@@ -29,7 +29,7 @@ namespace GestionProjets.Controllers
             return new OkObjectResult(typeprojets);
         }
 
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
             var typeprojet = _typeprojetRepository.GetTypeProjetByID(id);

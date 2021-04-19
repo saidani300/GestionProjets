@@ -1,5 +1,6 @@
 using GestionProjets.Data;
 using GestionProjets.DBContext;
+using GestionProjets.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +33,11 @@ namespace GestionProjets
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDbContext<QualitasContext>(o => o.UseSqlServer(Configuration.GetConnectionString("QualitasDB")));
+            services.AddTransient<IProjetRepository, ProjetRepository>();
+            services.AddTransient<ITacheRepository, TacheRepository>();
+            services.AddTransient<ITypeProjetRepository, TypeProjetRepository>();
+            services.AddTransient<IActionRepository, ActionRepository>();
+            services.AddTransient<IPhaseRepository, PhaseRepository>();
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();

@@ -27,7 +27,7 @@ namespace GestionProjets.Controllers
             return new OkObjectResult(taches);
         }
 
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
             var tache = _tacheRepository.GetTacheByID(id);

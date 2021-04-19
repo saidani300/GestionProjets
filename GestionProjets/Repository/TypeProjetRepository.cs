@@ -16,14 +16,14 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
-        public void DeleteTypeProjet(int TypeProjetId)
+        public void DeleteTypeProjet(string TypeProjetId)
         {
             var TypeProjet = _dbContext.TypesProjet.Find(TypeProjetId);
             _dbContext.TypesProjet.Remove(TypeProjet);
             Save();
         }
 
-        public TypeProjet GetTypeProjetByID(int TypeProjetId)
+        public TypeProjet GetTypeProjetByID(string TypeProjetId)
         {
             return _dbContext.TypesProjet.Find(TypeProjetId);
         }

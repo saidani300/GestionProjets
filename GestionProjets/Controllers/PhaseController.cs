@@ -29,7 +29,7 @@ namespace GestionProjets.Controllers
             return new OkObjectResult(phases);
         }
 
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
             var phase = _phaseRepository.GetPhaseByID(id);

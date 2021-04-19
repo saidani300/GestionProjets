@@ -1,7 +1,7 @@
 ﻿using GestionProjets.Models;
 using System.Collections.Generic;
 
-namespace GestionPhases.Repository
+namespace GestionProjets.Repository
 {
     public interface IPhaseRepository
     {
