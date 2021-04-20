@@ -1,5 +1,5 @@
-﻿using GestionPhases.Repository;
-using GestionProjets.Models;
+﻿using GestionProjets.Models;
+using GestionProjets.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
