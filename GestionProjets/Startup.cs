@@ -38,6 +38,15 @@ namespace GestionProjets
             services.AddTransient<ITypeProjetRepository, TypeProjetRepository>();
             services.AddTransient<IActionRepository, ActionRepository>();
             services.AddTransient<IPhaseRepository, PhaseRepository>();
+            services.AddTransient<IAutorisationRepository, AutorisationRepository>();
+            services.AddTransient<IEvaluationRepository, EvaluationRepository>();
+            services.AddTransient<IIndicateurRepository, IndicateurRepository>();
+            services.AddTransient<IMesureRepository, MesureRepository>();
+            services.AddTransient<IObjectifRepository, ObjectifRepository>();
+            services.AddTransient<IOpportuniteRepository, OpportuniteRepository>();
+            services.AddTransient<IParametreRepository, ParametreRepository>();
+            services.AddTransient<IReunionRepository, ReunionRepository>();
+            services.AddTransient<IRisqueRepository, RisqueRepository>();
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
