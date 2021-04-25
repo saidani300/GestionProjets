@@ -1,15 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestionProjets.Models
 {
     public class Autorisation
     {
-        public string Id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
         public string Reference { get; set; }
-        public string IdUser { get; set; }
+        public int IdUser { get; set; }
         public bool Etat { get; set; } = false;
     }
 }

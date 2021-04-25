@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestionProjets.Models
 {
@@ -12,17 +13,18 @@ namespace GestionProjets.Models
     }   
     public class Projet
     {
-       public string Id { get; set; }
-       public string Nom { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
+        public string Nom { get; set; }
        public string Description { get; set; }
-        public TypeProjet Type { get; set; }
+        public Guid TypeId { get; set; }
         public DateTime DateCreation { get; set; } = DateTime.Now;
         public DateTime DateModification { get; set; } = DateTime.Now;
         public DateTime DateD { get; set; }
        public DateTime DateF { get; set; }
-       public StatutP Statut { get; set; }
-        public IEnumerable<Phase> Phases { get; set; }
-        public IEnumerable<Action> Actions { get; set; }
+        public Guid UserId { get; set; }
+        public StatutP Statut { get; set; }
 
     }
 }

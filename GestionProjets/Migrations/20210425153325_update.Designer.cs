@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionProjets.Migrations
 {
     [DbContext(typeof(QualitasContext))]
-    [Migration("20210420102903_Init")]
-    partial class Init
+    [Migration("20210425153325_update")]
+    partial class update
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,8 +23,9 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Action", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreation")
                         .HasColumnType("datetime2");
@@ -44,45 +45,34 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhaseId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("PhaseId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("PredAction")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProjetId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ReunionId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("PredAction")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Statut")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PhaseId");
-
-                    b.HasIndex("ProjetId");
-
-                    b.HasIndex("ReunionId");
 
                     b.ToTable("Actions");
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Autorisation", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("Etat")
                         .HasColumnType("bit");
 
-                    b.Property<string>("IdUser")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("IdUser")
+                        .HasColumnType("int");
 
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
@@ -94,8 +84,9 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Evaluation", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreation")
                         .HasColumnType("datetime2");
@@ -106,8 +97,8 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("IdSource")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("IdSource")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
@@ -122,8 +113,9 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Indicateur", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -150,8 +142,9 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Mesure", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreation")
                         .HasColumnType("datetime2");
@@ -162,8 +155,11 @@ namespace GestionProjets.Migrations
                     b.Property<DateTime>("DateFin")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("IdIndicateur")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("IdIndicateur")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ObjectifId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<long>("Valeur")
                         .HasColumnType("bigint");
@@ -175,8 +171,9 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Objectif", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreation")
                         .HasColumnType("datetime2");
@@ -190,8 +187,8 @@ namespace GestionProjets.Migrations
                     b.Property<int>("Etat")
                         .HasColumnType("int");
 
-                    b.Property<string>("IdProjet")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("IdProjet")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
@@ -206,8 +203,9 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Opportunite", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Categorie")
                         .HasColumnType("int");
@@ -221,11 +219,11 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("IdProjet")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("IdProjet")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("IdUser")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("IdUser")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Impact")
                         .HasColumnType("nvarchar(max)");
@@ -249,8 +247,9 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Parametre", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
@@ -265,8 +264,9 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Phase", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreation")
                         .HasColumnType("datetime2");
@@ -280,20 +280,19 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProjetId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("ProjetId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProjetId");
 
                     b.ToTable("Phases");
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Projet", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreation")
                         .HasColumnType("datetime2");
@@ -316,20 +315,22 @@ namespace GestionProjets.Migrations
                     b.Property<int>("Statut")
                         .HasColumnType("int");
 
-                    b.Property<string>("TypeId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("TypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TypeId");
 
                     b.ToTable("Projets");
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Reunion", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -343,11 +344,11 @@ namespace GestionProjets.Migrations
                     b.Property<int>("Etat")
                         .HasColumnType("int");
 
-                    b.Property<string>("IdProjet")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("IdProjet")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("IdUser")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("IdUser")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
@@ -359,8 +360,9 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Risque", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Cause")
                         .HasColumnType("nvarchar(max)");
@@ -371,11 +373,11 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("IdProjet")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("IdProjet")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("IdUser")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("IdUser")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Impact")
                         .HasColumnType("nvarchar(max)");
@@ -399,11 +401,12 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Tache", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ActionId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("ActionId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreation")
                         .HasColumnType("datetime2");
@@ -423,26 +426,25 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PredTache")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("PredTache")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Statut")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ActionId");
 
                     b.ToTable("Taches");
                 });
 
             modelBuilder.Entity("GestionProjets.Models.TypeProjet", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
@@ -450,42 +452,6 @@ namespace GestionProjets.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TypesProjet");
-                });
-
-            modelBuilder.Entity("GestionProjets.Models.Action", b =>
-                {
-                    b.HasOne("GestionProjets.Models.Phase", null)
-                        .WithMany("Actions")
-                        .HasForeignKey("PhaseId");
-
-                    b.HasOne("GestionProjets.Models.Projet", null)
-                        .WithMany("Actions")
-                        .HasForeignKey("ProjetId");
-
-                    b.HasOne("GestionProjets.Models.Reunion", null)
-                        .WithMany("Actions")
-                        .HasForeignKey("ReunionId");
-                });
-
-            modelBuilder.Entity("GestionProjets.Models.Phase", b =>
-                {
-                    b.HasOne("GestionProjets.Models.Projet", null)
-                        .WithMany("Phases")
-                        .HasForeignKey("ProjetId");
-                });
-
-            modelBuilder.Entity("GestionProjets.Models.Projet", b =>
-                {
-                    b.HasOne("GestionProjets.Models.TypeProjet", "Type")
-                        .WithMany()
-                        .HasForeignKey("TypeId");
-                });
-
-            modelBuilder.Entity("GestionProjets.Models.Tache", b =>
-                {
-                    b.HasOne("GestionProjets.Models.Action", null)
-                        .WithMany("Taches")
-                        .HasForeignKey("ActionId");
                 });
 #pragma warning restore 612, 618
         }

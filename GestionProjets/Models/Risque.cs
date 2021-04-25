@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace GestionProjets.Models
 {
     public enum NiveauRisque
@@ -22,7 +20,9 @@ namespace GestionProjets.Models
 
     public class Risque
     {
-        public string Id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
         public string Nom { get; set; }
         public string Description { get; set; }
         public NiveauRisque Niveau { get; set; }
@@ -31,7 +31,7 @@ namespace GestionProjets.Models
         public string Cause { get; set; }
         public DateTime DateCreation { get; set; } = DateTime.Now;
         public string Impact { get; set; }
-        public string IdUser { get; set; }
-        public string IdProjet { get; set; }
+        public Guid IdUser { get; set; }
+        public Guid IdProjet { get; set; }
     }
 }

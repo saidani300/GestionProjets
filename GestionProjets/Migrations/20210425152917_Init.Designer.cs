@@ -4,14 +4,16 @@ using GestionProjets.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GestionProjets.Migrations
 {
     [DbContext(typeof(QualitasContext))]
-    partial class QualitasContextModelSnapshot : ModelSnapshot
+    [Migration("20210425152917_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -313,13 +315,15 @@ namespace GestionProjets.Migrations
                     b.Property<int>("Statut")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("TypeId")
+                    b.Property<Guid?>("TypeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Projets");
                 });
@@ -450,6 +454,13 @@ namespace GestionProjets.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TypesProjet");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Projet", b =>
+                {
+                    b.HasOne("GestionProjets.Models.TypeProjet", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId");
                 });
 #pragma warning restore 612, 618
         }
