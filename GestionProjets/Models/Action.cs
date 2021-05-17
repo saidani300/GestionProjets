@@ -25,6 +25,7 @@ namespace GestionProjets.Models
         public DateTime DateF { get; set; }
         public Guid PredAction { get; set; }
         public Guid PhaseId { get; set; }
+        public Guid ProjetId { get; set; }
         public StatutA Statut { get; set; }
     }
 }

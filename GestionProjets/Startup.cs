@@ -59,7 +59,7 @@ namespace GestionProjets
                     "v1",
                     new OpenApiInfo
                     {
-                        Title = "Demo Project API",
+                        Title = "Qualitas API",
                         Version = "v1"
                     });
             });
@@ -88,7 +88,7 @@ namespace GestionProjets
             app.UseAuthorization();
 
             app.UseSwagger();
-            app.UseSwaggerUI(x => { x.SwaggerEndpoint("/swagger/v1/swagger.json", "Demo Project API v1"); });
+            app.UseSwaggerUI(x => { x.SwaggerEndpoint("/swagger/v1/swagger.json", "Qualitas API v1"); });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

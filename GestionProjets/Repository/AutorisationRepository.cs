@@ -33,6 +33,18 @@ namespace GestionProjets.Repository
             return _dbContext.Autorisations.ToList();
         }
 
+        public bool Autorisation(Guid id, string reference)
+        {
+            if (_dbContext.Autorisations.Where(A => A.IdUser == id).Where(A => A.Reference == reference).FirstOrDefault().Etat==false)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
         public void InsertAutorisation(Autorisation Autorisation)
         {
             _dbContext.Add(Autorisation);

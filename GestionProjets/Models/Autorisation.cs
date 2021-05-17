@@ -10,7 +10,8 @@ namespace GestionProjets.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public string Reference { get; set; }
-        public int IdUser { get; set; }
+        public Guid IdUser { get; set; }
+        public Guid IdMembre { get; set; }
         public bool Etat { get; set; } = false;
     }
 }

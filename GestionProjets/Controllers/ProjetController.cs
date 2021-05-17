@@ -1,5 +1,6 @@
 ﻿using GestionProjets.Models;
 using GestionProjets.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace GestionProjets.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Responsable")]
     public class ProjetController : ControllerBase
     {
         private readonly IProjetRepository _projetRepository;

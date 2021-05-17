@@ -24,6 +24,7 @@ namespace GestionProjets.Models
         public DateTime DateD { get; set; }
        public DateTime DateF { get; set; }
         public Guid UserId { get; set; }
+        public Guid ChefId { get; set; }
         public StatutP Statut { get; set; }
 
     }

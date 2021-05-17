@@ -1,5 +1,6 @@
 ﻿using GestionProjets.Models;
 using GestionProjets.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace GestionProjets.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Responsable,Chefdeprojet")]
     public class TacheController : ControllerBase
     {
         private readonly ITacheRepository _tacheRepository;
@@ -44,7 +46,7 @@ namespace GestionProjets.Controllers
                 return CreatedAtAction(nameof(Get), new { id = tache.Id }, tache);
             }
         }
-
+        [Authorize(Roles = "Responsable,Chefdeprojet,Membre")]
         [HttpPut]
         public IActionResult Put([FromBody] Tache tache)
         {

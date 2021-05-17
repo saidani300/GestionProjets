@@ -1,5 +1,6 @@
 ﻿using GestionProjets.Models;
 using GestionProjets.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,59 +14,60 @@ namespace GestionProjets.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class AutorisationController : ControllerBase
     {
-        private readonly IAutorisationRepository _actionRepository;
+        private readonly IAutorisationRepository _autorisationRepository;
 
-        public AutorisationController(IAutorisationRepository actionRepository)
+        public AutorisationController(IAutorisationRepository autorisationRepository)
         {
-            _actionRepository = actionRepository;
+            _autorisationRepository = autorisationRepository;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            var actions = _actionRepository.GetAutorisations();
-            return new OkObjectResult(actions);
+            var autorisations = _autorisationRepository.GetAutorisations();
+            return new OkObjectResult(autorisations);
         }
 
         [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
-            var action = _actionRepository.GetAutorisationByID(id);
-            return new OkObjectResult(action);
+            var autorisation = _autorisationRepository.GetAutorisationByID(id);
+            return new OkObjectResult(autorisation);
         }
-
+        [Authorize(Roles = "Responsable")]
         [HttpPost]
-        public IActionResult Post([FromBody] Models.Autorisation action)
+        public IActionResult Post([FromBody] Models.Autorisation autorisation)
         {
             using (var scope = new TransactionScope())
             {
-                _actionRepository.InsertAutorisation(action);
+                _autorisationRepository.InsertAutorisation(autorisation);
                 scope.Complete();
-                return CreatedAtAction(nameof(Get), new { id = action.Id }, action);
+                return CreatedAtAction(nameof(Get), new { id = autorisation.Id }, autorisation);
             }
         }
-
+        [Authorize(Roles = "Responsable")]
         [HttpPut]
-        public IActionResult Put([FromBody] Models.Autorisation action)
+        public IActionResult Put([FromBody] Models.Autorisation autorisation)
         {
-            if (action != null)
+            if (autorisation != null)
             {
                 using (var scope = new TransactionScope())
                 {
-                    _actionRepository.UpdateAutorisation(action);
+                    _autorisationRepository.UpdateAutorisation(autorisation);
                     scope.Complete();
                     return new OkResult();
                 }
             }
             return new NoContentResult();
         }
-
+        [Authorize(Roles = "Responsable")]
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
-            _actionRepository.DeleteAutorisation(id);
+            _autorisationRepository.DeleteAutorisation(id);
             return new OkResult();
         }
     }

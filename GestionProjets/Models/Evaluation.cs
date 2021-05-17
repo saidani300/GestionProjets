@@ -15,5 +15,6 @@ namespace GestionProjets.Models
         public DateTime DateCreation { get; set; } = DateTime.Now;
         public DateTime DateModification { get; set; } = DateTime.Now;
         public Guid IdSource { get; set; }
+        public Guid IdProjet { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GestionProjets.Repository
 {
@@ -6,7 +7,7 @@ namespace GestionProjets.Repository
     {
         void DeleteAction(string ActionId);
         Models.Action GetActionByID(string ActionId);
-        IEnumerable<Models.Action> GetActions();
+        IEnumerable<Models.Action> GetActionsByProject(Guid ProjetId);
         void InsertAction(Models.Action Action);
         void Save();
         void UpdateAction(Models.Action Action);

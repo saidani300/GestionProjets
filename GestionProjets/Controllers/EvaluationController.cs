@@ -1,9 +1,11 @@
 ﻿using GestionProjets.Models;
 using GestionProjets.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Transactions;
 
@@ -13,15 +15,34 @@ namespace GestionProjets.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Responsable")]
     public class EvaluationController : ControllerBase
     {
         private readonly IEvaluationRepository _evaluationRepository;
+        private readonly IProjetRepository _projetRepository;
 
-        public EvaluationController(IEvaluationRepository evaluationRepository)
+        public EvaluationController(IEvaluationRepository evaluationRepository , IProjetRepository projetRepository)
         {
             _evaluationRepository = evaluationRepository;
+            _projetRepository = projetRepository;
+
         }
 
+        public bool Authorization(Evaluation evaluation)
+        {
+
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Guid projetId = evaluation.IdProjet;
+            Guid projetUserId = _projetRepository.GetProjetByID(projetId.ToString()).UserId;
+            if (projetUserId.ToString() == LoggedInuserId)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         [HttpGet]
         public IActionResult Get()
         {
@@ -39,18 +60,27 @@ namespace GestionProjets.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Evaluation evaluation)
         {
-            using (var scope = new TransactionScope())
+            if (Authorization(evaluation))
             {
-                _evaluationRepository.InsertEvaluation(evaluation);
-                scope.Complete();
-                return CreatedAtAction(nameof(Get), new { id = evaluation.Id }, evaluation);
+                using (var scope = new TransactionScope())
+                {
+                    _evaluationRepository.InsertEvaluation(evaluation);
+                    scope.Complete();
+                    return CreatedAtAction(nameof(Get), new { id = evaluation.Id }, evaluation);
+                }
+            }
+            else
+            {
+                return BadRequest();
             }
         }
 
         [HttpPut]
         public IActionResult Put([FromBody] Evaluation evaluation)
         {
-            if (evaluation != null)
+            if (Authorization(evaluation))
+            {
+                if (evaluation != null)
             {
                 using (var scope = new TransactionScope())
                 {
@@ -60,13 +90,26 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {
-            _evaluationRepository.DeleteEvaluation(id);
+            Evaluation evaluation = _evaluationRepository.GetEvaluationByID(id);
+            if (Authorization(evaluation))
+            {
+                _evaluationRepository.DeleteEvaluation(id);
             return new OkResult();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

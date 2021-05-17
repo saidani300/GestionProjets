@@ -27,9 +27,9 @@ namespace GestionProjets.Repository
             return _dbContext.Actions.Find(ActionId);
         }
 
-        public IEnumerable<Models.Action> GetActions()
+        public IEnumerable<Models.Action> GetActionsByProject(Guid ProjetId)
         {
-            return _dbContext.Actions.ToList();
+            return _dbContext.Actions.Where(A => A.ProjetId  == ProjetId);
         }
 
         public void InsertAction(Models.Action Action)
