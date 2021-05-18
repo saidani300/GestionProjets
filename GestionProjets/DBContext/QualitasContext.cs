@@ -26,6 +26,7 @@ namespace GestionProjets.DBContext
         public DbSet<Parametre> Parametres { get; set; }
         public DbSet<Reunion> Reunions { get; set; }
         public DbSet<Risque> Risques { get; set; }
+        public DbSet<Utilisateur> Utilisateurs { get; set; }
 
     }
 }
