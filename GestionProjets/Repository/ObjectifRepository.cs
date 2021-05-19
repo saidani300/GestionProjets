@@ -16,12 +16,18 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
+        public IEnumerable<Objectif> GetobjectifsByProject(Guid ProjetId)
+        {
+            return _dbContext.Objectifs.Where(A => A.IdProjet == ProjetId);
+        }
+
         public void DeleteObjectif(string ObjectifId)
         {
             var Objectif = _dbContext.Objectifs.Find(ObjectifId);
             _dbContext.Objectifs.Remove(Objectif);
             Save();
         }
+
 
         public Objectif GetObjectifByID(string ObjectifId)
         {

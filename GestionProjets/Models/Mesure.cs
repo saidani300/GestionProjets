@@ -15,6 +15,6 @@ namespace GestionProjets.Models
         public long Valeur { get; set; }
         public Guid IdIndicateur { get; set; }
         public Guid ObjectifId { get; set; }
-
+        public Guid ProjetId { get; set; }
     }
 }

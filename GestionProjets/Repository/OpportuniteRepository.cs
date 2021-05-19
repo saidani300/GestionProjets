@@ -16,6 +16,10 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
+        public IEnumerable<Opportunite> GetOpportunitesByProject(Guid ProjetId)
+        {
+            return _dbContext.Opportunites.Where(A => A.IdProjet == ProjetId);
+        }
         public void DeleteOpportunite(string OpportuniteId)
         {
             var Opportunite = _dbContext.Opportunites.Find(OpportuniteId);

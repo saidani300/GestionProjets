@@ -32,9 +32,25 @@ namespace GestionProjets.Controllers
         public IActionResult GetByProject(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Action1"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Action0"))
             {
                 var actions = _actionRepository.GetActionsByProject(id);
+                return new OkObjectResult(actions);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("~/getbyphase/{id}")]
+
+        public IActionResult GetByPhase(Guid id)
+        {
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Action1"))
+            {
+                var actions = _actionRepository.GetActionsByPhase(id);
                 return new OkObjectResult(actions);
             }
             else

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Transactions;
 
@@ -18,10 +19,29 @@ namespace GestionProjets.Controllers
     public class OpportuniteController : ControllerBase
     {
         private readonly IOpportuniteRepository _opportuniteRepository;
+        private readonly IProjetRepository _projetRepository;
+        private readonly IAutorisationRepository _autorisationRepository;
 
-        public OpportuniteController(IOpportuniteRepository opportuniteRepository)
+        public OpportuniteController(IOpportuniteRepository opportuniteRepository, IProjetRepository projetRepository, IAutorisationRepository autorisationRepository)
         {
             _opportuniteRepository = opportuniteRepository;
+            _projetRepository = projetRepository;
+            _autorisationRepository = autorisationRepository;
+        }
+        [HttpGet("~/getbyprojet/{id}")]
+
+        public IActionResult GetByProject(Guid id)
+        {
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure1"))
+            {
+                var opportunites = _opportuniteRepository.GetOpportunitesByProject(id);
+                return new OkObjectResult(opportunites);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet]

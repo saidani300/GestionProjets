@@ -22,6 +22,10 @@ namespace GestionProjets.Repository
             _dbContext.Mesures.Remove(Mesure);
             Save();
         }
+        public IEnumerable<Mesure> GetMesuresByProject(Guid ProjetId)
+        {
+            return _dbContext.Mesures.Where(A => A.ProjetId == ProjetId);
+        }
 
         public Mesure GetMesureByID(string MesureId)
         {

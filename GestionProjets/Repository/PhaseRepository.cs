@@ -12,9 +12,14 @@ namespace GestionProjets.Repository
     {
         private readonly QualitasContext _dbContext;
 
+
         public PhaseRepository(QualitasContext dbContext)
         {
             _dbContext = dbContext;
+        }
+        public IEnumerable<Phase> GetPhasesByProject(Guid ProjetId)
+        {
+            return _dbContext.Phases.Where(A => A.ProjetId == ProjetId);
         }
         public void DeletePhase(string PhaseId)
         {

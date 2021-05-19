@@ -32,6 +32,10 @@ namespace GestionProjets.Repository
             return _dbContext.Actions.Where(A => A.ProjetId  == ProjetId);
         }
 
+        public IEnumerable<Models.Action> GetActionsByPhase(Guid PhaseId)
+        {
+            return _dbContext.Actions.Where(A => A.PhaseId == PhaseId);
+        }
         public void InsertAction(Models.Action Action)
         {
             _dbContext.Add(Action);

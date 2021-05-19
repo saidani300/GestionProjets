@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Transactions;
 
@@ -18,12 +19,31 @@ namespace GestionProjets.Controllers
     public class ObjectifController : ControllerBase
     {
         private readonly IObjectifRepository _objectifRepository;
+        private readonly IProjetRepository _projetRepository;
+        private readonly IAutorisationRepository _autorisationRepository;
 
-        public ObjectifController(IObjectifRepository objectifRepository)
+        public ObjectifController(IObjectifRepository objectifRepository, IProjetRepository projetRepository, IAutorisationRepository autorisationRepository)
         {
             _objectifRepository = objectifRepository;
+            _projetRepository = projetRepository;
+            _autorisationRepository = autorisationRepository;
         }
 
+        [HttpGet("~/getbyprojet/{id}")]
+
+        public IActionResult GetByProject(Guid id)
+        {
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure1"))
+            {
+                var objectifs = _objectifRepository.GetobjectifsByProject(id);
+                return new OkObjectResult(objectifs);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
         [HttpGet]
         public IActionResult Get()
         {
