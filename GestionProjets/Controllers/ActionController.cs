@@ -27,9 +27,8 @@ namespace GestionProjets.Controllers
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
         }
+        [HttpGet("~/getbyprojet/{id}")]
 
-        [HttpGet("{id}")]
-        [Route("/GetByProject")]
         public IActionResult GetByProject(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -60,7 +59,7 @@ namespace GestionProjets.Controllers
             }
         }
 
-        public bool Authorization(Models.Action action)
+        internal bool Authorization(Models.Action action)
         {
 
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);

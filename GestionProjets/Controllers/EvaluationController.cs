@@ -28,7 +28,7 @@ namespace GestionProjets.Controllers
 
         }
 
-        public bool Authorization(Evaluation evaluation)
+        internal bool Authorization(Evaluation evaluation)
         {
 
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);

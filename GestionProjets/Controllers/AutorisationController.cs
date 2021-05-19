@@ -37,6 +37,7 @@ namespace GestionProjets.Controllers
             var autorisation = _autorisationRepository.GetAutorisationByID(id);
             return new OkObjectResult(autorisation);
         }
+
         [Authorize(Roles = "Responsable")]
         [HttpPost]
         public IActionResult Post([FromBody] Models.Autorisation autorisation)

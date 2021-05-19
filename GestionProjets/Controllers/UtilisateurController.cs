@@ -37,8 +37,8 @@ namespace GestionProjets.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [Route("/GetAllUsers")]
-
+        [Route("/getallusers")]
+        [HttpGet]
         public IActionResult GetAllUsers()
         {
             var utilisateurs = _utilisateurRepository.GetUtilisateurs();
