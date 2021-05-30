@@ -42,5 +42,7 @@ namespace GestionProjets.DBContext
 
         public DbSet<Utilisateur> Utilisateurs { get; set; }
 
+        public DbSet<Document> Documents { get; set; }
+
     }
 }

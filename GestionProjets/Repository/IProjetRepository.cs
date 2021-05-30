@@ -1,12 +1,13 @@
 ﻿using GestionProjets.Models;
+using System;
 using System.Collections.Generic;
 
 namespace GestionProjets.Repository
 {
     public interface IProjetRepository
     {
-        void DeleteProjet(string ProjetId);
-        Projet GetProjetByID(string ProjetId);
+        void DeleteProjet(Guid ProjetId);
+        Projet GetProjetByID(Guid ProjetId);
         IEnumerable<Projet> GetProjets();
         void InsertProjet(Projet Projet);
         void Save();

@@ -49,6 +49,9 @@ namespace GestionProjets.Migrations
                     b.Property<Guid>("PredAction")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ProjetId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Statut")
                         .HasColumnType("int");
 
@@ -69,8 +72,11 @@ namespace GestionProjets.Migrations
                     b.Property<bool>("Etat")
                         .HasColumnType("bit");
 
-                    b.Property<int>("IdUser")
-                        .HasColumnType("int");
+                    b.Property<Guid>("IdMembre")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("IdUser")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
@@ -78,6 +84,29 @@ namespace GestionProjets.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Autorisations");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Document", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("IdProjet")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Nom")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Documents");
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Evaluation", b =>
@@ -94,6 +123,9 @@ namespace GestionProjets.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("IdProjet")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("IdSource")
                         .HasColumnType("uniqueidentifier");
@@ -157,6 +189,9 @@ namespace GestionProjets.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ObjectifId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<long>("Valeur")
@@ -290,6 +325,9 @@ namespace GestionProjets.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ChefId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreation")
@@ -450,6 +488,38 @@ namespace GestionProjets.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TypesProjet");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Utilisateur", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateModification")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nom")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumCIN")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Prenom")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Utilisateurs");
                 });
 #pragma warning restore 612, 618
         }

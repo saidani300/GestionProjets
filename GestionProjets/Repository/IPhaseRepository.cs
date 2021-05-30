@@ -7,8 +7,8 @@ namespace GestionProjets.Repository
     public interface IPhaseRepository
     {
         IEnumerable<Phase> GetPhasesByProject(Guid ProjetId);
-        void DeletePhase(string PhaseId);
-        Phase GetPhaseByID(string PhaseId);
+        void DeletePhase(Guid PhaseId);
+        Phase GetPhaseByID(Guid PhaseId);
         IEnumerable<Phase> GetPhases();
         void InsertPhase(Phase Phase);
         void Save();

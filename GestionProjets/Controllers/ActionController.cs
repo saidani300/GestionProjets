@@ -80,8 +80,8 @@ namespace GestionProjets.Controllers
 
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             Guid projetId = action.ProjetId;
-            Guid projetChefId = _projetRepository.GetProjetByID(projetId.ToString()).ChefId;
-            Guid projetUserId = _projetRepository.GetProjetByID(projetId.ToString()).UserId;
+            Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
+            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId.ToString() == LoggedInuserId || projetChefId.ToString() == LoggedInuserId)
             {
                 return true;

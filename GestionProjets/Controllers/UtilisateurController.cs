@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Transactions;
+
 namespace GestionProjets.Controllers
 {
     [Route("api/[controller]")]
@@ -34,6 +36,17 @@ namespace GestionProjets.Controllers
            Utilisateur utilisateur=  _utilisateurRepository.GetUtilisateurByID(userId);
 
             return new OkObjectResult(utilisateur);
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] Utilisateur utilisateur)
+        {
+            using (var scope = new TransactionScope())
+            {
+                _utilisateurRepository.InsertUtilisateur(utilisateur);
+                scope.Complete();
+                return CreatedAtAction(nameof(Get), new { id = utilisateur.Id }, utilisateur);
+            }
         }
 
         [Authorize(Roles = "Admin")]

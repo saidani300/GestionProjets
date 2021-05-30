@@ -33,7 +33,7 @@ namespace GestionProjets.Controllers
 
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             Guid projetId = evaluation.IdProjet;
-            Guid projetUserId = _projetRepository.GetProjetByID(projetId.ToString()).UserId;
+            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId.ToString() == LoggedInuserId)
             {
                 return true;

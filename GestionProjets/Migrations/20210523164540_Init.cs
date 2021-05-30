@@ -21,6 +21,7 @@ namespace GestionProjets.Migrations
                     DateF = table.Column<DateTime>(nullable: false),
                     PredAction = table.Column<Guid>(nullable: false),
                     PhaseId = table.Column<Guid>(nullable: false),
+                    ProjetId = table.Column<Guid>(nullable: false),
                     Statut = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -34,12 +35,28 @@ namespace GestionProjets.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Reference = table.Column<string>(nullable: true),
-                    IdUser = table.Column<int>(nullable: false),
+                    IdUser = table.Column<Guid>(nullable: false),
+                    IdMembre = table.Column<Guid>(nullable: false),
                     Etat = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Autorisations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Documents",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Nom = table.Column<string>(nullable: true),
+                    Url = table.Column<string>(nullable: true),
+                    DateCreation = table.Column<DateTime>(nullable: false),
+                    IdProjet = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Documents", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,7 +69,8 @@ namespace GestionProjets.Migrations
                     Note = table.Column<long>(nullable: false),
                     DateCreation = table.Column<DateTime>(nullable: false),
                     DateModification = table.Column<DateTime>(nullable: false),
-                    IdSource = table.Column<Guid>(nullable: false)
+                    IdSource = table.Column<Guid>(nullable: false),
+                    IdProjet = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -86,7 +104,8 @@ namespace GestionProjets.Migrations
                     DateFin = table.Column<DateTime>(nullable: false),
                     Valeur = table.Column<long>(nullable: false),
                     IdIndicateur = table.Column<Guid>(nullable: false),
-                    ObjectifId = table.Column<Guid>(nullable: false)
+                    ObjectifId = table.Column<Guid>(nullable: false),
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -163,6 +182,27 @@ namespace GestionProjets.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Projets",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Nom = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    TypeId = table.Column<Guid>(nullable: false),
+                    DateCreation = table.Column<DateTime>(nullable: false),
+                    DateModification = table.Column<DateTime>(nullable: false),
+                    DateD = table.Column<DateTime>(nullable: false),
+                    DateF = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
+                    ChefId = table.Column<Guid>(nullable: false),
+                    Statut = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Projets", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reunions",
                 columns: table => new
                 {
@@ -235,35 +275,22 @@ namespace GestionProjets.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Projets",
+                name: "Utilisateurs",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Nom = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    TypeId = table.Column<Guid>(nullable: true),
+                    Prenom = table.Column<string>(nullable: true),
+                    Age = table.Column<int>(nullable: false),
+                    NumCIN = table.Column<int>(nullable: false),
+                    Email = table.Column<string>(nullable: true),
                     DateCreation = table.Column<DateTime>(nullable: false),
-                    DateModification = table.Column<DateTime>(nullable: false),
-                    DateD = table.Column<DateTime>(nullable: false),
-                    DateF = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
-                    Statut = table.Column<int>(nullable: false)
+                    DateModification = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Projets", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Projets_TypesProjet_TypeId",
-                        column: x => x.TypeId,
-                        principalTable: "TypesProjet",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_Utilisateurs", x => x.Id);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Projets_TypeId",
-                table: "Projets",
-                column: "TypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -273,6 +300,9 @@ namespace GestionProjets.Migrations
 
             migrationBuilder.DropTable(
                 name: "Autorisations");
+
+            migrationBuilder.DropTable(
+                name: "Documents");
 
             migrationBuilder.DropTable(
                 name: "Evaluations");
@@ -309,6 +339,9 @@ namespace GestionProjets.Migrations
 
             migrationBuilder.DropTable(
                 name: "TypesProjet");
+
+            migrationBuilder.DropTable(
+                name: "Utilisateurs");
         }
     }
 }

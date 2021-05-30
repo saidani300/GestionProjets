@@ -52,7 +52,7 @@ namespace GestionProjets.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public IActionResult Get(Guid id)
         {
             var phase = _phaseRepository.GetPhaseByID(id);
             return new OkObjectResult(phase);
@@ -85,7 +85,7 @@ namespace GestionProjets.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public IActionResult Delete(Guid id)
         {
             _phaseRepository.DeletePhase(id);
             return new OkResult();

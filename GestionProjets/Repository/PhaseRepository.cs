@@ -21,14 +21,14 @@ namespace GestionProjets.Repository
         {
             return _dbContext.Phases.Where(A => A.ProjetId == ProjetId);
         }
-        public void DeletePhase(string PhaseId)
+        public void DeletePhase(Guid PhaseId)
         {
             var Phase = _dbContext.Phases.Find(PhaseId);
             _dbContext.Phases.Remove(Phase);
             Save();
         }
 
-        public Phase GetPhaseByID(string PhaseId)
+        public Phase GetPhaseByID(Guid PhaseId)
         {
             return _dbContext.Phases.Find(PhaseId);
         }

@@ -35,6 +35,9 @@ namespace GestionProjets
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+               .AddRoles<IdentityRole>()
+               .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddDbContext<QualitasContext>(o => o.UseSqlServer(Configuration.GetConnectionString("QualitasDB")));
             services.AddTransient<IProjetRepository, ProjetRepository>();
             services.AddTransient<ITacheRepository, TacheRepository>();
@@ -50,8 +53,8 @@ namespace GestionProjets
             services.AddTransient<IParametreRepository, ParametreRepository>();
             services.AddTransient<IReunionRepository, ReunionRepository>();
             services.AddTransient<IRisqueRepository, RisqueRepository>();
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddTransient<IDocumentRepository, DocumentRepository>();
+            services.AddTransient<IUtilisateurRepository, UtilisateurRepository>();
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddAuthentication(Options =>
@@ -73,8 +76,11 @@ namespace GestionProjets
                     };
 
                 });
+         
             services.AddSwaggerGen(setup =>
             {
+                setup.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+
                 setup.SwaggerDoc(
                     "v1",
                     new OpenApiInfo

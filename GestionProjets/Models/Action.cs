@@ -23,7 +23,7 @@ namespace GestionProjets.Models
         public DateTime DateModification { get; set; } = DateTime.Now;
         public DateTime DateD { get; set; }
         public DateTime DateF { get; set; }
-        public Guid PredAction { get; set; }
+        public Guid? PredAction { get; set; }
         public Guid PhaseId { get; set; }
         public Guid ProjetId { get; set; }
         public StatutA Statut { get; set; }

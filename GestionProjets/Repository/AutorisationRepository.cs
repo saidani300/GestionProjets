@@ -35,11 +35,18 @@ namespace GestionProjets.Repository
 
         public bool Autorisation(Guid id, string reference)
         {
-            if (_dbContext.Autorisations.Where(A => A.IdUser == id).Where(A => A.Reference == reference).FirstOrDefault().Etat==false)
+            try
             {
-                return false;
+                if (_dbContext.Autorisations.Where(A => A.IdUser == id)?.Where(A => A.Reference == reference)?.FirstOrDefault()?.Etat == false)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
-            else
+            catch
             {
                 return true;
             }

@@ -32,7 +32,7 @@ namespace GestionProjets.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public IActionResult Get(Guid id)
         {
             var projet = _projetRepository.GetProjetByID(id);
             return new OkObjectResult(projet);
@@ -65,7 +65,7 @@ namespace GestionProjets.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public IActionResult Delete(Guid id)
         {
             _projetRepository.DeleteProjet(id);
             return new OkResult();
