@@ -27,7 +27,7 @@ namespace GestionProjets.Controllers
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
         }
-        [HttpGet("~/getbyprojet/{id}")]
+        [HttpGet("getbyprojet/{id}")]
 
         public IActionResult GetByProject(Guid id)
         {
@@ -43,7 +43,7 @@ namespace GestionProjets.Controllers
             }
         }
 
-        [HttpGet("~/getbyphase/{id}")]
+        [HttpGet("getbyphase/{id}")]
 
         public IActionResult GetByPhase(Guid id)
         {
@@ -61,7 +61,7 @@ namespace GestionProjets.Controllers
 
         [HttpGet("{id}")]
         
-        public IActionResult Get(string id)
+        public IActionResult Get(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Action2"))
@@ -78,11 +78,11 @@ namespace GestionProjets.Controllers
         internal bool Authorization(Models.Action action)
         {
 
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
             Guid projetId = action.ProjetId;
             Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
-            if (projetUserId.ToString() == LoggedInuserId || projetChefId.ToString() == LoggedInuserId)
+            if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
             {
                 return true;
             }
@@ -144,7 +144,7 @@ namespace GestionProjets.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public IActionResult Delete(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Action4"))

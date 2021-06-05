@@ -21,6 +21,6 @@ namespace GestionProjets.Models
         public DateTime DateCreation { get; set; } = DateTime.Now;
         public EtatReunion Etat { get; set; }
         public Guid IdUser { get; set; }
-        public Guid IdProjet { get; set; }
+        public Guid ProjetId { get; set; }
     }
 }

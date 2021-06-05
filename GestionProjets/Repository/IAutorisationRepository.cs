@@ -6,8 +6,8 @@ namespace GestionProjets.Repository
 {
     public interface IAutorisationRepository
     {
-        void DeleteAutorisation(string AutorisationId);
-        Autorisation GetAutorisationByID(string AutorisationId);
+        void DeleteAutorisation(Guid AutorisationId);
+        Autorisation GetAutorisationByID(Guid AutorisationId);
         IEnumerable<Autorisation> GetAutorisations();
         bool Autorisation(Guid id, string reference);
         void InsertAutorisation(Autorisation Autorisation);

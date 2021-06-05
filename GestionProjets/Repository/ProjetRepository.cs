@@ -10,9 +10,9 @@ namespace GestionProjets.Repository
 {
     public class ProjetRepository : IProjetRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public ProjetRepository(QualitasContext dbContext)
+        public ProjetRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -28,9 +28,9 @@ namespace GestionProjets.Repository
             return _dbContext.Projets.Find(ProjetId);
         }
 
-        public IEnumerable<Projet> GetProjets()
+        public IEnumerable<Projet> GetProjets(Guid Userid)
         {
-            return _dbContext.Projets.ToList();
+            return _dbContext.Projets.Where(A => A.UserId == Userid);
         }
 
         public void InsertProjet(Projet Projet)

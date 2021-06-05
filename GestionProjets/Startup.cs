@@ -38,7 +38,7 @@ namespace GestionProjets
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                .AddRoles<IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddDbContext<QualitasContext>(o => o.UseSqlServer(Configuration.GetConnectionString("QualitasDB")));
+            services.AddDbContext<QalitasContext>(o => o.UseSqlServer(Configuration.GetConnectionString("QalitasDB")));
             services.AddTransient<IProjetRepository, ProjetRepository>();
             services.AddTransient<ITacheRepository, TacheRepository>();
             services.AddTransient<ITypeProjetRepository, TypeProjetRepository>();
@@ -85,7 +85,7 @@ namespace GestionProjets
                     "v1",
                     new OpenApiInfo
                     {
-                        Title = "Qualitas API",
+                        Title = "Qalitas API",
                         Version = "v1"
                     });
             });
@@ -114,7 +114,7 @@ namespace GestionProjets
             app.UseAuthorization();
 
             app.UseSwagger();
-            app.UseSwaggerUI(x => { x.SwaggerEndpoint("/swagger/v1/swagger.json", "Qualitas API v1"); });
+            app.UseSwaggerUI(x => { x.SwaggerEndpoint("/swagger/v1/swagger.json", "Qalitas API v1"); });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -9,7 +9,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Transactions;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GestionProjets.Controllers
 {
@@ -20,11 +19,14 @@ namespace GestionProjets.Controllers
     {
         private readonly IEvaluationRepository _evaluationRepository;
         private readonly IProjetRepository _projetRepository;
+        private readonly IAutorisationRepository _autorisationRepository;
 
-        public EvaluationController(IEvaluationRepository evaluationRepository , IProjetRepository projetRepository)
+        public EvaluationController(IEvaluationRepository evaluationRepository , IProjetRepository projetRepository, IAutorisationRepository autorisationRepository)
         {
             _evaluationRepository = evaluationRepository;
             _projetRepository = projetRepository;
+            _autorisationRepository = autorisationRepository;
+
 
         }
 
@@ -46,21 +48,40 @@ namespace GestionProjets.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var evaluations = _evaluationRepository.GetEvaluations();
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Evaluation0"))
+            {
+                var evaluations = _evaluationRepository.GetEvaluations();
             return new OkObjectResult(evaluations);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public IActionResult Get(Guid id)
         {
-            var evaluation = _evaluationRepository.GetEvaluationByID(id);
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Evaluation1"))
+            {
+                var evaluation = _evaluationRepository.GetEvaluationByID(id);
             return new OkObjectResult(evaluation);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]
         public IActionResult Post([FromBody] Evaluation evaluation)
         {
-            if (Authorization(evaluation))
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Evaluation2"))
+            {
+                if (Authorization(evaluation))
             {
                 using (var scope = new TransactionScope())
                 {
@@ -73,12 +94,20 @@ namespace GestionProjets.Controllers
             {
                 return BadRequest();
             }
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPut]
         public IActionResult Put([FromBody] Evaluation evaluation)
         {
-            if (Authorization(evaluation))
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Evaluation3"))
+            {
+                if (Authorization(evaluation))
             {
                 if (evaluation != null)
             {
@@ -95,12 +124,20 @@ namespace GestionProjets.Controllers
             {
                 return BadRequest();
             }
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public IActionResult Delete(Guid id)
         {
-            Evaluation evaluation = _evaluationRepository.GetEvaluationByID(id);
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Evaluation4"))
+            {
+                Evaluation evaluation = _evaluationRepository.GetEvaluationByID(id);
             if (Authorization(evaluation))
             {
                 _evaluationRepository.DeleteEvaluation(id);
@@ -111,5 +148,10 @@ namespace GestionProjets.Controllers
                 return BadRequest();
             }
         }
+            else
+            {
+                return BadRequest();
+    }
+}
     }
 }

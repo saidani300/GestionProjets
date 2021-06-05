@@ -10,9 +10,9 @@ namespace GestionProjets.Repository
 {
     public class DocumentRepository : IDocumentRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public DocumentRepository(QualitasContext dbContext)
+        public DocumentRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -20,14 +20,14 @@ namespace GestionProjets.Repository
         {
             return _dbContext.Documents.Where(A => A.IdProjet == ProjetId);
         }
-        public void DeleteDocument(string DocumentId)
+        public void DeleteDocument(Guid DocumentId)
         {
             var Document = _dbContext.Documents.Find(DocumentId);
             _dbContext.Documents.Remove(Document);
             Save();
         }
 
-        public Document GetDocumentByID(string DocumentId)
+        public Document GetDocumentByID(Guid DocumentId)
         {
             return _dbContext.Documents.Find(DocumentId);
         }

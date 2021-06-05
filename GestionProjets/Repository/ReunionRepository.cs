@@ -10,20 +10,20 @@ namespace GestionProjets.Repository
 {
     public class ReunionRepository : IReunionRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public ReunionRepository(QualitasContext dbContext)
+        public ReunionRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public void DeleteReunion(string ReunionId)
+        public void DeleteReunion(Guid ReunionId)
         {
             var Reunion = _dbContext.Reunions.Find(ReunionId);
             _dbContext.Reunions.Remove(Reunion);
             Save();
         }
 
-        public Reunion GetReunionByID(string ReunionId)
+        public Reunion GetReunionByID(Guid ReunionId)
         {
             return _dbContext.Reunions.Find(ReunionId);
         }

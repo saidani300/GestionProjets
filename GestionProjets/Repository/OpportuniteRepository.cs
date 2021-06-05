@@ -10,24 +10,24 @@ namespace GestionProjets.Repository
 {
     public class OpportuniteRepository : IOpportuniteRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public OpportuniteRepository(QualitasContext dbContext)
+        public OpportuniteRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
         public IEnumerable<Opportunite> GetOpportunitesByProject(Guid ProjetId)
         {
-            return _dbContext.Opportunites.Where(A => A.IdProjet == ProjetId);
+            return _dbContext.Opportunites.Where(A => A.ProjetId == ProjetId);
         }
-        public void DeleteOpportunite(string OpportuniteId)
+        public void DeleteOpportunite(Guid OpportuniteId)
         {
             var Opportunite = _dbContext.Opportunites.Find(OpportuniteId);
             _dbContext.Opportunites.Remove(Opportunite);
             Save();
         }
 
-        public Opportunite GetOpportuniteByID(string OpportuniteId)
+        public Opportunite GetOpportuniteByID(Guid OpportuniteId)
         {
             return _dbContext.Opportunites.Find(OpportuniteId);
         }

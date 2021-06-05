@@ -1,12 +1,13 @@
 ﻿using GestionProjets.Models;
+using System;
 using System.Collections.Generic;
 
 namespace GestionProjets.Repository
 {
     public interface IRisqueRepository
     {
-        void DeleteRisque(string RisqueId);
-        Risque GetRisqueByID(string RisqueId);
+        void DeleteRisque(Guid RisqueId);
+        Risque GetRisqueByID(Guid RisqueId);
         IEnumerable<Risque> GetRisques();
         void InsertRisque(Risque Risque);
         void Save();

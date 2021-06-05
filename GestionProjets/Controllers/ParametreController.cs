@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Transactions;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GestionProjets.Controllers
 {
@@ -18,41 +18,99 @@ namespace GestionProjets.Controllers
     public class ParametreController : ControllerBase
     {
         private readonly IParametreRepository _parametreRepository;
+        private readonly IProjetRepository _projetRepository;
+        private readonly IAutorisationRepository _autorisationRepository;
 
-        public ParametreController(IParametreRepository parametreRepository)
+        public ParametreController(IParametreRepository parametreRepository,  IProjetRepository projetRepository, IAutorisationRepository autorisationRepository)
         {
             _parametreRepository = parametreRepository;
+            _projetRepository = projetRepository;
+            _autorisationRepository = autorisationRepository;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            var parametres = _parametreRepository.GetParametres();
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Parametre0"))
+            {
+                var parametres = _parametreRepository.GetParametres();
             return new OkObjectResult(parametres);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public IActionResult Get(Guid id)
         {
-            var parametre = _parametreRepository.GetParametreByID(id);
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Parametre1"))
+            {
+                var parametre = _parametreRepository.GetParametreByID(id);
             return new OkObjectResult(parametre);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        internal bool Authorization(Parametre parametre)
+        {
+
+            Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            Guid projetId = parametre.ProjetId;
+            Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
+            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
+            if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         [HttpPost]
         public IActionResult Post([FromBody] Parametre parametre)
         {
-            using (var scope = new TransactionScope())
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Parametre2"))
+            {
+                if (Authorization(parametre))
+                {
+                    using (var scope = new TransactionScope())
             {
                 _parametreRepository.InsertParametre(parametre);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = parametre.Id }, parametre);
+            }
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest();
             }
         }
 
         [HttpPut]
         public IActionResult Put([FromBody] Parametre parametre)
         {
-            if (parametre != null)
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Parametre3"))
+            {
+                if (Authorization(parametre))
+                {
+                    if (parametre != null)
             {
                 using (var scope = new TransactionScope())
                 {
@@ -62,13 +120,31 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public IActionResult Delete(Guid id)
         {
-            _parametreRepository.DeleteParametre(id);
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Parametre4"))
+            {
+                _parametreRepository.DeleteParametre(id);
             return new OkResult();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

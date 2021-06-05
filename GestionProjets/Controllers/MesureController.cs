@@ -9,7 +9,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Transactions;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GestionProjets.Controllers
 {
@@ -31,12 +30,12 @@ namespace GestionProjets.Controllers
 
         }
 
-        [HttpGet("~/getbyprojet/{id}")]
+        [HttpGet("getbyprojet/{id}")]
 
         public IActionResult GetByProject(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure1"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure0"))
             {
                 var mesures = _mesureRepository.GetMesuresByProject(id);
                 return new OkObjectResult(mesures);
@@ -51,7 +50,7 @@ namespace GestionProjets.Controllers
         public IActionResult Get()
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure2"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure1"))
             {
                 var mesures = _mesureRepository.GetMesures();
             return new OkObjectResult(mesures);
@@ -63,10 +62,10 @@ namespace GestionProjets.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public IActionResult Get(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure3"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure2"))
             {
                 var mesure = _mesureRepository.GetMesureByID(id);
             return new OkObjectResult(mesure);
@@ -77,17 +76,40 @@ namespace GestionProjets.Controllers
             }
         }
 
+        internal bool Authorization(Mesure mesure)
+        {
+
+            Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            Guid projetId = mesure.ProjetId;
+            Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
+            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
+            if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         [HttpPost]
         public IActionResult Post([FromBody] Mesure mesure)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure4"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure3"))
             {
-                using (var scope = new TransactionScope())
+                if (Authorization(mesure))
+                {
+                    using (var scope = new TransactionScope())
             {
                 _mesureRepository.InsertMesure(mesure);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = mesure.Id }, mesure);
+            }
+            }
+            else
+            {
+                return BadRequest();
             }
             }
             else
@@ -100,9 +122,11 @@ namespace GestionProjets.Controllers
         public IActionResult Put([FromBody] Mesure mesure)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure5"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure4"))
             {
-                if (mesure != null)
+                if (Authorization(mesure))
+                {
+                    if (mesure != null)
             {
                 using (var scope = new TransactionScope())
                 {
@@ -117,13 +141,18 @@ namespace GestionProjets.Controllers
             {
                 return BadRequest();
             }
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public IActionResult Delete(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure6"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure5"))
             {
                 _mesureRepository.DeleteMesure(id);
             return new OkResult();

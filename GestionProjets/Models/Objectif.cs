@@ -28,6 +28,6 @@ namespace GestionProjets.Models
         public EtatO Etat { get; set; }
         public DateTime DateCreation { get; set; } = DateTime.Now;
         public DateTime DateModification { get; set; } = DateTime.Now;
-        public Guid IdProjet { get; set; }
+        public Guid ProjetId { get; set; }
     }
 }

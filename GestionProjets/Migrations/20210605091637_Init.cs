@@ -19,7 +19,7 @@ namespace GestionProjets.Migrations
                     DateModification = table.Column<DateTime>(nullable: false),
                     DateD = table.Column<DateTime>(nullable: false),
                     DateF = table.Column<DateTime>(nullable: false),
-                    PredAction = table.Column<Guid>(nullable: false),
+                    PredAction = table.Column<Guid>(nullable: true),
                     PhaseId = table.Column<Guid>(nullable: false),
                     ProjetId = table.Column<Guid>(nullable: false),
                     Statut = table.Column<int>(nullable: false)
@@ -87,7 +87,8 @@ namespace GestionProjets.Migrations
                     Methode = table.Column<string>(nullable: true),
                     Val1 = table.Column<long>(nullable: false),
                     Val2 = table.Column<long>(nullable: false),
-                    Unite = table.Column<string>(nullable: true)
+                    Unite = table.Column<string>(nullable: true),
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -123,7 +124,7 @@ namespace GestionProjets.Migrations
                     Etat = table.Column<int>(nullable: false),
                     DateCreation = table.Column<DateTime>(nullable: false),
                     DateModification = table.Column<DateTime>(nullable: false),
-                    IdProjet = table.Column<Guid>(nullable: false)
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -145,7 +146,7 @@ namespace GestionProjets.Migrations
                     DateCreation = table.Column<DateTime>(nullable: false),
                     Impact = table.Column<string>(nullable: true),
                     IdUser = table.Column<Guid>(nullable: false),
-                    IdProjet = table.Column<Guid>(nullable: false)
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -158,7 +159,8 @@ namespace GestionProjets.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Nom = table.Column<string>(nullable: true),
-                    Valeur = table.Column<long>(nullable: false)
+                    Valeur = table.Column<long>(nullable: false),
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -213,7 +215,7 @@ namespace GestionProjets.Migrations
                     DateCreation = table.Column<DateTime>(nullable: false),
                     Etat = table.Column<int>(nullable: false),
                     IdUser = table.Column<Guid>(nullable: false),
-                    IdProjet = table.Column<Guid>(nullable: false)
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -234,7 +236,7 @@ namespace GestionProjets.Migrations
                     DateCreation = table.Column<DateTime>(nullable: false),
                     Impact = table.Column<string>(nullable: true),
                     IdUser = table.Column<Guid>(nullable: false),
-                    IdProjet = table.Column<Guid>(nullable: false)
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -255,7 +257,8 @@ namespace GestionProjets.Migrations
                     DateF = table.Column<DateTime>(nullable: false),
                     PredTache = table.Column<Guid>(nullable: false),
                     ActionId = table.Column<Guid>(nullable: false),
-                    Statut = table.Column<int>(nullable: false)
+                    Statut = table.Column<int>(nullable: false),
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {

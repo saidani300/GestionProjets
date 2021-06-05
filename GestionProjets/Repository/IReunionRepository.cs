@@ -1,12 +1,13 @@
 ﻿using GestionProjets.Models;
+using System;
 using System.Collections.Generic;
 
 namespace GestionProjets.Repository
 {
     public interface IReunionRepository
     {
-        void DeleteReunion(string ReunionId);
-        Reunion GetReunionByID(string ReunionId);
+        void DeleteReunion(Guid ReunionId);
+        Reunion GetReunionByID(Guid ReunionId);
         IEnumerable<Reunion> GetReunions();
         void InsertReunion(Reunion Reunion);
         void Save();

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace GestionProjets.DBContext
 {
-    public class QualitasContext : DbContext
+    public class QalitasContext : DbContext
     {
-        public QualitasContext(DbContextOptions<QualitasContext> options) : base(options)
+        public QalitasContext(DbContextOptions<QalitasContext> options) : base(options)
         {
         }
         public DbSet<Projet> Projets { get; set; }

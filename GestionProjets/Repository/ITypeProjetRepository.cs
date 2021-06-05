@@ -1,12 +1,13 @@
 ﻿using GestionProjets.Models;
+using System;
 using System.Collections.Generic;
 
 namespace GestionProjets.Repository
 {
     public interface ITypeProjetRepository
     {
-        void DeleteTypeProjet(string TypeProjetId);
-        TypeProjet GetTypeProjetByID(string TypeProjetId);
+        void DeleteTypeProjet(Guid TypeProjetId);
+        TypeProjet GetTypeProjetByID(Guid TypeProjetId);
         IEnumerable<TypeProjet> GetTypeProjets();
         void InsertTypeProjet(TypeProjet TypeProjet);
         void Save();

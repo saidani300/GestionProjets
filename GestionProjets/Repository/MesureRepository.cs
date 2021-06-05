@@ -10,13 +10,13 @@ namespace GestionProjets.Repository
 {
     public class MesureRepository : IMesureRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public MesureRepository(QualitasContext dbContext)
+        public MesureRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public void DeleteMesure(string MesureId)
+        public void DeleteMesure(Guid MesureId)
         {
             var Mesure = _dbContext.Mesures.Find(MesureId);
             _dbContext.Mesures.Remove(Mesure);
@@ -27,7 +27,7 @@ namespace GestionProjets.Repository
             return _dbContext.Mesures.Where(A => A.ProjetId == ProjetId);
         }
 
-        public Mesure GetMesureByID(string MesureId)
+        public Mesure GetMesureByID(Guid MesureId)
         {
             return _dbContext.Mesures.Find(MesureId);
         }

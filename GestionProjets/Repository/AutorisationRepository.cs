@@ -10,20 +10,20 @@ namespace GestionProjets.Repository
 {
     public class AutorisationRepository : IAutorisationRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public AutorisationRepository(QualitasContext dbContext)
+        public AutorisationRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public void DeleteAutorisation(string AutorisationId)
+        public void DeleteAutorisation(Guid AutorisationId)
         {
             var Autorisation = _dbContext.Autorisations.Find(AutorisationId);
             _dbContext.Autorisations.Remove(Autorisation);
             Save();
         }
 
-        public Autorisation GetAutorisationByID(string AutorisationId)
+        public Autorisation GetAutorisationByID(Guid AutorisationId)
         {
             return _dbContext.Autorisations.Find(AutorisationId);
         }

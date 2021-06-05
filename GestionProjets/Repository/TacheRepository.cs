@@ -10,20 +10,29 @@ namespace GestionProjets.Repository
 {
     public class TacheRepository : ITacheRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public TacheRepository(QualitasContext dbContext)
+        public TacheRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public void DeleteTache(string TacheId)
+        public IEnumerable<Tache> GetTachesByProject(Guid ProjetId)
+        {
+            return _dbContext.Taches.Where(A => A.ProjetId == ProjetId);
+        }
+
+        public IEnumerable<Tache> GetTachesByAction(Guid ActionId)
+        {
+            return _dbContext.Taches.Where(A => A.ActionId == ActionId);
+        }
+        public void DeleteTache(Guid TacheId)
         {
             var Tache = _dbContext.Taches.Find(TacheId);
             _dbContext.Taches.Remove(Tache);
             Save();
         }
 
-        public Tache GetTacheByID(string TacheId)
+        public Tache GetTacheByID(Guid TacheId)
         {
             return _dbContext.Taches.Find(TacheId);
         }

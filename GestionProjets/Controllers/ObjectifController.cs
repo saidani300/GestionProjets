@@ -9,7 +9,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Transactions;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace GestionProjets.Controllers
 {
@@ -29,12 +28,12 @@ namespace GestionProjets.Controllers
             _autorisationRepository = autorisationRepository;
         }
 
-        [HttpGet("~/getbyprojet/{id}")]
+        [HttpGet("getbyprojet/{id}")]
 
         public IActionResult GetByProject(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure1"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Objectif0"))
             {
                 var objectifs = _objectifRepository.GetobjectifsByProject(id);
                 return new OkObjectResult(objectifs);
@@ -47,32 +46,87 @@ namespace GestionProjets.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var objectifs = _objectifRepository.GetObjectifs();
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Objectif1"))
+            {
+                var objectifs = _objectifRepository.GetObjectifs();
             return new OkObjectResult(objectifs);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(string id)
+        public IActionResult Get(Guid id)
         {
-            var objectif = _objectifRepository.GetObjectifByID(id);
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Objectif2"))
+            {
+                var objectif = _objectifRepository.GetObjectifByID(id);
             return new OkObjectResult(objectif);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        internal bool Authorization(Objectif objectif)
+        {
+
+            Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            Guid projetId = objectif.ProjetId;
+            Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
+            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
+            if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         [HttpPost]
         public IActionResult Post([FromBody] Objectif objectif)
         {
-            using (var scope = new TransactionScope())
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Objectif3"))
+            {
+                if (Authorization(objectif))
+                {
+                    using (var scope = new TransactionScope())
             {
                 _objectifRepository.InsertObjectif(objectif);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = objectif.Id }, objectif);
+            }
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest();
             }
         }
 
         [HttpPut]
         public IActionResult Put([FromBody] Objectif objectif)
         {
-            if (objectif != null)
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Objectif4"))
+            {
+                if (Authorization(objectif))
+                {
+                    if (objectif != null)
             {
                 using (var scope = new TransactionScope())
                 {
@@ -82,13 +136,32 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public IActionResult Delete(Guid id)
         {
-            _objectifRepository.DeleteObjectif(id);
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Objectif5"))
+            {
+                _objectifRepository.DeleteObjectif(id);
             return new OkResult();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

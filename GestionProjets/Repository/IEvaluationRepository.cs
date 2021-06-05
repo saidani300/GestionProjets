@@ -1,12 +1,13 @@
 ﻿using GestionProjets.Models;
+using System;
 using System.Collections.Generic;
 
 namespace GestionProjets.Repository
 {
     public interface IEvaluationRepository
     {
-        void DeleteEvaluation(string EvaluationId);
-        Evaluation GetEvaluationByID(string EvaluationId);
+        void DeleteEvaluation(Guid EvaluationId);
+        Evaluation GetEvaluationByID(Guid EvaluationId);
         IEnumerable<Evaluation> GetEvaluations();
         void InsertEvaluation(Evaluation Evaluation);
         void Save();

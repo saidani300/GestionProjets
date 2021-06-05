@@ -10,20 +10,20 @@ namespace GestionProjets.Repository
 {
     public class TypeProjetRepository : ITypeProjetRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public TypeProjetRepository(QualitasContext dbContext)
+        public TypeProjetRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public void DeleteTypeProjet(string TypeProjetId)
+        public void DeleteTypeProjet(Guid TypeProjetId)
         {
             var TypeProjet = _dbContext.TypesProjet.Find(TypeProjetId);
             _dbContext.TypesProjet.Remove(TypeProjet);
             Save();
         }
 
-        public TypeProjet GetTypeProjetByID(string TypeProjetId)
+        public TypeProjet GetTypeProjetByID(Guid TypeProjetId)
         {
             return _dbContext.TypesProjet.Find(TypeProjetId);
         }

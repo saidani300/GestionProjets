@@ -6,8 +6,8 @@ namespace GestionProjets.Repository
 {
     public interface IDocumentRepository
     {
-        void DeleteDocument(string DocumentId);
-        Document GetDocumentByID(string DocumentId);
+        void DeleteDocument(Guid DocumentId);
+        Document GetDocumentByID(Guid DocumentId);
         IEnumerable<Document> GetDocuments();
         IEnumerable<Document> GetDocumetsByProject(Guid ProjetId);
         void InsertDocument(Document Document);

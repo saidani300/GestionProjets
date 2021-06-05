@@ -4,16 +4,14 @@ using GestionProjets.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GestionProjets.Migrations
 {
-    [DbContext(typeof(QualitasContext))]
-    [Migration("20210523164540_Init")]
-    partial class Init
+    [DbContext(typeof(QalitasContext))]
+    partial class QalitasContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +46,7 @@ namespace GestionProjets.Migrations
                     b.Property<Guid>("PhaseId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PredAction")
+                    b.Property<Guid?>("PredAction")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ProjetId")
@@ -158,6 +156,9 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("ProjetId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Unite")
                         .HasColumnType("nvarchar(max)");
 
@@ -222,14 +223,14 @@ namespace GestionProjets.Migrations
                     b.Property<int>("Etat")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("IdProjet")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Priorite")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("ProjetId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -254,9 +255,6 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("IdProjet")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("IdUser")
                         .HasColumnType("uniqueidentifier");
 
@@ -268,6 +266,9 @@ namespace GestionProjets.Migrations
 
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProjetId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Source")
                         .HasColumnType("nvarchar(max)");
@@ -288,6 +289,9 @@ namespace GestionProjets.Migrations
 
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProjetId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<long>("Valeur")
                         .HasColumnType("bigint");
@@ -382,14 +386,14 @@ namespace GestionProjets.Migrations
                     b.Property<int>("Etat")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("IdProjet")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("IdUser")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProjetId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -411,9 +415,6 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("IdProjet")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("IdUser")
                         .HasColumnType("uniqueidentifier");
 
@@ -425,6 +426,9 @@ namespace GestionProjets.Migrations
 
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProjetId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Source")
                         .HasColumnType("nvarchar(max)");
@@ -465,6 +469,9 @@ namespace GestionProjets.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("PredTache")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Statut")

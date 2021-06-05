@@ -10,20 +10,20 @@ namespace GestionProjets.Repository
 {
     public class IndicateurRepository : IIndicateurRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public IndicateurRepository(QualitasContext dbContext)
+        public IndicateurRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public void DeleteIndicateur(string IndicateurId)
+        public void DeleteIndicateur(Guid IndicateurId)
         {
             var Indicateur = _dbContext.Indicateurs.Find(IndicateurId);
             _dbContext.Indicateurs.Remove(Indicateur);
             Save();
         }
 
-        public Indicateur GetIndicateurByID(string IndicateurId)
+        public Indicateur GetIndicateurByID(Guid IndicateurId)
         {
             return _dbContext.Indicateurs.Find(IndicateurId);
         }

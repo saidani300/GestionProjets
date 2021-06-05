@@ -10,20 +10,20 @@ namespace GestionProjets.Repository
 {
     public class UtilisateurRepository : IUtilisateurRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public UtilisateurRepository(QualitasContext dbContext)
+        public UtilisateurRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public void DeleteUtilisateur(string UtilisateurId)
+        public void DeleteUtilisateur(Guid UtilisateurId)
         {
             var Utilisateur = _dbContext.Utilisateurs.Find(UtilisateurId);
             _dbContext.Utilisateurs.Remove(Utilisateur);
             Save();
         }
 
-        public Utilisateur GetUtilisateurByID(string UtilisateurId)
+        public Utilisateur GetUtilisateurByID(Guid UtilisateurId)
         {
             return _dbContext.Utilisateurs.Find(UtilisateurId);
         }

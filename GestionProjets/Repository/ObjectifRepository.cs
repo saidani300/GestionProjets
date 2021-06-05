@@ -10,18 +10,18 @@ namespace GestionProjets.Repository
 {
     public class ObjectifRepository : IObjectifRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public ObjectifRepository(QualitasContext dbContext)
+        public ObjectifRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
         public IEnumerable<Objectif> GetobjectifsByProject(Guid ProjetId)
         {
-            return _dbContext.Objectifs.Where(A => A.IdProjet == ProjetId);
+            return _dbContext.Objectifs.Where(A => A.ProjetId == ProjetId);
         }
 
-        public void DeleteObjectif(string ObjectifId)
+        public void DeleteObjectif(Guid ObjectifId)
         {
             var Objectif = _dbContext.Objectifs.Find(ObjectifId);
             _dbContext.Objectifs.Remove(Objectif);
@@ -29,7 +29,7 @@ namespace GestionProjets.Repository
         }
 
 
-        public Objectif GetObjectifByID(string ObjectifId)
+        public Objectif GetObjectifByID(Guid ObjectifId)
         {
             return _dbContext.Objectifs.Find(ObjectifId);
         }

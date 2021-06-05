@@ -10,20 +10,20 @@ namespace GestionProjets.Repository
 {
     public class RisqueRepository : IRisqueRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public RisqueRepository(QualitasContext dbContext)
+        public RisqueRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public void DeleteRisque(string RisqueId)
+        public void DeleteRisque(Guid RisqueId)
         {
             var Risque = _dbContext.Risques.Find(RisqueId);
             _dbContext.Risques.Remove(Risque);
             Save();
         }
 
-        public Risque GetRisqueByID(string RisqueId)
+        public Risque GetRisqueByID(Guid RisqueId)
         {
             return _dbContext.Risques.Find(RisqueId);
         }

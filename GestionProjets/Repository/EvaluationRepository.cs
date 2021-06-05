@@ -10,20 +10,20 @@ namespace GestionProjets.Repository
 {
     public class EvaluationRepository : IEvaluationRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public EvaluationRepository(QualitasContext dbContext)
+        public EvaluationRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public void DeleteEvaluation(string EvaluationId)
+        public void DeleteEvaluation(Guid EvaluationId)
         {
             var Evaluation = _dbContext.Evaluations.Find(EvaluationId);
             _dbContext.Evaluations.Remove(Evaluation);
             Save();
         }
 
-        public Evaluation GetEvaluationByID(string EvaluationId)
+        public Evaluation GetEvaluationByID(Guid EvaluationId)
         {
             return _dbContext.Evaluations.Find(EvaluationId);
         }

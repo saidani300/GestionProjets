@@ -26,5 +26,6 @@ namespace GestionProjets.Models
         public Guid PredTache { get; set; }
         public Guid ActionId { get; set; }
         public StatutT Statut { get; set; }
+        public Guid ProjetId { get; set; }
     }
 }

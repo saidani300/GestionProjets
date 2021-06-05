@@ -26,7 +26,8 @@ namespace GestionProjets.Controllers
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
         }
-        [HttpGet("~/getbyprojet/{id}")]
+
+        [HttpGet("getbyprojet/{id}")]
 
         public IActionResult GetByProject(Guid id)
         {
@@ -45,7 +46,7 @@ namespace GestionProjets.Controllers
 
         [HttpGet("{id}")]
 
-        public IActionResult Get(string id)
+        public IActionResult Get(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Document1"))
@@ -129,7 +130,7 @@ namespace GestionProjets.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public IActionResult Delete(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Document4"))

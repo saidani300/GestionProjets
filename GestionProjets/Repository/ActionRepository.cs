@@ -9,20 +9,20 @@ namespace GestionProjets.Repository
 {
     public class ActionRepository : IActionRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public ActionRepository(QualitasContext dbContext)
+        public ActionRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public void DeleteAction(string ActionId)
+        public void DeleteAction(Guid ActionId)
         {
             var Action = _dbContext.Actions.Find(ActionId);
             _dbContext.Actions.Remove(Action);
             Save();
         }
 
-        public Models.Action GetActionByID(string ActionId)
+        public Models.Action GetActionByID(Guid ActionId)
         {
             return _dbContext.Actions.Find(ActionId);
         }

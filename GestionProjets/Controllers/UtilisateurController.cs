@@ -4,6 +4,7 @@ using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -33,7 +34,7 @@ namespace GestionProjets.Controllers
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);//RequestContext.Principal.Identity.GetUserId();
 
 
-           Utilisateur utilisateur=  _utilisateurRepository.GetUtilisateurByID(userId);
+           Utilisateur utilisateur=  _utilisateurRepository.GetUtilisateurByID(new Guid(userId));
 
             return new OkObjectResult(utilisateur);
         }

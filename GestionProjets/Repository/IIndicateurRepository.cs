@@ -1,12 +1,13 @@
 ﻿using GestionProjets.Models;
+using System;
 using System.Collections.Generic;
 
 namespace GestionProjets.Repository
 {
     public interface IIndicateurRepository
     {
-        void DeleteIndicateur(string IndicateurId);
-        Indicateur GetIndicateurByID(string IndicateurId);
+        void DeleteIndicateur(Guid IndicateurId);
+        Indicateur GetIndicateurByID(Guid IndicateurId);
         IEnumerable<Indicateur> GetIndicateurs();
         void InsertIndicateur(Indicateur Indicateur);
         void Save();

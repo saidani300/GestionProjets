@@ -11,5 +11,6 @@ namespace GestionProjets.Models
         public Guid Id { get; set; }
         public string Nom { get; set; }
         public long Valeur { get; set; }
+        public Guid ProjetId { get; set; }
     }
 }

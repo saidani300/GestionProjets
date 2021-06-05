@@ -10,10 +10,10 @@ namespace GestionProjets.Repository
 {
     public class PhaseRepository : IPhaseRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
 
-        public PhaseRepository(QualitasContext dbContext)
+        public PhaseRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }

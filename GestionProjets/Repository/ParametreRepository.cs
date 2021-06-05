@@ -10,20 +10,20 @@ namespace GestionProjets.Repository
 {
     public class ParametreRepository : IParametreRepository
     {
-        private readonly QualitasContext _dbContext;
+        private readonly QalitasContext _dbContext;
 
-        public ParametreRepository(QualitasContext dbContext)
+        public ParametreRepository(QalitasContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public void DeleteParametre(string ParametreId)
+        public void DeleteParametre(Guid ParametreId)
         {
             var Parametre = _dbContext.Parametres.Find(ParametreId);
             _dbContext.Parametres.Remove(Parametre);
             Save();
         }
 
-        public Parametre GetParametreByID(string ParametreId)
+        public Parametre GetParametreByID(Guid ParametreId)
         {
             return _dbContext.Parametres.Find(ParametreId);
         }
