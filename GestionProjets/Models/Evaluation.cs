@@ -14,7 +14,13 @@ namespace GestionProjets.Models
         public long Note { get; set; }
         public DateTime DateCreation { get; set; } = DateTime.Now;
         public DateTime DateModification { get; set; } = DateTime.Now;
+
         public Guid IdSource { get; set; }
+        [ForeignKey("IdSource")]
+        public Utilisateur utilisateur { get; set; }
+
         public Guid IdProjet { get; set; }
+        [ForeignKey("IdProjet")]
+        public Projet projet { get; set; }
     }
 }

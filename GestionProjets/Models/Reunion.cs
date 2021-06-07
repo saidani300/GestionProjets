@@ -21,6 +21,11 @@ namespace GestionProjets.Models
         public DateTime DateCreation { get; set; } = DateTime.Now;
         public EtatReunion Etat { get; set; }
         public Guid IdUser { get; set; }
+        [ForeignKey("IdUser")]
+        public Utilisateur utilisateur { get; set; }
+
         public Guid ProjetId { get; set; }
+        [ForeignKey("ProjetId")]
+        public Projet projet { get; set; }
     }
 }

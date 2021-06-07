@@ -15,6 +15,9 @@ namespace GestionProjets.Models
         public string Nom { get; set; }
         public string Url { get; set; }
         public DateTime DateCreation { get; set; } = DateTime.Now;
+
         public Guid IdProjet { get; set; }
+        [ForeignKey("IdProjet")]
+        public Projet projet { get; set; }
     }
 }
