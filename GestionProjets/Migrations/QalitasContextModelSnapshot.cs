@@ -43,22 +43,25 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PhaseId")
+                    b.Property<Guid?>("PhaseId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("PredAction")
+                    b.Property<Guid?>("PreActionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProjetId")
+                    b.Property<Guid?>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Statut")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("PhaseId");
+
+                    b.HasIndex("PreActionId");
+
+                    b.HasIndex("ProjetId");
 
                     b.ToTable("Actions");
                 });
@@ -69,19 +72,18 @@ namespace GestionProjets.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Etat")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("IdMembre")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("IdUser")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UtilisateurId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UtilisateurId");
 
                     b.ToTable("Autorisations");
                 });
@@ -95,16 +97,18 @@ namespace GestionProjets.Migrations
                     b.Property<DateTime>("DateCreation")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("IdProjet")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ProjetId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjetId");
 
                     b.ToTable("Documents");
                 });
@@ -124,19 +128,23 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("IdProjet")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("IdSource")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Note")
                         .HasColumnType("bigint");
 
+                    b.Property<Guid>("ParametreId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ProjetId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ParametreId");
+
+                    b.HasIndex("ProjetId");
 
                     b.ToTable("Evaluations");
                 });
@@ -155,9 +163,6 @@ namespace GestionProjets.Migrations
 
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ProjetId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Unite")
                         .HasColumnType("nvarchar(max)");
@@ -188,19 +193,20 @@ namespace GestionProjets.Migrations
                     b.Property<DateTime>("DateFin")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("IdIndicateur")
+                    b.Property<Guid>("IndicateurId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ObjectifId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ProjetId")
+                    b.Property<Guid?>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<long>("Valeur")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IndicateurId");
+
+                    b.HasIndex("ProjetId");
 
                     b.ToTable("Mesures");
                 });
@@ -229,10 +235,12 @@ namespace GestionProjets.Migrations
                     b.Property<int>("Priorite")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ProjetId")
+                    b.Property<Guid?>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjetId");
 
                     b.ToTable("Objectifs");
                 });
@@ -255,9 +263,6 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("IdUser")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Impact")
                         .HasColumnType("nvarchar(max)");
 
@@ -267,7 +272,7 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ProjetId")
+                    b.Property<Guid?>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Source")
@@ -277,6 +282,8 @@ namespace GestionProjets.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjetId");
 
                     b.ToTable("Opportunites");
                 });
@@ -289,9 +296,6 @@ namespace GestionProjets.Migrations
 
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ProjetId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<long>("Valeur")
                         .HasColumnType("bigint");
@@ -319,10 +323,12 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ProjetId")
+                    b.Property<Guid?>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjetId");
 
                     b.ToTable("Phases");
                 });
@@ -360,10 +366,25 @@ namespace GestionProjets.Migrations
                     b.Property<Guid>("TypeId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("TypeProjetId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("Utilisateur1Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("Utilisateur2Id")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TypeProjetId");
+
+                    b.HasIndex("Utilisateur1Id");
+
+                    b.HasIndex("Utilisateur2Id");
 
                     b.ToTable("Projets");
                 });
@@ -386,16 +407,15 @@ namespace GestionProjets.Migrations
                     b.Property<int>("Etat")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("IdUser")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ProjetId")
+                    b.Property<Guid?>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjetId");
 
                     b.ToTable("Reunions");
                 });
@@ -415,9 +435,6 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("IdUser")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Impact")
                         .HasColumnType("nvarchar(max)");
 
@@ -427,7 +444,7 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ProjetId")
+                    b.Property<Guid?>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Source")
@@ -438,6 +455,8 @@ namespace GestionProjets.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProjetId");
+
                     b.ToTable("Risques");
                 });
 
@@ -447,7 +466,7 @@ namespace GestionProjets.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ActionId")
+                    b.Property<Guid?>("ActionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreation")
@@ -468,10 +487,10 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PredTache")
+                    b.Property<Guid?>("PreTacheId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProjetId")
+                    b.Property<Guid>("PredTacheId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Statut")
@@ -480,7 +499,16 @@ namespace GestionProjets.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("UtilisateurId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ActionId");
+
+                    b.HasIndex("PreTacheId");
+
+                    b.HasIndex("UtilisateurId");
 
                     b.ToTable("Taches");
                 });
@@ -526,9 +554,141 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Prenom")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("ReunionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("ReunionId");
+
                     b.ToTable("Utilisateurs");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Action", b =>
+                {
+                    b.HasOne("GestionProjets.Models.Phase", null)
+                        .WithMany("Actions")
+                        .HasForeignKey("PhaseId");
+
+                    b.HasOne("GestionProjets.Models.Action", "PreAction")
+                        .WithMany()
+                        .HasForeignKey("PreActionId");
+
+                    b.HasOne("GestionProjets.Models.Projet", null)
+                        .WithMany("Actions")
+                        .HasForeignKey("ProjetId");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Autorisation", b =>
+                {
+                    b.HasOne("GestionProjets.Models.Utilisateur", "Utilisateur")
+                        .WithMany()
+                        .HasForeignKey("UtilisateurId");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Document", b =>
+                {
+                    b.HasOne("GestionProjets.Models.Projet", null)
+                        .WithMany("Documents")
+                        .HasForeignKey("ProjetId");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Evaluation", b =>
+                {
+                    b.HasOne("GestionProjets.Models.Parametre", "Parametre")
+                        .WithMany()
+                        .HasForeignKey("ParametreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GestionProjets.Models.Projet", null)
+                        .WithMany("Evaluations")
+                        .HasForeignKey("ProjetId");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Mesure", b =>
+                {
+                    b.HasOne("GestionProjets.Models.Indicateur", "Indicateur")
+                        .WithMany()
+                        .HasForeignKey("IndicateurId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GestionProjets.Models.Projet", null)
+                        .WithMany("Mesures")
+                        .HasForeignKey("ProjetId");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Objectif", b =>
+                {
+                    b.HasOne("GestionProjets.Models.Projet", null)
+                        .WithMany("Objectifs")
+                        .HasForeignKey("ProjetId");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Opportunite", b =>
+                {
+                    b.HasOne("GestionProjets.Models.Projet", null)
+                        .WithMany("Opportunites")
+                        .HasForeignKey("ProjetId");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Phase", b =>
+                {
+                    b.HasOne("GestionProjets.Models.Projet", null)
+                        .WithMany("Phases")
+                        .HasForeignKey("ProjetId");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Projet", b =>
+                {
+                    b.HasOne("GestionProjets.Models.TypeProjet", "TypeProjet")
+                        .WithMany()
+                        .HasForeignKey("TypeProjetId");
+
+                    b.HasOne("GestionProjets.Models.Utilisateur", "Utilisateur1")
+                        .WithMany()
+                        .HasForeignKey("Utilisateur1Id");
+
+                    b.HasOne("GestionProjets.Models.Utilisateur", "Utilisateur2")
+                        .WithMany()
+                        .HasForeignKey("Utilisateur2Id");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Reunion", b =>
+                {
+                    b.HasOne("GestionProjets.Models.Projet", null)
+                        .WithMany("Reunions")
+                        .HasForeignKey("ProjetId");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Risque", b =>
+                {
+                    b.HasOne("GestionProjets.Models.Projet", null)
+                        .WithMany("Risques")
+                        .HasForeignKey("ProjetId");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Tache", b =>
+                {
+                    b.HasOne("GestionProjets.Models.Action", null)
+                        .WithMany("Taches")
+                        .HasForeignKey("ActionId");
+
+                    b.HasOne("GestionProjets.Models.Tache", "PreTache")
+                        .WithMany()
+                        .HasForeignKey("PreTacheId");
+
+                    b.HasOne("GestionProjets.Models.Utilisateur", "Utilisateur")
+                        .WithMany()
+                        .HasForeignKey("UtilisateurId");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Utilisateur", b =>
+                {
+                    b.HasOne("GestionProjets.Models.Reunion", null)
+                        .WithMany("Utilisateurs")
+                        .HasForeignKey("ReunionId");
                 });
 #pragma warning restore 612, 618
         }

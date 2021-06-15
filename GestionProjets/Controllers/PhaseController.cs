@@ -73,11 +73,10 @@ namespace GestionProjets.Controllers
             }
         }
 
-        internal bool Authorization(Phase phase)
+        internal bool Authorization(Phase phase, Guid projetId)
         {
 
             Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetId = phase.ProjetId;
             Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
@@ -95,19 +94,19 @@ namespace GestionProjets.Controllers
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Phase3"))
             {
-                if (Authorization(phase))
-                {
+                //if (Authorization(phase))
+                //{
                     using (var scope = new TransactionScope())
             {
                 _phaseRepository.InsertPhase(phase);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = phase.Id }, phase);
             }
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}
             }
             else
             {
@@ -121,8 +120,8 @@ namespace GestionProjets.Controllers
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Phase4"))
             {
-                if (Authorization(phase))
-                {
+                //if (Authorization(phase))
+                //{
                     if (phase != null)
             {
                 using (var scope = new TransactionScope())
@@ -133,11 +132,11 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-        }
-                else
-                {
-                    return BadRequest();
-    }
+    //    }
+    //            else
+    //            {
+    //                return BadRequest();
+    //}
 }
             else
 {

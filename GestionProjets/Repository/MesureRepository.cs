@@ -16,15 +16,10 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
-        public void DeleteMesure(Guid MesureId)
-        {
-            var Mesure = _dbContext.Mesures.Find(MesureId);
-            _dbContext.Mesures.Remove(Mesure);
-            Save();
-        }
+
         public IEnumerable<Mesure> GetMesuresByProject(Guid ProjetId)
         {
-            return _dbContext.Mesures.Where(A => A.ProjetId == ProjetId);
+            return _dbContext.Projets.Where(A => A.Id == ProjetId).FirstOrDefault().Mesures;
         }
 
         public Mesure GetMesureByID(Guid MesureId)
@@ -43,15 +38,24 @@ namespace GestionProjets.Repository
             Save();
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
+
 
         public void UpdateMesure(Mesure Mesure)
         {
             _dbContext.Entry(Mesure).State = EntityState.Modified;
             Save();
+        }
+
+        public void DeleteMesure(Guid MesureId)
+        {
+            var Mesure = _dbContext.Mesures.Find(MesureId);
+            _dbContext.Mesures.Remove(Mesure);
+            Save();
+        }
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }

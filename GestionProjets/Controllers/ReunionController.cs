@@ -29,11 +29,28 @@ namespace GestionProjets.Controllers
             _autorisationRepository = autorisationRepository;
         }
 
+        [HttpGet("getbyprojet/{id}")]
+
+        public IActionResult GetByProject(Guid id)
+        {
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion0"))
+            {
+                var Reunions = _reunionRepository.GetReunionsByProjet(id);
+                return new OkObjectResult(Reunions);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+
         [HttpGet]
         public IActionResult Get()
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion0"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion1"))
             {
                 var reunions = _reunionRepository.GetReunions();
                 return new OkObjectResult(reunions);
@@ -48,7 +65,7 @@ namespace GestionProjets.Controllers
         public IActionResult Get(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion1"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion2"))
             {
                 var reunion = _reunionRepository.GetReunionByID(id);
             return new OkObjectResult(reunion);
@@ -58,11 +75,10 @@ namespace GestionProjets.Controllers
                 return BadRequest();
     }
 }
-        internal bool Authorization(Reunion reunion)
+        internal bool Authorization(Reunion reunion, Guid projetId)
         {
 
             Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetId = reunion.ProjetId;
             Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
@@ -78,21 +94,21 @@ namespace GestionProjets.Controllers
         public IActionResult Post([FromBody] Reunion reunion)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion2"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion3"))
             {
-                if (Authorization(reunion))
-                {
+                //if (Authorization(reunion))
+                //{
                     using (var scope = new TransactionScope())
             {
                 _reunionRepository.InsertReunion(reunion);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = reunion.Id }, reunion);
             }
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}
             }
             else
             {
@@ -104,10 +120,10 @@ namespace GestionProjets.Controllers
         public IActionResult Put([FromBody] Reunion reunion)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion3"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion4"))
             {
-                if (Authorization(reunion))
-                {
+                //if (Authorization(reunion))
+                //{
                     if (reunion != null)
             {
                 using (var scope = new TransactionScope())
@@ -118,11 +134,11 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}
             }
             else
             {
@@ -134,7 +150,7 @@ namespace GestionProjets.Controllers
         public IActionResult Delete(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion4"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion5"))
             {
                 _reunionRepository.DeleteReunion(id);
             return new OkResult();

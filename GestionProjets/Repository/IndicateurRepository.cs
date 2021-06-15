@@ -16,12 +16,7 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
-        public void DeleteIndicateur(Guid IndicateurId)
-        {
-            var Indicateur = _dbContext.Indicateurs.Find(IndicateurId);
-            _dbContext.Indicateurs.Remove(Indicateur);
-            Save();
-        }
+
 
         public Indicateur GetIndicateurByID(Guid IndicateurId)
         {
@@ -39,15 +34,24 @@ namespace GestionProjets.Repository
             Save();
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
 
         public void UpdateIndicateur(Indicateur Indicateur)
         {
             _dbContext.Entry(Indicateur).State = EntityState.Modified;
             Save();
         }
+
+        public void DeleteIndicateur(Guid IndicateurId)
+        {
+            var Indicateur = _dbContext.Indicateurs.Find(IndicateurId);
+            _dbContext.Indicateurs.Remove(Indicateur);
+            Save();
+        }
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
+        }
+
     }
 }

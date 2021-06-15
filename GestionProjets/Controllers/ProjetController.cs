@@ -28,11 +28,27 @@ namespace GestionProjets.Controllers
 
         }
 
+        [HttpGet("getbyutilisateur/{id}")]
+
+        public IActionResult GetByUtilisateur(Guid id)
+        {
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet0"))
+            {
+                var projets = _projetRepository.GetProjetsByUtilisateur(id);
+                return new OkObjectResult(projets);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet0"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet1"))
             {
             var projets = _projetRepository.GetProjets(new Guid(LoggedInuserId));
             return new OkObjectResult(projets);
@@ -47,7 +63,7 @@ namespace GestionProjets.Controllers
         public IActionResult Get(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet1"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet2"))
             {
                 var projet = _projetRepository.GetProjetByID(id);
             return new OkObjectResult(projet);
@@ -78,7 +94,7 @@ namespace GestionProjets.Controllers
         public IActionResult Post([FromBody] Projet projet)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet2"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet3"))
             {
                 if (Authorization(projet))
                 {
@@ -104,7 +120,7 @@ namespace GestionProjets.Controllers
         public IActionResult Put([FromBody] Projet projet)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet3"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet4"))
             {
                 if (Authorization(projet))
                 {
@@ -134,7 +150,7 @@ namespace GestionProjets.Controllers
         public IActionResult Delete(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet4"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet5"))
             {
                 _projetRepository.DeleteProjet(id);
             return new OkResult();

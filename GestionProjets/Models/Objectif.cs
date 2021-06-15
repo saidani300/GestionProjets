@@ -22,15 +22,12 @@ namespace GestionProjets.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+
         public string Nom { get; set; }
         public string Description { get; set; }
         public Priorite Priorite { get; set; }
         public EtatO Etat { get; set; }
         public DateTime DateCreation { get; set; } = DateTime.Now;
         public DateTime DateModification { get; set; } = DateTime.Now;
-
-        public Guid ProjetId { get; set; }
-        [ForeignKey("ProjetId")]
-        public Projet projet { get; set; }
     }
 }

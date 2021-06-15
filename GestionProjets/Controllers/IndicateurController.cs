@@ -29,11 +29,10 @@ namespace GestionProjets.Controllers
             _autorisationRepository = autorisationRepository;
         }
 
-        internal bool Authorization(Indicateur indicateur)
+        internal bool Authorization(Indicateur indicateur , Guid projetId)
         {
 
             Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetId = indicateur.ProjetId;
             Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
@@ -83,19 +82,19 @@ namespace GestionProjets.Controllers
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Indicateur2"))
             {
-                if (Authorization(indicateur))
-                {
+                //if (Authorization(indicateur))
+                //{
                     using (var scope = new TransactionScope())
             {
                 _indicateurRepository.InsertIndicateur(indicateur);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = indicateur.Id }, indicateur);
             }
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}
             }
             else
             {
@@ -109,8 +108,8 @@ namespace GestionProjets.Controllers
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Indicateur3"))
             {
-                if (Authorization(indicateur))
-                {
+                //if (Authorization(indicateur))
+                //{
                     if (indicateur != null)
             {
                 using (var scope = new TransactionScope())
@@ -121,11 +120,11 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}
             }
             else
             {

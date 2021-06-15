@@ -16,9 +16,9 @@ namespace GestionProjets.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+
         public Guid UserId { get; set; }
-        [ForeignKey("UserId")]
-        public Utilisateur utilisateur { get; set; }
+        public Utilisateur Utilisateur { get; set; }
 
         public string Nom { get; set; }
         public string Description { get; set; }
@@ -26,17 +26,25 @@ namespace GestionProjets.Models
         public DateTime DateModification { get; set; } = DateTime.Now;
         public DateTime DateD { get; set; }
         public DateTime DateF { get; set; }
-        public Guid PredTache { get; set; }
-        [ForeignKey("PredTache")]
-        public Tache tache { get; set; }
 
-        public Guid ActionId { get; set; }
-        [ForeignKey("ActionId")]
-        public Action action { get; set; }
+        public Guid PredTacheId { get; set; }
+        public Tache PreTache { get; set; }
 
         public StatutT Statut { get; set; }
-        public Guid ProjetId { get; set; }
-        [ForeignKey("ProjetId")]
-        public Projet projet { get; set; }
     }
-}
+
+    public class TacheDTO
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
+        public string Nom { get; set; }
+        public string Description { get; set; }
+        public DateTime DateD { get; set; }
+        public DateTime DateF { get; set; }
+        public Guid PredTacheId { get; set; }
+        public StatutT Statut { get; set; }
+    }
+
+    }

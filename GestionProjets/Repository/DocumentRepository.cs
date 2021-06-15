@@ -18,13 +18,7 @@ namespace GestionProjets.Repository
         }
         public IEnumerable<Document> GetDocumetsByProject(Guid ProjetId)
         {
-            return _dbContext.Documents.Where(A => A.IdProjet == ProjetId);
-        }
-        public void DeleteDocument(Guid DocumentId)
-        {
-            var Document = _dbContext.Documents.Find(DocumentId);
-            _dbContext.Documents.Remove(Document);
-            Save();
+            return _dbContext.Projets.Where(A => A.Id == ProjetId).FirstOrDefault().Documents;
         }
 
         public Document GetDocumentByID(Guid DocumentId)
@@ -43,15 +37,24 @@ namespace GestionProjets.Repository
             Save();
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
 
         public void UpdateDocument(Document Document)
         {
             _dbContext.Entry(Document).State = EntityState.Modified;
             Save();
         }
+
+        public void DeleteDocument(Guid DocumentId)
+        {
+            var Document = _dbContext.Documents.Find(DocumentId);
+            _dbContext.Documents.Remove(Document);
+            Save();
+        }
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
+        }
+
     }
 }

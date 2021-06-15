@@ -29,11 +29,28 @@ namespace GestionProjets.Controllers
             _autorisationRepository = autorisationRepository;
         }
 
+        [HttpGet("getbyprojet/{id}")]
+
+        public IActionResult GetByProject(Guid id)
+        {
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque0"))
+            {
+                var Risques = _risqueRepository.GetRisquesByProjet(id);
+                return new OkObjectResult(Risques);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+
         [HttpGet]
         public IActionResult Get()
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque0"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque1"))
             {
                 var risques = _risqueRepository.GetRisques();
             return new OkObjectResult(risques);
@@ -48,7 +65,7 @@ namespace GestionProjets.Controllers
         public IActionResult Get(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque1"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque2"))
             {
                 var risque = _risqueRepository.GetRisqueByID(id);
             return new OkObjectResult(risque);
@@ -59,11 +76,10 @@ namespace GestionProjets.Controllers
             }
         }
 
-        internal bool Authorization(Risque risque)
+        internal bool Authorization(Risque risque, Guid projetId)
         {
 
             Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetId = risque.ProjetId;
             Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
@@ -80,21 +96,21 @@ namespace GestionProjets.Controllers
         public IActionResult Post([FromBody] Risque risque)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque2"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque3"))
             {
-                if (Authorization(risque))
-                {
+                //if (Authorization(risque))
+                //{
                     using (var scope = new TransactionScope())
             {
                 _risqueRepository.InsertRisque(risque);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = risque.Id }, risque);
             }
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}
             }
             else
             {
@@ -106,10 +122,10 @@ namespace GestionProjets.Controllers
         public IActionResult Put([FromBody] Risque risque)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque3"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque4"))
             {
-                if (Authorization(risque))
-                {
+                //if (Authorization(risque))
+                //{
                     if (risque != null)
             {
                 using (var scope = new TransactionScope())
@@ -120,11 +136,11 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}
             }
             else
             {
@@ -136,7 +152,7 @@ namespace GestionProjets.Controllers
         public IActionResult Delete(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque4"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque5"))
             {
                 _risqueRepository.DeleteRisque(id);
             return new OkResult();

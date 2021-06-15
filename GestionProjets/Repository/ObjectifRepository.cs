@@ -18,15 +18,9 @@ namespace GestionProjets.Repository
         }
         public IEnumerable<Objectif> GetobjectifsByProject(Guid ProjetId)
         {
-            return _dbContext.Objectifs.Where(A => A.ProjetId == ProjetId);
+            return _dbContext.Projets.Where(A => A.Id == ProjetId).FirstOrDefault().Objectifs;
         }
 
-        public void DeleteObjectif(Guid ObjectifId)
-        {
-            var Objectif = _dbContext.Objectifs.Find(ObjectifId);
-            _dbContext.Objectifs.Remove(Objectif);
-            Save();
-        }
 
 
         public Objectif GetObjectifByID(Guid ObjectifId)
@@ -45,15 +39,24 @@ namespace GestionProjets.Repository
             Save();
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
+
 
         public void UpdateObjectif(Objectif Objectif)
         {
             _dbContext.Entry(Objectif).State = EntityState.Modified;
             Save();
+        }
+
+        public void DeleteObjectif(Guid ObjectifId)
+        {
+            var Objectif = _dbContext.Objectifs.Find(ObjectifId);
+            _dbContext.Objectifs.Remove(Objectif);
+            Save();
+        }
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }

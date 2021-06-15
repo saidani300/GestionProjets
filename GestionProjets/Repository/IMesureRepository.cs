@@ -8,8 +8,8 @@ namespace GestionProjets.Repository
     {
         void DeleteMesure(Guid MesureId);
         Mesure GetMesureByID(Guid MesureId);
-        IEnumerable<Mesure> GetMesuresByProject(Guid ProjetId);
         IEnumerable<Mesure> GetMesures();
+        IEnumerable<Mesure> GetMesuresByProject(Guid ProjetId);
         void InsertMesure(Mesure Mesure);
         void Save();
         void UpdateMesure(Mesure Mesure);

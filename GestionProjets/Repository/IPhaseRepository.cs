@@ -6,10 +6,10 @@ namespace GestionProjets.Repository
 {
     public interface IPhaseRepository
     {
-        IEnumerable<Phase> GetPhasesByProject(Guid ProjetId);
         void DeletePhase(Guid PhaseId);
         Phase GetPhaseByID(Guid PhaseId);
         IEnumerable<Phase> GetPhases();
+        IEnumerable<Phase> GetPhasesByProject(Guid ProjetId);
         void InsertPhase(Phase Phase);
         void Save();
         void UpdatePhase(Phase Phase);

@@ -18,14 +18,9 @@ namespace GestionProjets.Repository
         }
         public IEnumerable<Opportunite> GetOpportunitesByProject(Guid ProjetId)
         {
-            return _dbContext.Opportunites.Where(A => A.ProjetId == ProjetId);
+            return _dbContext.Projets.Where(A => A.Id == ProjetId).FirstOrDefault().Opportunites;
         }
-        public void DeleteOpportunite(Guid OpportuniteId)
-        {
-            var Opportunite = _dbContext.Opportunites.Find(OpportuniteId);
-            _dbContext.Opportunites.Remove(Opportunite);
-            Save();
-        }
+
 
         public Opportunite GetOpportuniteByID(Guid OpportuniteId)
         {
@@ -43,15 +38,23 @@ namespace GestionProjets.Repository
             Save();
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
 
         public void UpdateOpportunite(Opportunite Opportunite)
         {
             _dbContext.Entry(Opportunite).State = EntityState.Modified;
             Save();
+        }
+
+        public void DeleteOpportunite(Guid OpportuniteId)
+        {
+            var Opportunite = _dbContext.Opportunites.Find(OpportuniteId);
+            _dbContext.Opportunites.Remove(Opportunite);
+            Save();
+        }
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }

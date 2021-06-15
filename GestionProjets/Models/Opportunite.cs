@@ -30,6 +30,7 @@ namespace GestionProjets.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+
         public string Nom { get; set; }
         public string Description { get; set; }
         public NiveauOpportunite Niveau { get; set; }
@@ -40,12 +41,5 @@ namespace GestionProjets.Models
         public DateTime DateCreation { get; set; } = DateTime.Now;
         public string Impact { get; set; }
 
-        public Guid IdUser { get; set; }
-        [ForeignKey("IdUser")]
-        public Utilisateur utilisateur { get; set; }
-
-        public Guid ProjetId { get; set; }
-        [ForeignKey("ProjetId")]
-        public Projet projet { get; set; }
     }
 }

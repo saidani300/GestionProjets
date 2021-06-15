@@ -16,12 +16,7 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
-        public void DeleteParametre(Guid ParametreId)
-        {
-            var Parametre = _dbContext.Parametres.Find(ParametreId);
-            _dbContext.Parametres.Remove(Parametre);
-            Save();
-        }
+
 
         public Parametre GetParametreByID(Guid ParametreId)
         {
@@ -39,15 +34,24 @@ namespace GestionProjets.Repository
             Save();
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
+
 
         public void UpdateParametre(Parametre Parametre)
         {
             _dbContext.Entry(Parametre).State = EntityState.Modified;
             Save();
+        }
+
+        public void DeleteParametre(Guid ParametreId)
+        {
+            var Parametre = _dbContext.Parametres.Find(ParametreId);
+            _dbContext.Parametres.Remove(Parametre);
+            Save();
+        }
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }

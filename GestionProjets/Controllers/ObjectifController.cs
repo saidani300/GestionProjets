@@ -73,11 +73,10 @@ namespace GestionProjets.Controllers
             }
         }
 
-        internal bool Authorization(Objectif objectif)
+        internal bool Authorization(Objectif objectif , Guid projetId)
         {
 
             Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetId = objectif.ProjetId;
             Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
@@ -97,19 +96,19 @@ namespace GestionProjets.Controllers
 
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Objectif3"))
             {
-                if (Authorization(objectif))
-                {
+                //if (Authorization(objectif))
+                //{
                     using (var scope = new TransactionScope())
             {
                 _objectifRepository.InsertObjectif(objectif);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = objectif.Id }, objectif);
             }
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}
             }
             else
             {
@@ -124,8 +123,8 @@ namespace GestionProjets.Controllers
 
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Objectif4"))
             {
-                if (Authorization(objectif))
-                {
+                //if (Authorization(objectif))
+                //{
                     if (objectif != null)
             {
                 using (var scope = new TransactionScope())
@@ -136,11 +135,11 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}
             }
             else
             {

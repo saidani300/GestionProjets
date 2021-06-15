@@ -15,12 +15,6 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
-        public void DeleteAction(Guid ActionId)
-        {
-            var Action = _dbContext.Actions.Find(ActionId);
-            _dbContext.Actions.Remove(Action);
-            Save();
-        }
 
         public Models.Action GetActionByID(Guid ActionId)
         {
@@ -29,22 +23,24 @@ namespace GestionProjets.Repository
 
         public IEnumerable<Models.Action> GetActionsByProject(Guid ProjetId)
         {
-            return _dbContext.Actions.Where(A => A.ProjetId  == ProjetId);
+            return _dbContext.Projets.Where(A => A.Id == ProjetId).FirstOrDefault().Actions;
         }
 
         public IEnumerable<Models.Action> GetActionsByPhase(Guid PhaseId)
         {
-            return _dbContext.Actions.Where(A => A.PhaseId == PhaseId);
+            return _dbContext.Phases.Where(A => A.Id == PhaseId).FirstOrDefault().Actions;
         }
-        public void InsertAction(Models.Action Action)
+
+        public void InsertActionProjet(Models.Action Action, Guid ProjetId)
         {
-            _dbContext.Add(Action);
+            _dbContext.Projets.Where(A => A.Id == ProjetId).FirstOrDefault().Actions.Add(Action);
             Save();
         }
 
-        public void Save()
+        public void InsertActionPhase(Models.Action Action, Guid PhaseId)
         {
-            _dbContext.SaveChanges();
+            _dbContext.Phases.Where(A => A.Id == PhaseId).FirstOrDefault().Actions.Add(Action);
+            Save();
         }
 
         public void UpdateAction(Models.Action Action)
@@ -52,5 +48,17 @@ namespace GestionProjets.Repository
             _dbContext.Entry(Action).State = EntityState.Modified;
             Save();
         }
+
+        public void DeleteAction(Guid ActionId)
+        {
+            var Action = _dbContext.Actions.Find(ActionId);
+            _dbContext.Actions.Remove(Action);
+            Save();
+        }
+        public void Save()
+        {
+            _dbContext.SaveChanges();
+        }
+
     }
 }

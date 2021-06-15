@@ -26,27 +26,12 @@ namespace GestionProjets.Controllers
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
         }
-        [HttpGet("getbyprojet/{id}")]
-
-        public IActionResult GetByProject(Guid id)
-        {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache0"))
-            {
-                var taches = _tacheRepository.GetTachesByProject(id);
-                return new OkObjectResult(taches);
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
-        [HttpGet("getbyAction/{id}")]
+        [HttpGet("getbyaction/{id}")]
 
         public IActionResult GetByAction(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache1"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache0"))
             {
                 var taches = _tacheRepository.GetTachesByAction(id);
                 return new OkObjectResult(taches);
@@ -56,12 +41,13 @@ namespace GestionProjets.Controllers
                 return BadRequest();
             }
         }
+        
 
         [HttpGet]
         public IActionResult Get()
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache2"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache1"))
             {
                 var taches = _tacheRepository.GetTaches();
             return new OkObjectResult(taches);
@@ -76,7 +62,7 @@ namespace GestionProjets.Controllers
         public IActionResult Get(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache3"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache2"))
             {
                 var tache = _tacheRepository.GetTacheByID(id);
             return new OkObjectResult(tache);
@@ -88,11 +74,10 @@ namespace GestionProjets.Controllers
 
 }
 
-        internal bool Authorization(Tache tache)
+        internal bool Authorization(Tache tache, Guid projetId)
         {
 
             Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetId = tache.ProjetId;
             Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
@@ -109,21 +94,21 @@ namespace GestionProjets.Controllers
         public IActionResult Post([FromBody] Tache tache)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache4"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache3"))
             {
-                if (Authorization(tache))
-                {
+                //if (Authorization(tache))
+                //{
                     using (var scope = new TransactionScope())
             {
                 _tacheRepository.InsertTache(tache);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = tache.Id }, tache);
             }
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}
             }
             else
             {
@@ -135,10 +120,10 @@ namespace GestionProjets.Controllers
         public IActionResult Put([FromBody] Tache tache)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache5"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache4"))
             {
-                if (Authorization(tache))
-                {
+                //if (Authorization(tache))
+                //{
                     if (tache != null)
             {
                 using (var scope = new TransactionScope())
@@ -149,11 +134,11 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}
             }
             else
             {
@@ -165,7 +150,7 @@ namespace GestionProjets.Controllers
         public IActionResult Delete(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache6"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache5"))
             {
                 _tacheRepository.DeleteTache(id);
             return new OkResult();

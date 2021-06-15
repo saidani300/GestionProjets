@@ -9,6 +9,7 @@ namespace GestionProjets.Models
 {
     public class Utilisateur
     {
+        [Key]
         public Guid Id { get; set; }
         public string Nom { get; set; }
         public string Prenom { get; set; }
@@ -17,6 +18,16 @@ namespace GestionProjets.Models
         public string Email { get; set; }
         public DateTime DateCreation { get; set; } = DateTime.Now;
         public DateTime DateModification { get; set; } = DateTime.Now;
+        
+    }
+    public class UtilisateurDTO
+    {
+        [Key]
+        public Guid Id { get; set; }
+        public string Nom { get; set; }
+        public string Prenom { get; set; }
+        public string Email { get; set; }
+
     }
 
     public class Role

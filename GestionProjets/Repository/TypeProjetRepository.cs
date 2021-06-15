@@ -16,12 +16,7 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
-        public void DeleteTypeProjet(Guid TypeProjetId)
-        {
-            var TypeProjet = _dbContext.TypesProjet.Find(TypeProjetId);
-            _dbContext.TypesProjet.Remove(TypeProjet);
-            Save();
-        }
+
 
         public TypeProjet GetTypeProjetByID(Guid TypeProjetId)
         {
@@ -39,15 +34,24 @@ namespace GestionProjets.Repository
             Save();
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
+
 
         public void UpdateTypeProjet(TypeProjet TypeProjet)
         {
             _dbContext.Entry(TypeProjet).State = EntityState.Modified;
             Save();
+        }
+
+        public void DeleteTypeProjet(Guid TypeProjetId)
+        {
+            var TypeProjet = _dbContext.TypesProjet.Find(TypeProjetId);
+            _dbContext.TypesProjet.Remove(TypeProjet);
+            Save();
+        }
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }

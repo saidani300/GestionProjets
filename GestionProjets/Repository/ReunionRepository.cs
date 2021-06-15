@@ -16,11 +16,10 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
-        public void DeleteReunion(Guid ReunionId)
+
+        public IEnumerable<Reunion> GetReunionsByProjet(Guid ProjetId)
         {
-            var Reunion = _dbContext.Reunions.Find(ReunionId);
-            _dbContext.Reunions.Remove(Reunion);
-            Save();
+            return _dbContext.Projets.Where(A => A.Id == ProjetId).FirstOrDefault().Reunions;
         }
 
         public Reunion GetReunionByID(Guid ReunionId)
@@ -39,15 +38,23 @@ namespace GestionProjets.Repository
             Save();
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
 
         public void UpdateReunion(Reunion Reunion)
         {
             _dbContext.Entry(Reunion).State = EntityState.Modified;
             Save();
+        }
+
+        public void DeleteReunion(Guid ReunionId)
+        {
+            var Reunion = _dbContext.Reunions.Find(ReunionId);
+            _dbContext.Reunions.Remove(Reunion);
+            Save();
+        }
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }

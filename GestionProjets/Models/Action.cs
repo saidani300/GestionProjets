@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,30 +18,45 @@ namespace GestionProjets.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        public Guid UserId { get; set; }
-        [ForeignKey("UserId")]
-        public Utilisateur utilisateur { get; set; }
-
         public string Nom { get; set; }
         public string Description { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateCreation { get; set; } = DateTime.Now;
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateModification { get; set; } = DateTime.Now;
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateD { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateF { get; set; }
 
-        public Guid? PredAction { get; set; }
-        [ForeignKey("PredAction")]
-        public Action action { get; set; }
+        public Guid? PreActionId { get; set; }
+        public Action PreAction { get; set; }
 
-        public Guid PhaseId { get; set; }
-        [ForeignKey("PhaseId")]
-        public Phase phase { get; set; }
-
-        public Guid ProjetId { get; set; }
-        [ForeignKey("ProjetId")]
-        public Projet projet { get; set; }
+        public ICollection<Tache> Taches { get; set; }
 
 
         public StatutA Statut { get; set; }
     }
+
+    public class ActionDTO
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
+        public string Nom { get; set; }
+        public string Description { get; set; }
+        public DateTime DateD { get; set; }
+        public DateTime DateF { get; set; }
+        public Guid PreActionId { get; set; }
+        public StatutA Statut { get; set; }
+    }
+
 }

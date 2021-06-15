@@ -9,6 +9,7 @@ namespace GestionProjets.Repository
         void DeleteReunion(Guid ReunionId);
         Reunion GetReunionByID(Guid ReunionId);
         IEnumerable<Reunion> GetReunions();
+        IEnumerable<Reunion> GetReunionsByProjet(Guid ProjetId);
         void InsertReunion(Reunion Reunion);
         void Save();
         void UpdateReunion(Reunion Reunion);

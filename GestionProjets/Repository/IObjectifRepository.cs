@@ -6,10 +6,10 @@ namespace GestionProjets.Repository
 {
     public interface IObjectifRepository
     {
-        IEnumerable<Objectif> GetobjectifsByProject(Guid ProjetId);
         void DeleteObjectif(Guid ObjectifId);
         Objectif GetObjectifByID(Guid ObjectifId);
         IEnumerable<Objectif> GetObjectifs();
+        IEnumerable<Objectif> GetobjectifsByProject(Guid ProjetId);
         void InsertObjectif(Objectif Objectif);
         void Save();
         void UpdateObjectif(Objectif Objectif);

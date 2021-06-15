@@ -16,21 +16,17 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
-        public IEnumerable<Tache> GetTachesByProject(Guid ProjetId)
-        {
-            return _dbContext.Taches.Where(A => A.ProjetId == ProjetId);
-        }
+        //public IEnumerable<Tache> GetTachesByProject(Guid ProjetId)
+        //{
+        //    return _dbContext.Projets.Where(A => A.Id == ProjetId).;
+        //}
 
         public IEnumerable<Tache> GetTachesByAction(Guid ActionId)
         {
-            return _dbContext.Taches.Where(A => A.ActionId == ActionId);
+            return _dbContext.Actions.Where(A => A.Id == ActionId).FirstOrDefault().Taches;
         }
-        public void DeleteTache(Guid TacheId)
-        {
-            var Tache = _dbContext.Taches.Find(TacheId);
-            _dbContext.Taches.Remove(Tache);
-            Save();
-        }
+
+
 
         public Tache GetTacheByID(Guid TacheId)
         {
@@ -45,19 +41,28 @@ namespace GestionProjets.Repository
         public void InsertTache(Tache Tache)
         {
             _dbContext.Add(Tache);
-            
+
+            Save();
+        }
+
+
+
+        public void UpdateTache(Tache Tache)
+        {
+            _dbContext.Entry(Tache).State = EntityState.Modified;
+            Save();
+        }
+
+        public void DeleteTache(Guid TacheId)
+        {
+            var Tache = _dbContext.Taches.Find(TacheId);
+            _dbContext.Taches.Remove(Tache);
             Save();
         }
 
         public void Save()
         {
             _dbContext.SaveChanges();
-        }
-
-        public void UpdateTache(Tache Tache)
-        {
-            _dbContext.Entry(Tache).State = EntityState.Modified;
-            Save();
         }
     }
 }

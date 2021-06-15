@@ -75,11 +75,11 @@ namespace GestionProjets.Controllers
             }
         }
 
-        internal bool Authorization(Models.Action action)
+
+        internal bool Authorization(Models.Action action, Guid projetId)
         {
 
             Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetId = action.ProjetId;
             Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
@@ -92,17 +92,17 @@ namespace GestionProjets.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult Post([FromBody] Models.Action action)
+        [HttpPost("AjouterActionProjet/{id}")]
+        public IActionResult PostProjet([FromBody] Models.Action action , Guid Id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Action3"))
             {
-                if (Authorization(action))
+                if (Authorization(action , Id))
             {
                 using (var scope = new TransactionScope())
                 {
-                    _actionRepository.InsertAction(action);
+                    _actionRepository.InsertActionProjet(action, Id);
                     scope.Complete();
                     return CreatedAtAction(nameof(Get), new { id = action.Id }, action);
                 }
@@ -113,14 +113,36 @@ namespace GestionProjets.Controllers
             {return BadRequest();}
         }
 
-        [HttpPut]
-        public IActionResult Put([FromBody] Models.Action action)
+        [HttpPost("AjouterActionPhase/{id}")]
+        public IActionResult PostPhase([FromBody] Models.Action action, Guid Id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Action4"))
             {
-                if (Authorization(action))
+                //if (Authorization(action))
+                //{
+                    using (var scope = new TransactionScope())
+                    {
+                        _actionRepository.InsertActionPhase(action, Id);
+                        scope.Complete();
+                        return CreatedAtAction(nameof(Get), new { id = action.Id }, action);
+                    }
+                //}
+                //else
+                //{ return BadRequest(); }
+            }
+            else
+            { return BadRequest(); }
+        }
+
+        [HttpPut]
+        public IActionResult Put([FromBody] Models.Action action)
+        {
+            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Action5"))
             {
+            //    if (Authorization(action))
+            //{
                 if (action != null)
             {
                 using (var scope = new TransactionScope())
@@ -131,11 +153,11 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-            }
-            else
-            {
-                return BadRequest();
-            }
+            //}
+            //else
+            //{
+            //    return BadRequest();
+            //}
             }
             else
             {
@@ -147,18 +169,18 @@ namespace GestionProjets.Controllers
         public IActionResult Delete(Guid id)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Action4"))
+            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Action6"))
             {
                 Models.Action action = _actionRepository.GetActionByID(id);
-            if (Authorization(action))
-            {
+            //if (Authorization(action))
+            //{
                 _actionRepository.DeleteAction(id);
                 return new OkResult();
-            }
-            else
-            {
-                return BadRequest();
-            }
+            //}
+            //else
+            //{
+            //    return BadRequest();
+            //}
             }
             else
             {

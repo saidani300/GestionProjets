@@ -16,11 +16,11 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
-        public void DeleteRisque(Guid RisqueId)
+
+
+        public IEnumerable<Risque> GetRisquesByProjet(Guid ProjetId)
         {
-            var Risque = _dbContext.Risques.Find(RisqueId);
-            _dbContext.Risques.Remove(Risque);
-            Save();
+            return _dbContext.Projets.Where(A => A.Id == ProjetId).FirstOrDefault().Risques;
         }
 
         public Risque GetRisqueByID(Guid RisqueId)
@@ -39,15 +39,23 @@ namespace GestionProjets.Repository
             Save();
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
 
         public void UpdateRisque(Risque Risque)
         {
             _dbContext.Entry(Risque).State = EntityState.Modified;
             Save();
+        }
+
+        public void DeleteRisque(Guid RisqueId)
+        {
+            var Risque = _dbContext.Risques.Find(RisqueId);
+            _dbContext.Risques.Remove(Risque);
+            Save();
+        }
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }

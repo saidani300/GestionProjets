@@ -19,13 +19,7 @@ namespace GestionProjets.Repository
         }
         public IEnumerable<Phase> GetPhasesByProject(Guid ProjetId)
         {
-            return _dbContext.Phases.Where(A => A.ProjetId == ProjetId);
-        }
-        public void DeletePhase(Guid PhaseId)
-        {
-            var Phase = _dbContext.Phases.Find(PhaseId);
-            _dbContext.Phases.Remove(Phase);
-            Save();
+            return _dbContext.Projets.Where(A => A.Id == ProjetId).FirstOrDefault().Phases;
         }
 
         public Phase GetPhaseByID(Guid PhaseId)
@@ -44,15 +38,23 @@ namespace GestionProjets.Repository
             Save();
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
 
         public void UpdatePhase(Phase Phase)
         {
             _dbContext.Entry(Phase).State = EntityState.Modified;
             Save();
+        }
+
+        public void DeletePhase(Guid PhaseId)
+        {
+            var Phase = _dbContext.Phases.Find(PhaseId);
+            _dbContext.Phases.Remove(Phase);
+            Save();
+        }
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }

@@ -16,11 +16,10 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
-        public void DeleteProjet(Guid ProjetId)
+
+        public IEnumerable<Projet> GetProjetsByUtilisateur(Guid UserId)
         {
-            var Projet = _dbContext.Projets.Find(ProjetId);
-            _dbContext.Projets.Remove(Projet);
-            Save();
+            return _dbContext.Projets.Where(A => A.UserId == UserId);
         }
 
         public Projet GetProjetByID(Guid ProjetId)
@@ -39,15 +38,24 @@ namespace GestionProjets.Repository
             Save();
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
 
         public void UpdateProjet(Projet Projet)
         {
             _dbContext.Entry(Projet).State = EntityState.Modified;
             Save();
         }
+
+        public void DeleteProjet(Guid ProjetId)
+        {
+            var Projet = _dbContext.Projets.Find(ProjetId);
+            _dbContext.Projets.Remove(Projet);
+            Save();
+        }
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
+        }
+
     }
 }

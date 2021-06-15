@@ -16,12 +16,7 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
-        public void DeleteUtilisateur(Guid UtilisateurId)
-        {
-            var Utilisateur = _dbContext.Utilisateurs.Find(UtilisateurId);
-            _dbContext.Utilisateurs.Remove(Utilisateur);
-            Save();
-        }
+
 
         public Utilisateur GetUtilisateurByID(Guid UtilisateurId)
         {
@@ -39,15 +34,24 @@ namespace GestionProjets.Repository
             Save();
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
 
         public void UpdateUtilisateur(Utilisateur Utilisateur)
         {
             _dbContext.Entry(Utilisateur).State = EntityState.Modified;
             Save();
         }
+
+        public void DeleteUtilisateur(Guid UtilisateurId)
+        {
+            var Utilisateur = _dbContext.Utilisateurs.Find(UtilisateurId);
+            _dbContext.Utilisateurs.Remove(Utilisateur);
+            Save();
+        }
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
+        }
+
     }
 }

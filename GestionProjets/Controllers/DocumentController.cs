@@ -60,11 +60,10 @@ namespace GestionProjets.Controllers
             }
         }
 
-        internal bool Authorization(Document document)
+        internal bool Authorization(Document document , Guid projetId)
         {
 
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Guid projetId = document.IdProjet;
             Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId.ToString() == LoggedInuserId || projetChefId.ToString() == LoggedInuserId)
@@ -83,17 +82,17 @@ namespace GestionProjets.Controllers
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Document2"))
             {
-                if (Authorization(document))
-                {
+                //if (Authorization(document))
+                //{
                     using (var scope = new TransactionScope())
                     {
                         _documentRepository.InsertDocument(document);
                         scope.Complete();
                         return CreatedAtAction(nameof(Get), new { id = document.Id }, document);
                     }
-                }
-                else
-                { return BadRequest(); }
+                //}
+                //else
+                //{ return BadRequest(); }
             }
             else
             { return BadRequest(); }
@@ -105,8 +104,8 @@ namespace GestionProjets.Controllers
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Document3"))
             {
-                if (Authorization(document))
-                {
+                //if (Authorization(document))
+                //{
                     if (document != null)
                     {
                         using (var scope = new TransactionScope())
@@ -117,11 +116,11 @@ namespace GestionProjets.Controllers
                         }
                     }
                     return new NoContentResult();
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}
             }
             else
             {
@@ -136,15 +135,15 @@ namespace GestionProjets.Controllers
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Document4"))
             {
                 Document document = _documentRepository.GetDocumentByID(id);
-                if (Authorization(document))
-                {
+                //if (Authorization(document))
+                //{
                     _documentRepository.DeleteDocument(id);
                     return new OkResult();
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}
             }
             else
             {

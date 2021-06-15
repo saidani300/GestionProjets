@@ -16,12 +16,7 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
-        public void DeleteAutorisation(Guid AutorisationId)
-        {
-            var Autorisation = _dbContext.Autorisations.Find(AutorisationId);
-            _dbContext.Autorisations.Remove(Autorisation);
-            Save();
-        }
+
 
         public Autorisation GetAutorisationByID(Guid AutorisationId)
         {
@@ -35,18 +30,11 @@ namespace GestionProjets.Repository
 
         public bool Autorisation(Guid id, string reference)
         {
-            try
+            if (_dbContext.Autorisations.Count(A => A.UserId == id && A.Reference == reference) != 0)
             {
-                if (_dbContext.Autorisations.Where(A => A.IdUser == id)?.Where(A => A.Reference == reference)?.FirstOrDefault()?.Etat == false)
-                {
-                    return false;
-                }
-                else
-                {
-                    return true;
-                }
+                return false;
             }
-            catch
+            else
             {
                 return true;
             }
@@ -58,15 +46,23 @@ namespace GestionProjets.Repository
             Save();
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
+
 
         public void UpdateAutorisation(Autorisation Autorisation)
         {
             _dbContext.Entry(Autorisation).State = EntityState.Modified;
             Save();
+        }
+
+        public void DeleteAutorisation(Guid AutorisationId)
+        {
+            var Autorisation = _dbContext.Autorisations.Find(AutorisationId);
+            _dbContext.Autorisations.Remove(Autorisation);
+            Save();
+        }
+        public void Save()
+        {
+            _dbContext.SaveChanges();
         }
     }
 }

@@ -16,11 +16,10 @@ namespace GestionProjets.Repository
         {
             _dbContext = dbContext;
         }
-        public void DeleteEvaluation(Guid EvaluationId)
+
+        public IEnumerable<Evaluation> GetEvaluationsByProjet(Guid ProjetId)
         {
-            var Evaluation = _dbContext.Evaluations.Find(EvaluationId);
-            _dbContext.Evaluations.Remove(Evaluation);
-            Save();
+            return _dbContext.Projets.Where(A => A.Id == ProjetId).FirstOrDefault().Evaluations;
         }
 
         public Evaluation GetEvaluationByID(Guid EvaluationId)
@@ -39,15 +38,24 @@ namespace GestionProjets.Repository
             Save();
         }
 
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
 
         public void UpdateEvaluation(Evaluation Evaluation)
         {
             _dbContext.Entry(Evaluation).State = EntityState.Modified;
             Save();
         }
+
+        public void DeleteEvaluation(Guid EvaluationId)
+        {
+            var Evaluation = _dbContext.Evaluations.Find(EvaluationId);
+            _dbContext.Evaluations.Remove(Evaluation);
+            Save();
+        }
+
+        public void Save()
+        {
+            _dbContext.SaveChanges();
+        }
+
     }
 }

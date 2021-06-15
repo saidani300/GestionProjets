@@ -57,7 +57,9 @@ namespace GestionProjets
             services.AddTransient<IUtilisateurRepository, UtilisateurRepository>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddAuthentication(Options =>
+
             {
                 Options.DefaultAuthenticateScheme = "JwtBearer";
                 Options.DefaultChallengeScheme = "JwtBearer";
