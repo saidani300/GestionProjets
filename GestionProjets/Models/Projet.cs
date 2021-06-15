@@ -69,8 +69,6 @@ namespace GestionProjets.Models
         public Guid UserId { get; set; }
         public Guid ChefId { get; set; }
 
-        public ICollection<Phase> Phases { get; set; }
-
         public StatutP Statut { get; set; }
 
     }

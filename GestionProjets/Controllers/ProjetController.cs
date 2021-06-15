@@ -1,4 +1,5 @@
-﻿using GestionProjets.Models;
+﻿using AutoMapper;
+using GestionProjets.Models;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,13 +20,13 @@ namespace GestionProjets.Controllers
     {
         private readonly IProjetRepository _projetRepository;
         private readonly IAutorisationRepository _autorisationRepository;
+        private readonly IMapper _mapper;
 
-
-        public ProjetController(IProjetRepository projetRepository, IAutorisationRepository autorisationRepository)
+        public ProjetController(IProjetRepository projetRepository, IAutorisationRepository autorisationRepository , IMapper mapper)
         {
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
-
+            _mapper = mapper;
         }
 
         [HttpGet("getbyutilisateur/{id}")]
@@ -36,7 +37,9 @@ namespace GestionProjets.Controllers
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet0"))
             {
                 var projets = _projetRepository.GetProjetsByUtilisateur(id);
-                return new OkObjectResult(projets);
+                var projetsDTO = projets.Select(_mapper.Map<ProjetDTO>);
+
+                return new OkObjectResult(projetsDTO);
             }
             else
             {
@@ -51,6 +54,7 @@ namespace GestionProjets.Controllers
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet1"))
             {
             var projets = _projetRepository.GetProjets(new Guid(LoggedInuserId));
+            var projetsDTO = projets.Select(_mapper.Map<ProjetDTO>);
             return new OkObjectResult(projets);
             }
             else
@@ -66,7 +70,9 @@ namespace GestionProjets.Controllers
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet2"))
             {
                 var projet = _projetRepository.GetProjetByID(id);
-            return new OkObjectResult(projet);
+                ProjetDTO projetDTO = _mapper.Map<ProjetDTO>(projet);
+
+                return new OkObjectResult(projetDTO);
             }
             else
             {
@@ -96,24 +102,26 @@ namespace GestionProjets.Controllers
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet3"))
             {
-                if (Authorization(projet))
-                {
+               /* if (Authorization(projet))
+                {*/
                     using (var scope = new TransactionScope())
             {
                 _projetRepository.InsertProjet(projet);
                 scope.Complete();
-                return CreatedAtAction(nameof(Get), new { id = projet.Id }, projet);
+                ProjetDTO projetDTO = _mapper.Map<ProjetDTO>(projet);
+
+                return CreatedAtAction(nameof(Get), new { id = projet.Id }, projetDTO);
             }
                 }
                 else
                 {
                     return BadRequest();
                 }
-            }
+           /* }
             else
             {
                 return BadRequest();
-            }
+            }*/
         }
 
         [HttpPut]
@@ -122,8 +130,8 @@ namespace GestionProjets.Controllers
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Projet4"))
             {
-                if (Authorization(projet))
-                {
+                //if (Authorization(projet))
+                //{
                     if (projet != null)
             {
                 using (var scope = new TransactionScope())
@@ -134,11 +142,11 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-                }
-                else
-                {
-                    return BadRequest();
-                }
+                //}
+                //else
+                //{
+                //    return BadRequest();
+                //}
             }
             else
             {
