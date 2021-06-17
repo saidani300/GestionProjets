@@ -34,8 +34,12 @@ namespace GestionProjets.Repository
 
         public void InsertMesure(Mesure Mesure)
         {
-            _dbContext.Add(Mesure);
-            Save();
+            if (Mesure != null)
+            {
+                Projet p = _dbContext.Projets.Where(A => A.Id == Mesure.Id).FirstOrDefault();
+                p.Mesures.Add(Mesure);
+                Save();
+            }
         }
 
 

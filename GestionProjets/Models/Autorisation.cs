@@ -9,12 +9,13 @@ namespace GestionProjets.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-
+        [Required]
         public string Reference { get; set; }
+        [Required]
+        [ForeignKey("Utilisateur")]
 
         public Guid UserId { get; set; }
-        public Utilisateur Utilisateur { get; set; }
+        public virtual Utilisateur Utilisateur { get; set; }
 
-       // public bool Etat { get; set; } = false;
     }
 }

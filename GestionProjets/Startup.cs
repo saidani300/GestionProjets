@@ -33,12 +33,13 @@ namespace GestionProjets
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
+            options
+                .UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                .AddRoles<IdentityRole>()
                .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddDbContext<QalitasContext>(o => o.UseSqlServer(Configuration.GetConnectionString("QalitasDB")));
+            services.AddDbContext<QalitasContext>(o => o.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("QalitasDB")));
             services.AddTransient<IProjetRepository, ProjetRepository>();
             services.AddTransient<ITacheRepository, TacheRepository>();
             services.AddTransient<ITypeProjetRepository, TypeProjetRepository>();
@@ -55,7 +56,9 @@ namespace GestionProjets
             services.AddTransient<IRisqueRepository, RisqueRepository>();
             services.AddTransient<IDocumentRepository, DocumentRepository>();
             services.AddTransient<IUtilisateurRepository, UtilisateurRepository>();
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
             services.AddRazorPages();
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddAuthentication(Options =>

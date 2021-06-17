@@ -34,8 +34,12 @@ namespace GestionProjets.Repository
 
         public void InsertEvaluation(Evaluation Evaluation)
         {
-            _dbContext.Add(Evaluation);
-            Save();
+            if (Evaluation != null)
+            {
+                Projet p = _dbContext.Projets.Where(A => A.Id == Evaluation.Id).FirstOrDefault();
+                p.Evaluations.Add(Evaluation);
+                Save();
+            }
         }
 
 

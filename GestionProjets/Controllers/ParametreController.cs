@@ -1,4 +1,5 @@
-﻿using GestionProjets.Models;
+﻿using GestionProjets.AuthorizationAttributes;
+using GestionProjets.Models;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,41 +30,32 @@ namespace GestionProjets.Controllers
         }
 
         [HttpGet]
+        [Ref("Parametre0")]
+
         public IActionResult Get()
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Parametre0"))
-            {
+            
                 var parametres = _parametreRepository.GetParametres();
             return new OkObjectResult(parametres);
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
 
         [HttpGet("{id}")]
+        [Ref("Parametre1")]
+
         public IActionResult Get(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Parametre1"))
-            {
+           
                 var parametre = _parametreRepository.GetParametreByID(id);
             return new OkObjectResult(parametre);
-            }
-            else
-            {
-                return BadRequest();
-            }
+            
         }
 
         internal bool Authorization(Parametre parametre, Guid projetId)
         {
 
             Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
+            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
             {
@@ -76,39 +68,26 @@ namespace GestionProjets.Controllers
         }
 
         [HttpPost]
+        [Ref("Parametre2")]
+
         public IActionResult Post([FromBody] Parametre parametre)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Parametre2"))
-            {
-                //if (Authorization(parametre))
-                //{
+            
                     using (var scope = new TransactionScope())
             {
                 _parametreRepository.InsertParametre(parametre);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = parametre.Id }, parametre);
             }
-                //}
-                //else
-                //{
-                //    return BadRequest();
-                //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+               
         }
 
         [HttpPut]
+        [Ref("Parametre3")]
+
         public IActionResult Put([FromBody] Parametre parametre)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Parametre3"))
-            {
-                //if (Authorization(parametre))
-                //{
+           
                     if (parametre != null)
             {
                 using (var scope = new TransactionScope())
@@ -119,31 +98,18 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-                //}
-                //else
-                //{
-                //    return BadRequest();
-                //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+               
         }
 
         [HttpDelete("{id}")]
+        [Ref("Parametre4")]
+
         public IActionResult Delete(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Parametre4"))
-            {
+           
                 _parametreRepository.DeleteParametre(id);
             return new OkResult();
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
     }
 }

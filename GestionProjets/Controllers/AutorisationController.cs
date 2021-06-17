@@ -1,4 +1,5 @@
-﻿using GestionProjets.Models;
+﻿using GestionProjets.AuthorizationAttributes;
+using GestionProjets.Models;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,63 +27,48 @@ namespace GestionProjets.Controllers
         }
 
         [HttpGet]
+        [Ref("Autorisation0")]
+
         public IActionResult Get()
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Autorisation0"))
-            {
+           
                 var autorisations = _autorisationRepository.GetAutorisations();
             return new OkObjectResult(autorisations);
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
 
         [HttpGet("{id}")]
+        [Ref("Autorisation1")]
+
         public IActionResult Get(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Autorisation1"))
-            {
+           
                 var autorisation = _autorisationRepository.GetAutorisationByID(id);
             return new OkObjectResult(autorisation);
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
 
         
         [HttpPost]
+        [Ref("Autorisation2")]
+
         public IActionResult Post([FromBody] Models.Autorisation autorisation)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Autorisation2"))
-            {
+            
                 using (var scope = new TransactionScope())
             {
                 _autorisationRepository.InsertAutorisation(autorisation);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = autorisation.Id }, autorisation);
             }
-            }
-            else
-            {
-                return BadRequest();
-            }
+            
         }
         [HttpPut]
+        [Ref("Autorisation3")]
+
         public IActionResult Put([FromBody] Models.Autorisation autorisation)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Autorisation3"))
-            {
+            
                 if (autorisation != null)
             {
                 using (var scope = new TransactionScope())
@@ -93,27 +79,18 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-            }
-            else
-            {
-                return BadRequest();
-            }
+            
         }
        
         [HttpDelete("{id}")]
+        [Ref("Autorisation4")]
+
         public IActionResult Delete(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Autorisation4"))
-            {
+            
                 _autorisationRepository.DeleteAutorisation(id);
             return new OkResult();
-            }
-            else
-            {
-                return BadRequest();
-            }
+            
         }
     }
 }

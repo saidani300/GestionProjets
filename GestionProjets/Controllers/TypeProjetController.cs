@@ -1,4 +1,5 @@
-﻿using GestionProjets.Models;
+﻿using GestionProjets.AuthorizationAttributes;
+using GestionProjets.Models;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,7 @@ namespace GestionProjets.Controllers
         }
 
         [HttpGet]
+        [Ref("TypeProjet0")]
         public IActionResult Get()
         {
             var typeprojets = _typeprojetRepository.GetTypeProjets();
@@ -32,6 +34,8 @@ namespace GestionProjets.Controllers
         }
 
         [HttpGet("{id}")]
+        [Ref("TypeProjet1")]
+
         public IActionResult Get(Guid id)
         {
             var typeprojet = _typeprojetRepository.GetTypeProjetByID(id);
@@ -39,6 +43,8 @@ namespace GestionProjets.Controllers
         }
 
         [HttpPost]
+        [Ref("TypeProjet2")]
+
         public IActionResult Post([FromBody] TypeProjet typeprojet)
         {
             using (var scope = new TransactionScope())
@@ -50,6 +56,8 @@ namespace GestionProjets.Controllers
         }
 
         [HttpPut]
+        [Ref("TypeProjet3")]
+
         public IActionResult Put([FromBody] TypeProjet typeprojet)
         {
             if (typeprojet != null)
@@ -65,6 +73,8 @@ namespace GestionProjets.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Ref("TypeProjet4")]
+
         public IActionResult Delete(Guid id)
         {
             _typeprojetRepository.DeleteTypeProjet(id);

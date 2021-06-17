@@ -1,4 +1,5 @@
-﻿using GestionProjets.Data;
+﻿using AutoMapper;
+using GestionProjets.Data;
 using GestionProjets.Models;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -21,12 +22,16 @@ namespace GestionProjets.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUtilisateurRepository _utilisateurRepository;
+        private readonly IMapper _mapper;
 
-        public UtilisateurController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IUtilisateurRepository utilisateurRepository)
+
+        public UtilisateurController(ApplicationDbContext context, UserManager<IdentityUser> userManager, IUtilisateurRepository utilisateurRepository, IMapper mapper)
         {
             _context = context;
             _userManager = userManager;
             _utilisateurRepository = utilisateurRepository;
+            _mapper = mapper;
+
         }
         [HttpGet]
         public IActionResult Get()
@@ -35,8 +40,11 @@ namespace GestionProjets.Controllers
 
 
            Utilisateur utilisateur=  _utilisateurRepository.GetUtilisateurByID(new Guid(userId));
+            UtilisateurDTO utilisateurDTO = _mapper.Map<UtilisateurDTO>(utilisateur);
 
-            return new OkObjectResult(utilisateur);
+
+
+            return new OkObjectResult(utilisateurDTO);
         }
 
         [HttpPost]
@@ -56,7 +64,9 @@ namespace GestionProjets.Controllers
         public IActionResult GetAllUsers()
         {
             var utilisateurs = _utilisateurRepository.GetUtilisateurs();
-            return new OkObjectResult(utilisateurs);
+            var utilisateursDTO = utilisateurs.Select(_mapper.Map<UtilisateurDTO>);
+
+            return new OkObjectResult(utilisateursDTO);
 
 
         }

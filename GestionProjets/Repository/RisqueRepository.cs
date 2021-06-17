@@ -35,8 +35,13 @@ namespace GestionProjets.Repository
 
         public void InsertRisque(Risque Risque)
         {
-            _dbContext.Add(Risque);
-            Save();
+            if (Risque != null)
+            {
+                Projet p = _dbContext.Projets.Where(A => A.Id == Risque.Id).FirstOrDefault();
+                p.Risques.Add(Risque);
+
+                Save();
+            }
         }
 
 

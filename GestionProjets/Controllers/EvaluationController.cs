@@ -1,4 +1,6 @@
-﻿using GestionProjets.Models;
+﻿using AutoMapper;
+using GestionProjets.AuthorizationAttributes;
+using GestionProjets.Models;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,29 +22,30 @@ namespace GestionProjets.Controllers
         private readonly IEvaluationRepository _evaluationRepository;
         private readonly IProjetRepository _projetRepository;
         private readonly IAutorisationRepository _autorisationRepository;
+        private readonly IMapper _mapper;
 
-        public EvaluationController(IEvaluationRepository evaluationRepository , IProjetRepository projetRepository, IAutorisationRepository autorisationRepository)
+
+        public EvaluationController(IEvaluationRepository evaluationRepository , IProjetRepository projetRepository, IAutorisationRepository autorisationRepository, IMapper mapper)
         {
             _evaluationRepository = evaluationRepository;
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
+            _mapper = mapper;
+
 
 
         }
         [HttpGet("getbyprojet/{id}")]
+        [Ref("Evaluation0")]
 
         public IActionResult GetByProject(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Evaluation0"))
-            {
+            
                 var evaluations = _evaluationRepository.GetEvaluationsByProjet(id);
-                return new OkObjectResult(evaluations);
-            }
-            else
-            {
-                return BadRequest();
-            }
+                var evaluationsDTO = evaluations.Select(_mapper.Map<EvaluationDTO>);
+
+                return new OkObjectResult(evaluationsDTO);
+           
         }
 
         internal bool Authorization(Evaluation evaluation , Guid projetId)
@@ -60,69 +63,51 @@ namespace GestionProjets.Controllers
             }
         }
         [HttpGet]
+        [Ref("Evaluation1")]
         public IActionResult Get()
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Evaluation1"))
-            {
+           
                 var evaluations = _evaluationRepository.GetEvaluations();
-            return new OkObjectResult(evaluations);
-            }
-            else
-            {
-                return BadRequest();
-            }
+                var evaluationsDTO = evaluations.Select(_mapper.Map<EvaluationDTO>);
+
+                return new OkObjectResult(evaluationsDTO);
+            
         }
 
         [HttpGet("{id}")]
+        [Ref("Evaluation2")]
+
         public IActionResult Get(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Evaluation2"))
-            {
+            
                 var evaluation = _evaluationRepository.GetEvaluationByID(id);
-            return new OkObjectResult(evaluation);
-            }
-            else
-            {
-                return BadRequest();
-            }
+                EvaluationDTO evaluationDTO = _mapper.Map<EvaluationDTO>(evaluation);
+
+                return new OkObjectResult(evaluationDTO);
+            
         }
 
         [HttpPost]
+        [Ref("Evaluation3")]
+
         public IActionResult Post([FromBody] Evaluation evaluation)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Evaluation3"))
-            {
-            //    if (Authorization(evaluation))
-            //{
+           
                 using (var scope = new TransactionScope())
                 {
                     _evaluationRepository.InsertEvaluation(evaluation);
                     scope.Complete();
                     return CreatedAtAction(nameof(Get), new { id = evaluation.Id }, evaluation);
                 }
-            //}
-            //else
-            //{
-            //    return BadRequest();
-            //}
-            }
-            else
-            {
-                return BadRequest();
-            }
         }
 
         [HttpPut]
+        [Ref("Evaluation4")]
+
         public IActionResult Put([FromBody] Evaluation evaluation)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Evaluation4"))
-            {
-            //    if (Authorization(evaluation))
-            //{
+            
+          
                 if (evaluation != null)
             {
                 using (var scope = new TransactionScope())
@@ -133,39 +118,20 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-            //}
-            //else
-            //{
-            //    return BadRequest();
-            //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
 
         [HttpDelete("{id}")]
+        [Ref("Evaluation5")]
+
         public IActionResult Delete(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Evaluation5"))
-            {
+            
                 Evaluation evaluation = _evaluationRepository.GetEvaluationByID(id);
-            //if (Authorization(evaluation))
-            //{
+            
                 _evaluationRepository.DeleteEvaluation(id);
             return new OkResult();
-            //}
-            //else
-            //{
-            //    return BadRequest();
-            //}
-        }
-            else
-            {
-                return BadRequest();
-    }
+           
 }
     }
 }

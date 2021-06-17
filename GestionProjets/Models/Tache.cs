@@ -16,21 +16,45 @@ namespace GestionProjets.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-
-        public Guid UserId { get; set; }
-        public Utilisateur Utilisateur { get; set; }
-
+        [Required]
         public string Nom { get; set; }
         public string Description { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateCreation { get; set; } = DateTime.Now;
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateModification { get; set; } = DateTime.Now;
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateD { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateF { get; set; }
 
-        public Guid PredTacheId { get; set; }
-        public Tache PreTache { get; set; }
+     
 
         public StatutT Statut { get; set; }
+
+
+        //Foreign keys
+
+        [ForeignKey("Utilisateur")]
+        public Guid UserId { get; set; }
+        public virtual Utilisateur Utilisateur { get; set; }
+
+        [ForeignKey("PreTache")]
+        public Guid? PredTacheId { get; set; }
+        public virtual Tache PreTache { get; set; }
+
+        [ForeignKey("Action")]
+
+        public Guid ActionId { get; set; }
+        public virtual Action Action { get; set; }
     }
 
     public class TacheDTO
@@ -41,10 +65,16 @@ namespace GestionProjets.Models
         public Guid UserId { get; set; }
         public string Nom { get; set; }
         public string Description { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateD { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateF { get; set; }
-        public Guid PredTacheId { get; set; }
+        public Guid? PredTacheId { get; set; }
         public StatutT Statut { get; set; }
-    }
+        public Guid ActionId { get; set; }
 
     }
+
+}

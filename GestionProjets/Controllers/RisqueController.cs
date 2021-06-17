@@ -1,4 +1,5 @@
-﻿using GestionProjets.Models;
+﻿using GestionProjets.AuthorizationAttributes;
+using GestionProjets.Models;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,57 +31,44 @@ namespace GestionProjets.Controllers
         }
 
         [HttpGet("getbyprojet/{id}")]
+        [Ref("Risque0")]
 
         public IActionResult GetByProject(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque0"))
-            {
+           
                 var Risques = _risqueRepository.GetRisquesByProjet(id);
                 return new OkObjectResult(Risques);
-            }
-            else
-            {
-                return BadRequest();
-            }
+            
         }
 
 
         [HttpGet]
+        [Ref("Risque1")]
+
         public IActionResult Get()
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque1"))
-            {
+            
                 var risques = _risqueRepository.GetRisques();
             return new OkObjectResult(risques);
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
 
         [HttpGet("{id}")]
+        [Ref("Risque2")]
+
         public IActionResult Get(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque2"))
-            {
+           
                 var risque = _risqueRepository.GetRisqueByID(id);
             return new OkObjectResult(risque);
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
 
         internal bool Authorization(Risque risque, Guid projetId)
         {
 
             Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
+            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
             {
@@ -93,39 +81,26 @@ namespace GestionProjets.Controllers
         }
 
         [HttpPost]
+        [Ref("Risque3")]
+
         public IActionResult Post([FromBody] Risque risque)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque3"))
-            {
-                //if (Authorization(risque))
-                //{
+            
                     using (var scope = new TransactionScope())
             {
                 _risqueRepository.InsertRisque(risque);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = risque.Id }, risque);
             }
-                //}
-                //else
-                //{
-                //    return BadRequest();
-                //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+               
         }
 
         [HttpPut]
+        [Ref("Risque4")]
+
         public IActionResult Put([FromBody] Risque risque)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque4"))
-            {
-                //if (Authorization(risque))
-                //{
+           
                     if (risque != null)
             {
                 using (var scope = new TransactionScope())
@@ -136,31 +111,18 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-                //}
-                //else
-                //{
-                //    return BadRequest();
-                //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+               
         }
 
         [HttpDelete("{id}")]
+        [Ref("Risque4")]
+
         public IActionResult Delete(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Risque5"))
-            {
+           
                 _risqueRepository.DeleteRisque(id);
             return new OkResult();
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
     }
 }

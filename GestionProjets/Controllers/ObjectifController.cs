@@ -1,4 +1,5 @@
-﻿using GestionProjets.Models;
+﻿using GestionProjets.AuthorizationAttributes;
+using GestionProjets.Models;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,55 +30,40 @@ namespace GestionProjets.Controllers
         }
 
         [HttpGet("getbyprojet/{id}")]
+        [Ref("Objectif0")]
 
         public IActionResult GetByProject(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Objectif0"))
-            {
+           
                 var objectifs = _objectifRepository.GetobjectifsByProject(id);
                 return new OkObjectResult(objectifs);
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
         [HttpGet]
+        [Ref("Objectif1")]
         public IActionResult Get()
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Objectif1"))
-            {
+           
                 var objectifs = _objectifRepository.GetObjectifs();
             return new OkObjectResult(objectifs);
-            }
-            else
-            {
-                return BadRequest();
-            }
+            
         }
 
         [HttpGet("{id}")]
+        [Ref("Objectif2")]
         public IActionResult Get(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Objectif2"))
-            {
+            
                 var objectif = _objectifRepository.GetObjectifByID(id);
             return new OkObjectResult(objectif);
-            }
-            else
-            {
-                return BadRequest();
-            }
+            
         }
 
         internal bool Authorization(Objectif objectif , Guid projetId)
         {
 
             Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
+            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
             {
@@ -90,41 +76,27 @@ namespace GestionProjets.Controllers
         }
 
         [HttpPost]
+        [Ref("Objectif3")]
+
         public IActionResult Post([FromBody] Objectif objectif)
         {
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Objectif3"))
-            {
-                //if (Authorization(objectif))
-                //{
                     using (var scope = new TransactionScope())
             {
                 _objectifRepository.InsertObjectif(objectif);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = objectif.Id }, objectif);
             }
-                //}
-                //else
-                //{
-                //    return BadRequest();
-                //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+                
         }
 
         [HttpPut]
+        [Ref("Objectif4")]
+
         public IActionResult Put([FromBody] Objectif objectif)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Objectif4"))
-            {
-                //if (Authorization(objectif))
-                //{
+           
                     if (objectif != null)
             {
                 using (var scope = new TransactionScope())
@@ -135,32 +107,18 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-                //}
-                //else
-                //{
-                //    return BadRequest();
-                //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+               
         }
 
         [HttpDelete("{id}")]
+        [Ref("Objectif5")]
+
         public IActionResult Delete(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Objectif5"))
-            {
+            
                 _objectifRepository.DeleteObjectif(id);
             return new OkResult();
-            }
-            else
-            {
-                return BadRequest();
-            }
+            
         }
     }
 }

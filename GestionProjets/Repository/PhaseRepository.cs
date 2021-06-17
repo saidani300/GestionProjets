@@ -34,7 +34,11 @@ namespace GestionProjets.Repository
 
         public void InsertPhase(Phase Phase)
         {
-            _dbContext.Add(Phase);
+            if (Phase != null)
+            {
+                Projet p = _dbContext.Projets.Where(A => A.Id == Phase.ProjetId).FirstOrDefault();
+                p.Phases.Add(Phase);
+            }
             Save();
         }
 

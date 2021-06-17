@@ -34,8 +34,12 @@ namespace GestionProjets.Repository
 
         public void InsertOpportunite(Opportunite Opportunite)
         {
-            _dbContext.Add(Opportunite);
-            Save();
+            if (Opportunite != null)
+            {
+                Projet p = _dbContext.Projets.Where(A => A.Id == Opportunite.Id).FirstOrDefault();
+                p.Opportunites.Add(Opportunite);
+                Save();
+            }
         }
 
 

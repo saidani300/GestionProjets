@@ -12,9 +12,9 @@ namespace GestionProjets.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nom = table.Column<string>(nullable: true),
+                    Nom = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    Methode = table.Column<string>(nullable: true),
+                    Methode = table.Column<string>(nullable: false),
                     Val1 = table.Column<long>(nullable: false),
                     Val2 = table.Column<long>(nullable: false),
                     Unite = table.Column<string>(nullable: true)
@@ -29,7 +29,7 @@ namespace GestionProjets.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nom = table.Column<string>(nullable: true),
+                    Nom = table.Column<string>(nullable: false),
                     Valeur = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
@@ -42,7 +42,7 @@ namespace GestionProjets.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nom = table.Column<string>(nullable: true)
+                    Nom = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,18 +54,18 @@ namespace GestionProjets.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
-                    UtilisateurId = table.Column<Guid>(nullable: true),
-                    Nom = table.Column<string>(nullable: true),
+                    Nom = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     DateCreation = table.Column<DateTime>(nullable: false),
                     DateModification = table.Column<DateTime>(nullable: false),
                     DateD = table.Column<DateTime>(nullable: false),
                     DateF = table.Column<DateTime>(nullable: false),
-                    PredTacheId = table.Column<Guid>(nullable: false),
-                    PreTacheId = table.Column<Guid>(nullable: true),
                     Statut = table.Column<int>(nullable: false),
-                    ActionId = table.Column<Guid>(nullable: true)
+                    UserId = table.Column<Guid>(nullable: false),
+                    UtilisateurId = table.Column<Guid>(nullable: true),
+                    PredTacheId = table.Column<Guid>(nullable: true),
+                    PreTacheId = table.Column<Guid>(nullable: true),
+                    ActionId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -88,7 +88,7 @@ namespace GestionProjets.Migrations
                     DateFin = table.Column<DateTime>(nullable: false),
                     Valeur = table.Column<long>(nullable: false),
                     IndicateurId = table.Column<Guid>(nullable: false),
-                    ProjetId = table.Column<Guid>(nullable: true)
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -106,13 +106,13 @@ namespace GestionProjets.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nom = table.Column<string>(nullable: true),
+                    Nom = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Note = table.Column<long>(nullable: false),
                     DateCreation = table.Column<DateTime>(nullable: false),
                     DateModification = table.Column<DateTime>(nullable: false),
                     ParametreId = table.Column<Guid>(nullable: false),
-                    ProjetId = table.Column<Guid>(nullable: true)
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -130,7 +130,7 @@ namespace GestionProjets.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nom = table.Column<string>(nullable: true),
+                    Nom = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     DateCreation = table.Column<DateTime>(nullable: false),
                     DateModification = table.Column<DateTime>(nullable: false),
@@ -138,8 +138,8 @@ namespace GestionProjets.Migrations
                     DateF = table.Column<DateTime>(nullable: false),
                     PreActionId = table.Column<Guid>(nullable: true),
                     Statut = table.Column<int>(nullable: false),
-                    PhaseId = table.Column<Guid>(nullable: true),
-                    ProjetId = table.Column<Guid>(nullable: true)
+                    ProjetId = table.Column<Guid>(nullable: true),
+                    PhaseId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -157,10 +157,10 @@ namespace GestionProjets.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nom = table.Column<string>(nullable: true),
-                    Url = table.Column<string>(nullable: true),
+                    Nom = table.Column<string>(nullable: false),
+                    Url = table.Column<string>(nullable: false),
                     DateCreation = table.Column<DateTime>(nullable: false),
-                    ProjetId = table.Column<Guid>(nullable: true)
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -178,7 +178,7 @@ namespace GestionProjets.Migrations
                     Etat = table.Column<int>(nullable: false),
                     DateCreation = table.Column<DateTime>(nullable: false),
                     DateModification = table.Column<DateTime>(nullable: false),
-                    ProjetId = table.Column<Guid>(nullable: true)
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -199,7 +199,7 @@ namespace GestionProjets.Migrations
                     Cause = table.Column<string>(nullable: true),
                     DateCreation = table.Column<DateTime>(nullable: false),
                     Impact = table.Column<string>(nullable: true),
-                    ProjetId = table.Column<Guid>(nullable: true)
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -211,11 +211,11 @@ namespace GestionProjets.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nom = table.Column<string>(nullable: true),
+                    Nom = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     DateCreation = table.Column<DateTime>(nullable: false),
                     DateModification = table.Column<DateTime>(nullable: false),
-                    ProjetId = table.Column<Guid>(nullable: true)
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -232,7 +232,7 @@ namespace GestionProjets.Migrations
                     Date = table.Column<DateTime>(nullable: false),
                     DateCreation = table.Column<DateTime>(nullable: false),
                     Etat = table.Column<int>(nullable: false),
-                    ProjetId = table.Column<Guid>(nullable: true)
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -244,11 +244,11 @@ namespace GestionProjets.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nom = table.Column<string>(nullable: true),
-                    Prenom = table.Column<string>(nullable: true),
+                    Nom = table.Column<string>(nullable: false),
+                    Prenom = table.Column<string>(nullable: false),
                     Age = table.Column<int>(nullable: false),
                     NumCIN = table.Column<int>(nullable: false),
-                    Email = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: false),
                     DateCreation = table.Column<DateTime>(nullable: false),
                     DateModification = table.Column<DateTime>(nullable: false),
                     ReunionId = table.Column<Guid>(nullable: true)
@@ -269,7 +269,7 @@ namespace GestionProjets.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Reference = table.Column<string>(nullable: true),
+                    Reference = table.Column<string>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
                     UtilisateurId = table.Column<Guid>(nullable: true)
                 },
@@ -289,19 +289,19 @@ namespace GestionProjets.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nom = table.Column<string>(nullable: true),
+                    Nom = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    TypeId = table.Column<Guid>(nullable: false),
-                    TypeProjetId = table.Column<Guid>(nullable: true),
                     DateCreation = table.Column<DateTime>(nullable: false),
                     DateModification = table.Column<DateTime>(nullable: false),
                     DateD = table.Column<DateTime>(nullable: false),
                     DateF = table.Column<DateTime>(nullable: false),
+                    Statut = table.Column<int>(nullable: false),
+                    TypeId = table.Column<Guid>(nullable: false),
+                    TypeProjetId = table.Column<Guid>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
                     Utilisateur1Id = table.Column<Guid>(nullable: true),
-                    ChefId = table.Column<Guid>(nullable: false),
-                    Utilisateur2Id = table.Column<Guid>(nullable: true),
-                    Statut = table.Column<int>(nullable: false)
+                    ChefId = table.Column<Guid>(nullable: true),
+                    Utilisateur2Id = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -331,7 +331,7 @@ namespace GestionProjets.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nom = table.Column<string>(nullable: true),
+                    Nom = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Niveau = table.Column<int>(nullable: false),
                     Source = table.Column<string>(nullable: true),
@@ -339,7 +339,7 @@ namespace GestionProjets.Migrations
                     Cause = table.Column<string>(nullable: true),
                     DateCreation = table.Column<DateTime>(nullable: false),
                     Impact = table.Column<string>(nullable: true),
-                    ProjetId = table.Column<Guid>(nullable: true)
+                    ProjetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -349,7 +349,7 @@ namespace GestionProjets.Migrations
                         column: x => x.ProjetId,
                         principalTable: "Projets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -471,7 +471,7 @@ namespace GestionProjets.Migrations
                 column: "ActionId",
                 principalTable: "Actions",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Mesures_Projets_ProjetId",
@@ -479,7 +479,7 @@ namespace GestionProjets.Migrations
                 column: "ProjetId",
                 principalTable: "Projets",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Evaluations_Projets_ProjetId",
@@ -487,7 +487,7 @@ namespace GestionProjets.Migrations
                 column: "ProjetId",
                 principalTable: "Projets",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Actions_Phases_PhaseId",
@@ -511,7 +511,7 @@ namespace GestionProjets.Migrations
                 column: "ProjetId",
                 principalTable: "Projets",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Objectifs_Projets_ProjetId",
@@ -519,7 +519,7 @@ namespace GestionProjets.Migrations
                 column: "ProjetId",
                 principalTable: "Projets",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Opportunites_Projets_ProjetId",
@@ -527,7 +527,7 @@ namespace GestionProjets.Migrations
                 column: "ProjetId",
                 principalTable: "Projets",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Phases_Projets_ProjetId",
@@ -535,7 +535,7 @@ namespace GestionProjets.Migrations
                 column: "ProjetId",
                 principalTable: "Projets",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Reunions_Projets_ProjetId",
@@ -543,7 +543,7 @@ namespace GestionProjets.Migrations
                 column: "ProjetId",
                 principalTable: "Projets",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

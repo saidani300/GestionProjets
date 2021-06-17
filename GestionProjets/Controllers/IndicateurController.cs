@@ -1,4 +1,5 @@
-﻿using GestionProjets.Models;
+﻿using GestionProjets.AuthorizationAttributes;
+using GestionProjets.Models;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ namespace GestionProjets.Controllers
         {
 
             Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
+            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
             {
@@ -46,70 +47,48 @@ namespace GestionProjets.Controllers
         }
 
         [HttpGet]
+        [Ref("Indicateur0")]
+
         public IActionResult Get()
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Indicateur0"))
-            {
+            
                     var indicateurs = _indicateurRepository.GetIndicateurs();
             return new OkObjectResult(indicateurs);
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
 
         [HttpGet("{id}")]
+        [Ref("Indicateur1")]
+
         public IActionResult Get(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Indicateur1"))
-            {
+            
                 var indicateur = _indicateurRepository.GetIndicateurByID(id);
             return new OkObjectResult(indicateur);
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
 
         [HttpPost]
+        [Ref("Indicateur2")]
+
         public IActionResult Post([FromBody] Indicateur indicateur)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Indicateur2"))
-            {
-                //if (Authorization(indicateur))
-                //{
+           
                     using (var scope = new TransactionScope())
             {
                 _indicateurRepository.InsertIndicateur(indicateur);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = indicateur.Id }, indicateur);
             }
-                //}
-                //else
-                //{
-                //    return BadRequest();
-                //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+               
         }
 
         [HttpPut]
+        [Ref("Indicateur3")]
+
         public IActionResult Put([FromBody] Indicateur indicateur)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Indicateur3"))
-            {
-                //if (Authorization(indicateur))
-                //{
+           
                     if (indicateur != null)
             {
                 using (var scope = new TransactionScope())
@@ -120,31 +99,19 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-                //}
-                //else
-                //{
-                //    return BadRequest();
-                //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+              
         }
 
         [HttpDelete("{id}")]
+        [Ref("Indicateur4")]
+
         public IActionResult Delete(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Indicateur4"))
-            {
+            
                 _indicateurRepository.DeleteIndicateur(id);
             return new OkResult();
-            }
-            else
-            {
-                return BadRequest();
-            }
+            
+            
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using GestionProjets.Models;
+﻿using AutoMapper;
+using GestionProjets.AuthorizationAttributes;
+using GestionProjets.Models;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,67 +22,62 @@ namespace GestionProjets.Controllers
         private readonly IMesureRepository _mesureRepository;
         private readonly IProjetRepository _projetRepository;
         private readonly IAutorisationRepository _autorisationRepository;
+        private readonly IMapper _mapper;
 
 
-        public MesureController(IMesureRepository mesureRepository ,IProjetRepository projetRepository , IAutorisationRepository autorisationRepository)
+        public MesureController(IMesureRepository mesureRepository ,IProjetRepository projetRepository , IAutorisationRepository autorisationRepository, IMapper mapper)
         {
             _mesureRepository = mesureRepository;
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
+            _mapper = mapper;
 
         }
 
         [HttpGet("getbyprojet/{id}")]
+        [Ref("Mesure0")]
 
         public IActionResult GetByProject(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure0"))
-            {
+            
                 var mesures = _mesureRepository.GetMesuresByProject(id);
-                return new OkObjectResult(mesures);
-            }
-            else
-            {
-                return BadRequest();
-            }
+                var mesuresDTO = mesures.Select(_mapper.Map<MesureDTO>);
+
+                return new OkObjectResult(mesuresDTO);
+           
         }
 
         [HttpGet]
+        [Ref("Mesure1")]
+
         public IActionResult Get()
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure1"))
-            {
+           
                 var mesures = _mesureRepository.GetMesures();
-            return new OkObjectResult(mesures);
-            }
-            else
-            {
-                return BadRequest();
-            }
+                var mesuresDTO = mesures.Select(_mapper.Map<MesureDTO>);
+
+                return new OkObjectResult(mesuresDTO);
+            
         }
 
         [HttpGet("{id}")]
+        [Ref("Mesure2")]
+
         public IActionResult Get(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure2"))
-            {
+           
                 var mesure = _mesureRepository.GetMesureByID(id);
-            return new OkObjectResult(mesure);
-            }
-            else
-            {
-                return BadRequest();
-            }
+                MesureDTO mesureDTO = _mapper.Map<MesureDTO>(mesure);
+
+                return new OkObjectResult(mesureDTO);
+           
         }
 
         internal bool Authorization(Mesure mesure , Guid projetId)
         {
 
             Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
+            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
             {
@@ -92,39 +89,26 @@ namespace GestionProjets.Controllers
             }
         }
         [HttpPost]
+        [Ref("Mesure3")]
+
         public IActionResult Post([FromBody] Mesure mesure)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure3"))
-            {
-                //if (Authorization(mesure))
-                //{
+           
                     using (var scope = new TransactionScope())
             {
                 _mesureRepository.InsertMesure(mesure);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = mesure.Id }, mesure);
             }
-            //}
-            //else
-            //{
-            //    return BadRequest();
-            //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+            
         }
 
         [HttpPut]
+        [Ref("Mesure4")]
+
         public IActionResult Put([FromBody] Mesure mesure)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure4"))
-            {
-                //if (Authorization(mesure))
-                //{
+            
                     if (mesure != null)
             {
                 using (var scope = new TransactionScope())
@@ -135,31 +119,18 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-            //}
-            //else
-            //{
-            //    return BadRequest();
-            //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+            
         }
 
         [HttpDelete("{id}")]
+        [Ref("Mesure5")]
+
         public IActionResult Delete(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Mesure5"))
-            {
+           
                 _mesureRepository.DeleteMesure(id);
             return new OkResult();
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using GestionProjets.Models;
+﻿using AutoMapper;
+using GestionProjets.AuthorizationAttributes;
+using GestionProjets.Models;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,58 +21,53 @@ namespace GestionProjets.Controllers
         private readonly ITacheRepository _tacheRepository;
         private readonly IProjetRepository _projetRepository;
         private readonly IAutorisationRepository _autorisationRepository;
+        private readonly IMapper _mapper;
 
-        public TacheController(ITacheRepository tacheRepository  , IProjetRepository projetRepository, IAutorisationRepository autorisationRepository)
+
+        public TacheController(ITacheRepository tacheRepository  , IProjetRepository projetRepository, IAutorisationRepository autorisationRepository, IMapper mapper)
         {
             _tacheRepository = tacheRepository;
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
+            _mapper = mapper;
+
         }
         [HttpGet("getbyaction/{id}")]
+        [Ref("Tache0")]
 
         public IActionResult GetByAction(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache0"))
-            {
+           
                 var taches = _tacheRepository.GetTachesByAction(id);
-                return new OkObjectResult(taches);
-            }
-            else
-            {
-                return BadRequest();
-            }
+                var tachesDTO = taches.Select(_mapper.Map<TacheDTO>);
+
+                return new OkObjectResult(tachesDTO);
+           
         }
         
 
         [HttpGet]
+        [Ref("Tache1")]
         public IActionResult Get()
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache1"))
-            {
+           
                 var taches = _tacheRepository.GetTaches();
-            return new OkObjectResult(taches);
-            }
-            else
-            {
-                return BadRequest();
-            }
+                var tachesDTO = taches.Select(_mapper.Map<TacheDTO>);
+
+                return new OkObjectResult(tachesDTO);
+          
         }
 
         [HttpGet("{id}")]
+        [Ref("Tache2")]
         public IActionResult Get(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache2"))
-            {
+            
                 var tache = _tacheRepository.GetTacheByID(id);
-            return new OkObjectResult(tache);
-        }
-            else
-            {
-                return BadRequest();
-    }
+                TacheDTO tacheDTO = _mapper.Map<TacheDTO>(tache);
+
+                return new OkObjectResult(tacheDTO);
+        
 
 }
 
@@ -78,7 +75,7 @@ namespace GestionProjets.Controllers
         {
 
             Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
+            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
             {
@@ -91,39 +88,24 @@ namespace GestionProjets.Controllers
         }
 
         [HttpPost]
+        [Ref("Tache3")]
         public IActionResult Post([FromBody] Tache tache)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache3"))
-            {
-                //if (Authorization(tache))
-                //{
+            
                     using (var scope = new TransactionScope())
             {
                 _tacheRepository.InsertTache(tache);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = tache.Id }, tache);
             }
-                //}
-                //else
-                //{
-                //    return BadRequest();
-                //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+               
         }
         [Authorize(Roles = "Responsable,Chefdeprojet,Membre")]
         [HttpPut]
+        [Ref("Tache4")]
         public IActionResult Put([FromBody] Tache tache)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache4"))
-            {
-                //if (Authorization(tache))
-                //{
+            
                     if (tache != null)
             {
                 using (var scope = new TransactionScope())
@@ -134,31 +116,17 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-                //}
-                //else
-                //{
-                //    return BadRequest();
-                //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+               
         }
 
         [HttpDelete("{id}")]
+        [Ref("Tache5")]
         public IActionResult Delete(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Tache5"))
-            {
+          
                 _tacheRepository.DeleteTache(id);
             return new OkResult();
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
     }
 }

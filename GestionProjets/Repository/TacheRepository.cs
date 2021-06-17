@@ -40,7 +40,7 @@ namespace GestionProjets.Repository
 
         public void InsertTache(Tache Tache)
         {
-            _dbContext.Add(Tache);
+            _dbContext.Actions.Where(A => A.Id == Tache.ActionId).FirstOrDefault().Taches.Add(Tache);
 
             Save();
         }

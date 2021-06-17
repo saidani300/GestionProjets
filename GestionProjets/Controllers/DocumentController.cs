@@ -1,4 +1,5 @@
-﻿using GestionProjets.Models;
+﻿using GestionProjets.AuthorizationAttributes;
+using GestionProjets.Models;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,43 +29,33 @@ namespace GestionProjets.Controllers
         }
 
         [HttpGet("getbyprojet/{id}")]
+        [Ref("Document0")]
 
         public IActionResult GetByProject(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Document0"))
-            {
+           
                 var documents = _documentRepository.GetDocumetsByProject(id);
                 return new OkObjectResult(documents);
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
 
 
         [HttpGet("{id}")]
+        [Ref("Document1")]
 
         public IActionResult Get(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Document1"))
-            {
+            
                 var document = _documentRepository.GetDocumentByID(id);
                 return new OkObjectResult(document);
-            }
-            else
-            {
-                return BadRequest();
-            }
+           
         }
 
         internal bool Authorization(Document document , Guid projetId)
         {
 
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
+            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId.ToString() == LoggedInuserId || projetChefId.ToString() == LoggedInuserId)
             {
@@ -77,35 +68,26 @@ namespace GestionProjets.Controllers
         }
 
         [HttpPost]
+        [Ref("Document2")]
+
         public IActionResult Post([FromBody] Document document)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Document2"))
-            {
-                //if (Authorization(document))
-                //{
+           
                     using (var scope = new TransactionScope())
                     {
                         _documentRepository.InsertDocument(document);
                         scope.Complete();
                         return CreatedAtAction(nameof(Get), new { id = document.Id }, document);
                     }
-                //}
-                //else
-                //{ return BadRequest(); }
-            }
-            else
-            { return BadRequest(); }
+              
         }
 
         [HttpPut]
+        [Ref("Document3")]
+
         public IActionResult Put([FromBody] Document document)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Document3"))
-            {
-                //if (Authorization(document))
-                //{
+           
                     if (document != null)
                     {
                         using (var scope = new TransactionScope())
@@ -116,39 +98,20 @@ namespace GestionProjets.Controllers
                         }
                     }
                     return new NoContentResult();
-                //}
-                //else
-                //{
-                //    return BadRequest();
-                //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+               
         }
 
         [HttpDelete("{id}")]
+        [Ref("Document4")]
+
         public IActionResult Delete(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Document4"))
-            {
+           
                 Document document = _documentRepository.GetDocumentByID(id);
-                //if (Authorization(document))
-                //{
+                
                     _documentRepository.DeleteDocument(id);
                     return new OkResult();
-                //}
-                //else
-                //{
-                //    return BadRequest();
-                //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+               
         }
     }
 }

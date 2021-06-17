@@ -34,8 +34,12 @@ namespace GestionProjets.Repository
 
         public void InsertReunion(Reunion Reunion)
         {
-            _dbContext.Add(Reunion);
-            Save();
+            if (Reunion != null)
+            {
+                Projet p = _dbContext.Projets.Where(A => A.Id == Reunion.Id).FirstOrDefault();
+                p.Reunions.Add(Reunion);
+                Save();
+            }
         }
 
 

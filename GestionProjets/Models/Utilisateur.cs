@@ -11,12 +11,21 @@ namespace GestionProjets.Models
     {
         [Key]
         public Guid Id { get; set; }
+        [Required]
         public string Nom { get; set; }
+        [Required]
         public string Prenom { get; set; }
         public int Age { get; set; }
         public int NumCIN { get; set; }
+        [Required]
         public string Email { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateCreation { get; set; } = DateTime.Now;
+
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateModification { get; set; } = DateTime.Now;
         
     }

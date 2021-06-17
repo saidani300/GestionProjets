@@ -1,4 +1,6 @@
-﻿using GestionProjets.Models;
+﻿using AutoMapper;
+using GestionProjets.AuthorizationAttributes;
+using GestionProjets.Models;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,65 +23,64 @@ namespace GestionProjets.Controllers
         private readonly IReunionRepository _reunionRepository;
         private readonly IProjetRepository _projetRepository;
         private readonly IAutorisationRepository _autorisationRepository;
+        private readonly IMapper _mapper;
 
-        public ReunionController(IReunionRepository reunionRepository, IProjetRepository projetRepository, IAutorisationRepository autorisationRepository)
+
+        public ReunionController(IReunionRepository reunionRepository, IProjetRepository projetRepository, IAutorisationRepository autorisationRepository, IMapper mapper)
         {
             _reunionRepository = reunionRepository;
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
+            _mapper = mapper;
+
         }
 
         [HttpGet("getbyprojet/{id}")]
-
+        [Ref("Reunion0")]
         public IActionResult GetByProject(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion0"))
-            {
-                var Reunions = _reunionRepository.GetReunionsByProjet(id);
-                return new OkObjectResult(Reunions);
-            }
-            else
-            {
-                return BadRequest();
-            }
+            
+                var reunions = _reunionRepository.GetReunionsByProjet(id);
+
+                var reunionsDTO = reunions.Select(_mapper.Map<ReunionDTO>);
+
+                return new OkObjectResult(reunionsDTO);
+            
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
+        [Ref("Reunion1")]
+
         public IActionResult Get()
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion1"))
-            {
+           
                 var reunions = _reunionRepository.GetReunions();
-                return new OkObjectResult(reunions);
-            }
-            else
-            {
-                return BadRequest();
-            }
+                var reunionsDTO = reunions.Select(_mapper.Map<ReunionDTO>);
+
+                return new OkObjectResult(reunionsDTO);
+          
         }
 
         [HttpGet("{id}")]
+        [Ref("Reunion2")]
+
         public IActionResult Get(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion2"))
-            {
+           
                 var reunion = _reunionRepository.GetReunionByID(id);
-            return new OkObjectResult(reunion);
-        }
-            else
-            {
-                return BadRequest();
-    }
+
+                ReunionDTO reunionDTO = _mapper.Map<ReunionDTO>(reunion);
+
+                return new OkObjectResult(reunionDTO);
+        
+           
 }
         internal bool Authorization(Reunion reunion, Guid projetId)
         {
 
             Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = _projetRepository.GetProjetByID(projetId).ChefId;
+            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
             Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
             if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
             {
@@ -91,39 +92,26 @@ namespace GestionProjets.Controllers
             }
         }
         [HttpPost]
+        [Ref("Reunion3")]
+
         public IActionResult Post([FromBody] Reunion reunion)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion3"))
-            {
-                //if (Authorization(reunion))
-                //{
+            
                     using (var scope = new TransactionScope())
             {
                 _reunionRepository.InsertReunion(reunion);
                 scope.Complete();
                 return CreatedAtAction(nameof(Get), new { id = reunion.Id }, reunion);
             }
-                //}
-                //else
-                //{
-                //    return BadRequest();
-                //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+               
         }
 
         [HttpPut]
+        [Ref("Reunion4")]
+
         public IActionResult Put([FromBody] Reunion reunion)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion4"))
-            {
-                //if (Authorization(reunion))
-                //{
+           
                     if (reunion != null)
             {
                 using (var scope = new TransactionScope())
@@ -134,31 +122,18 @@ namespace GestionProjets.Controllers
                 }
             }
             return new NoContentResult();
-                //}
-                //else
-                //{
-                //    return BadRequest();
-                //}
-            }
-            else
-            {
-                return BadRequest();
-            }
+                
         }
 
         [HttpDelete("{id}")]
+        [Ref("Reunion5")]
+
         public IActionResult Delete(Guid id)
         {
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (_autorisationRepository.Autorisation(new Guid(LoggedInuserId), "Reunion5"))
-            {
+            
                 _reunionRepository.DeleteReunion(id);
             return new OkResult();
-            }
-            else
-            {
-                return BadRequest();
-            }
+            
         }
     }
 }

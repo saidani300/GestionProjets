@@ -41,6 +41,7 @@ namespace GestionProjets.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nom")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("PhaseId")
@@ -73,6 +74,7 @@ namespace GestionProjets.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Reference")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
@@ -98,12 +100,14 @@ namespace GestionProjets.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nom")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ProjetId")
+                    b.Property<Guid>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Url")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -129,6 +133,7 @@ namespace GestionProjets.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nom")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Note")
@@ -137,7 +142,7 @@ namespace GestionProjets.Migrations
                     b.Property<Guid>("ParametreId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ProjetId")
+                    b.Property<Guid>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -159,9 +164,11 @@ namespace GestionProjets.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Methode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nom")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Unite")
@@ -196,7 +203,7 @@ namespace GestionProjets.Migrations
                     b.Property<Guid>("IndicateurId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ProjetId")
+                    b.Property<Guid>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<long>("Valeur")
@@ -235,7 +242,7 @@ namespace GestionProjets.Migrations
                     b.Property<int>("Priorite")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ProjetId")
+                    b.Property<Guid>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -272,7 +279,7 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ProjetId")
+                    b.Property<Guid>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Source")
@@ -295,6 +302,7 @@ namespace GestionProjets.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nom")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("Valeur")
@@ -321,9 +329,10 @@ namespace GestionProjets.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nom")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ProjetId")
+                    b.Property<Guid>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -339,7 +348,7 @@ namespace GestionProjets.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ChefId")
+                    b.Property<Guid?>("ChefId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreation")
@@ -358,6 +367,7 @@ namespace GestionProjets.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nom")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Statut")
@@ -410,7 +420,7 @@ namespace GestionProjets.Migrations
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ProjetId")
+                    b.Property<Guid>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -442,9 +452,10 @@ namespace GestionProjets.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nom")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ProjetId")
+                    b.Property<Guid>("ProjetId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Source")
@@ -466,7 +477,7 @@ namespace GestionProjets.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ActionId")
+                    b.Property<Guid>("ActionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreation")
@@ -485,12 +496,13 @@ namespace GestionProjets.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nom")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("PreTacheId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PredTacheId")
+                    b.Property<Guid?>("PredTacheId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Statut")
@@ -520,6 +532,7 @@ namespace GestionProjets.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Nom")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -543,15 +556,18 @@ namespace GestionProjets.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nom")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("NumCIN")
                         .HasColumnType("int");
 
                     b.Property<string>("Prenom")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("ReunionId")
@@ -566,7 +582,7 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Action", b =>
                 {
-                    b.HasOne("GestionProjets.Models.Phase", null)
+                    b.HasOne("GestionProjets.Models.Phase", "Phase")
                         .WithMany("Actions")
                         .HasForeignKey("PhaseId");
 
@@ -574,7 +590,7 @@ namespace GestionProjets.Migrations
                         .WithMany()
                         .HasForeignKey("PreActionId");
 
-                    b.HasOne("GestionProjets.Models.Projet", null)
+                    b.HasOne("GestionProjets.Models.Projet", "Projet")
                         .WithMany("Actions")
                         .HasForeignKey("ProjetId");
                 });
@@ -588,9 +604,11 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Document", b =>
                 {
-                    b.HasOne("GestionProjets.Models.Projet", null)
+                    b.HasOne("GestionProjets.Models.Projet", "Projet")
                         .WithMany("Documents")
-                        .HasForeignKey("ProjetId");
+                        .HasForeignKey("ProjetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Evaluation", b =>
@@ -601,9 +619,11 @@ namespace GestionProjets.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GestionProjets.Models.Projet", null)
+                    b.HasOne("GestionProjets.Models.Projet", "Projet")
                         .WithMany("Evaluations")
-                        .HasForeignKey("ProjetId");
+                        .HasForeignKey("ProjetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Mesure", b =>
@@ -614,30 +634,38 @@ namespace GestionProjets.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GestionProjets.Models.Projet", null)
+                    b.HasOne("GestionProjets.Models.Projet", "Projet")
                         .WithMany("Mesures")
-                        .HasForeignKey("ProjetId");
+                        .HasForeignKey("ProjetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Objectif", b =>
                 {
-                    b.HasOne("GestionProjets.Models.Projet", null)
+                    b.HasOne("GestionProjets.Models.Projet", "Projet")
                         .WithMany("Objectifs")
-                        .HasForeignKey("ProjetId");
+                        .HasForeignKey("ProjetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Opportunite", b =>
                 {
-                    b.HasOne("GestionProjets.Models.Projet", null)
+                    b.HasOne("GestionProjets.Models.Projet", "Projet")
                         .WithMany("Opportunites")
-                        .HasForeignKey("ProjetId");
+                        .HasForeignKey("ProjetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Phase", b =>
                 {
-                    b.HasOne("GestionProjets.Models.Projet", null)
+                    b.HasOne("GestionProjets.Models.Projet", "Projet")
                         .WithMany("Phases")
-                        .HasForeignKey("ProjetId");
+                        .HasForeignKey("ProjetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Projet", b =>
@@ -657,23 +685,29 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Reunion", b =>
                 {
-                    b.HasOne("GestionProjets.Models.Projet", null)
+                    b.HasOne("GestionProjets.Models.Projet", "Projet")
                         .WithMany("Reunions")
-                        .HasForeignKey("ProjetId");
+                        .HasForeignKey("ProjetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Risque", b =>
                 {
-                    b.HasOne("GestionProjets.Models.Projet", null)
+                    b.HasOne("GestionProjets.Models.Projet", "Projet")
                         .WithMany("Risques")
-                        .HasForeignKey("ProjetId");
+                        .HasForeignKey("ProjetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Tache", b =>
                 {
-                    b.HasOne("GestionProjets.Models.Action", null)
+                    b.HasOne("GestionProjets.Models.Action", "Action")
                         .WithMany("Taches")
-                        .HasForeignKey("ActionId");
+                        .HasForeignKey("ActionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("GestionProjets.Models.Tache", "PreTache")
                         .WithMany()

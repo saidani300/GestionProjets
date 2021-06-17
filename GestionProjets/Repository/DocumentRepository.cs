@@ -33,8 +33,12 @@ namespace GestionProjets.Repository
 
         public void InsertDocument(Document Document)
         {
-            _dbContext.Add(Document);
-            Save();
+            if (Document != null)
+            {
+                Projet p = _dbContext.Projets.Where(A => A.Id == Document.Id).FirstOrDefault();
+                p.Documents.Add(Document);
+                Save();
+            }
         }
 
 

@@ -35,8 +35,12 @@ namespace GestionProjets.Repository
 
         public void InsertObjectif(Objectif Objectif)
         {
-            _dbContext.Add(Objectif);
-            Save();
+            if (Objectif != null)
+            {
+                Projet p = _dbContext.Projets.Where(A => A.Id == Objectif.Id).FirstOrDefault();
+                p.Objectifs.Add(Objectif);
+                Save();
+            }
         }
 
 

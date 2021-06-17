@@ -12,6 +12,18 @@ namespace GestionProjets.Data
         public AutoMapperProfile()
         {
             CreateMap<Projet, ProjetDTO>();
+            CreateMap<Phase, PhaseDTO>();
+            CreateMap<Models.Action, Models.ActionDTO>();
+            CreateMap<Tache, TacheDTO>();
+            CreateMap<Evaluation, EvaluationDTO>();
+            CreateMap<Mesure, MesureDTO>();
+            CreateMap<Reunion, ReunionDTO>();
+            CreateMap<Document, DocumentDTO>();
+            CreateMap<Objectif, ObjectifDTO>();
+            CreateMap<Opportunite, OpportuniteDTO>();
+            CreateMap<Risque, RisqueDTO>();
+            CreateMap<Utilisateur, UtilisateurDTO>();
+
         }
     }
 }
