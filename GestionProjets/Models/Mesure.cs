@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,7 +19,9 @@ namespace GestionProjets.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateFin { get; set; }
-        public long Valeur { get; set; }
+        public long Valeur1 { get; set; }
+        public long Valeur2 { get; set; }
+        public long Resultat { get; set; }
 
 
 
@@ -27,9 +30,7 @@ namespace GestionProjets.Models
         public Guid IndicateurId { get; set; }
         public virtual Indicateur Indicateur { get; set; }
 
-        [ForeignKey("Projet")]
-        public Guid ProjetId { get; set; }
-        public virtual Projet Projet { get; set; }
+        
     }
 
     public class MesureDTO
@@ -39,9 +40,10 @@ namespace GestionProjets.Models
         public Guid Id { get; set; }
         public DateTime DateDebut { get; set; }
         public DateTime DateFin { get; set; }
-        public long Valeur { get; set; }
+        public long Valeur1 { get; set; }
+        public long Valeur2 { get; set; }
+        public long Resultat { get; set; }
         public Guid IndicateurId { get; set; }
-        public Guid ProjetId { get; set; }
 
     }
 }

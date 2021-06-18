@@ -21,14 +21,17 @@ namespace GestionProjets.Controllers
         private readonly ITacheRepository _tacheRepository;
         private readonly IProjetRepository _projetRepository;
         private readonly IAutorisationRepository _autorisationRepository;
+        private readonly INotificationRepository _notificationRepository;
+
         private readonly IMapper _mapper;
 
 
-        public TacheController(ITacheRepository tacheRepository  , IProjetRepository projetRepository, IAutorisationRepository autorisationRepository, IMapper mapper)
+        public TacheController(ITacheRepository tacheRepository  , IProjetRepository projetRepository, IAutorisationRepository autorisationRepository, INotificationRepository notificationRepository, IMapper mapper)
         {
             _tacheRepository = tacheRepository;
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
+            _notificationRepository = notificationRepository;
             _mapper = mapper;
 
         }
@@ -91,13 +94,30 @@ namespace GestionProjets.Controllers
         [Ref("Tache3")]
         public IActionResult Post([FromBody] Tache tache)
         {
-            
-                    using (var scope = new TransactionScope())
+
+            using (var scope = new TransactionScope())
             {
                 _tacheRepository.InsertTache(tache);
                 scope.Complete();
-                return CreatedAtAction(nameof(Get), new { id = tache.Id }, tache);
             }
+            //Notification
+            Tache t = _tacheRepository.GetTacheByID(tache.Id);
+
+            if (t.UserId != null)
+                {
+                    Notification notification = new Notification()
+                    {
+                        Nom = "Nom",
+                        Description = $"{t.Utilisateur.Nom} {t.Utilisateur.Prenom}" +
+                       $"vous a ajouté en tant que responsable sur la tache {tache.Nom}.",
+                        DateCreation = DateTime.Now,
+                        SourceId = t.Id,
+                        UserId = t.UserId
+                    };
+                    _notificationRepository.InsertNotification(notification);
+                }
+                return CreatedAtAction(nameof(Get), new { id = tache.Id }, tache);
+            
                
         }
         [Authorize(Roles = "Responsable,Chefdeprojet,Membre")]
@@ -110,10 +130,29 @@ namespace GestionProjets.Controllers
             {
                 using (var scope = new TransactionScope())
                 {
+                    Tache Otache = _tacheRepository.GetTacheByID(tache.Id);
+
                     _tacheRepository.UpdateTache(tache);
                     scope.Complete();
-                    return new OkResult();
                 }
+
+                //Notification
+                Tache t = _tacheRepository.GetTacheByID(tache.Id);
+                    if (t.UserId != null && t.UserId != tache.UserId)
+                    {
+                        Notification notification = new Notification()
+                        {
+                            Nom = "Nom",
+                            Description = $"{t.Utilisateur.Nom} {t.Utilisateur.Prenom}" +
+                           $"vous a ajouté en tant que responsable sur la tache {tache.Nom}.",
+                            DateCreation = DateTime.Now,
+                            SourceId = t.Id,
+                            UserId = t.UserId
+                        };
+                        _notificationRepository.InsertNotification(notification);
+                    }
+                    return new OkResult();
+                
             }
             return new NoContentResult();
                

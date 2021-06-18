@@ -3,8 +3,8 @@ using GestionProjets.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace GestionProjets.Repository
 {
@@ -17,9 +17,9 @@ namespace GestionProjets.Repository
             _dbContext = dbContext;
         }
 
-        public IEnumerable<Mesure> GetMesuresByProject(Guid ProjetId)
+        public IEnumerable<Mesure> GetMesuresByIndicateur(Guid IndicateurId)
         {
-            return _dbContext.Projets.Where(A => A.Id == ProjetId).FirstOrDefault().Mesures;
+            return _dbContext.Indicateurs.Where(A => A.Id == IndicateurId).FirstOrDefault().Mesures;
         }
 
         public Mesure GetMesureByID(Guid MesureId)
@@ -36,8 +36,15 @@ namespace GestionProjets.Repository
         {
             if (Mesure != null)
             {
-                Projet p = _dbContext.Projets.Where(A => A.Id == Mesure.Id).FirstOrDefault();
-                p.Mesures.Add(Mesure);
+                Indicateur indicateur = _dbContext.Indicateurs.Where(A => A.Id == Mesure.IndicateurId).FirstOrDefault();
+                //Calcul de valeur de mesure par l'indictateur.
+                string expression = indicateur.Methode;
+                string exp = expression.Replace("A", Mesure.Valeur1.ToString()).Replace("B", Mesure.Valeur2.ToString());
+                DataTable dt = new DataTable();
+                long v = (long)Convert.ToInt64(dt.Compute(exp, string.Empty));
+                Mesure.Resultat = v;
+
+                indicateur.Mesures.Add(Mesure);
                 Save();
             }
         }

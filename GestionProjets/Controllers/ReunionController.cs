@@ -23,14 +23,18 @@ namespace GestionProjets.Controllers
         private readonly IReunionRepository _reunionRepository;
         private readonly IProjetRepository _projetRepository;
         private readonly IAutorisationRepository _autorisationRepository;
+        private readonly INotificationRepository _notificationRepository;
+
         private readonly IMapper _mapper;
 
 
-        public ReunionController(IReunionRepository reunionRepository, IProjetRepository projetRepository, IAutorisationRepository autorisationRepository, IMapper mapper)
+        public ReunionController(IReunionRepository reunionRepository, IProjetRepository projetRepository, IAutorisationRepository autorisationRepository, INotificationRepository notificationRepository, IMapper mapper)
         {
             _reunionRepository = reunionRepository;
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
+            _notificationRepository = notificationRepository;
+
             _mapper = mapper;
 
         }
@@ -96,13 +100,31 @@ namespace GestionProjets.Controllers
 
         public IActionResult Post([FromBody] Reunion reunion)
         {
-            
-                    using (var scope = new TransactionScope())
+
+            using (var scope = new TransactionScope())
             {
                 _reunionRepository.InsertReunion(reunion);
                 scope.Complete();
-                return CreatedAtAction(nameof(Get), new { id = reunion.Id }, reunion);
             }
+            //Notification
+            Reunion r = _reunionRepository.GetReunionByID(reunion.Id);
+                if (r.Utilisateurs != null)
+                {
+                    foreach (Utilisateur utilisateur in r.Utilisateurs)
+                    {
+                        Notification notification = new Notification()
+                        {
+                            Nom = "Notification",
+                            Description = $"Vous êtes invité à une réunion le {r.Date}.",
+                            DateCreation = DateTime.Now,
+                            SourceId = r.Id,
+                            UserId = utilisateur.Id
+                        };
+                        _notificationRepository.InsertNotification(notification);
+                    }
+                }
+                return CreatedAtAction(nameof(Get), new { id = reunion.Id }, reunion);
+            
                
         }
 
@@ -116,11 +138,31 @@ namespace GestionProjets.Controllers
             {
                 using (var scope = new TransactionScope())
                 {
+
                     _reunionRepository.UpdateReunion(reunion);
                     scope.Complete();
+                }
+                //Notification
+                Reunion r = _reunionRepository.GetReunionByID(reunion.Id);
+
+                if (r.Utilisateurs != null)
+                    {
+                        foreach (Utilisateur utilisateur in r.Utilisateurs)
+                        {
+                            Notification notification = new Notification()
+                            {
+                                Nom = "Notification",
+                                Description = $"Vous êtes invité à une réunion le {r.Date}.",
+                                DateCreation = DateTime.Now,
+                                SourceId = r.Id,
+                                UserId = utilisateur.Id
+                            };
+                            _notificationRepository.InsertNotification(notification);
+                        }
+                    }
                     return new OkResult();
                 }
-            }
+            
             return new NoContentResult();
                 
         }

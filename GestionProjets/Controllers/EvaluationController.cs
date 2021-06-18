@@ -35,17 +35,30 @@ namespace GestionProjets.Controllers
 
 
         }
-        [HttpGet("getbyprojet/{id}")]
+        [HttpGet("getbyopportunite/{id}")]
         [Ref("Evaluation0")]
 
-        public IActionResult GetByProject(Guid id)
+        public IActionResult GetByOpportunite(Guid id)
         {
             
-                var evaluations = _evaluationRepository.GetEvaluationsByProjet(id);
+                var evaluations = _evaluationRepository.GetEvaluationsByOpportunite(id);
                 var evaluationsDTO = evaluations.Select(_mapper.Map<EvaluationDTO>);
 
                 return new OkObjectResult(evaluationsDTO);
            
+        }
+
+        [HttpGet("getbyrisque/{id}")]
+        [Ref("Evaluation0")]
+
+        public IActionResult GetByRisque(Guid id)
+        {
+
+            var evaluations = _evaluationRepository.GetEvaluationsByRisque(id);
+            var evaluationsDTO = evaluations.Select(_mapper.Map<EvaluationDTO>);
+
+            return new OkObjectResult(evaluationsDTO);
+
         }
 
         internal bool Authorization(Evaluation evaluation , Guid projetId)

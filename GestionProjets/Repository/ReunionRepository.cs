@@ -24,7 +24,8 @@ namespace GestionProjets.Repository
 
         public Reunion GetReunionByID(Guid ReunionId)
         {
-            return _dbContext.Reunions.Find(ReunionId);
+            return _dbContext.Reunions.Include(r=> r.Utilisateurs)
+                .Where(r=>r.Id == ReunionId).Single();
         }
 
         public IEnumerable<Reunion> GetReunions()

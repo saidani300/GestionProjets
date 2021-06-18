@@ -21,12 +21,14 @@ namespace GestionProjets.Controllers
     {
         private readonly IProjetRepository _projetRepository;
         private readonly IAutorisationRepository _autorisationRepository;
+        private readonly INotificationRepository _notificationRepository;
         private readonly IMapper _mapper;
 
-        public ProjetController(IProjetRepository projetRepository, IAutorisationRepository autorisationRepository , IMapper mapper)
+        public ProjetController(IProjetRepository projetRepository, IAutorisationRepository autorisationRepository , INotificationRepository notificationRepository, IMapper mapper)
         {
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
+            _notificationRepository = notificationRepository;
             _mapper = mapper;
         }
 
@@ -52,7 +54,7 @@ namespace GestionProjets.Controllers
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var projets = _projetRepository.GetProjets(new Guid(LoggedInuserId));
             var projetsDTO = projets.Select(_mapper.Map<ProjetDTO>);
-            return new OkObjectResult(projetsDTO);
+            return new OkObjectResult(projets);
             
         }
 
@@ -89,17 +91,34 @@ namespace GestionProjets.Controllers
 
         public IActionResult Post([FromBody] Projet projet)
         {
-           
-                    using (var scope = new TransactionScope())
+
+            using (var scope = new TransactionScope())
             {
                 projet.UserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-                projet.ChefId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
                 _projetRepository.InsertProjet(projet);
                 scope.Complete();
-                ProjetDTO projetDTO = _mapper.Map<ProjetDTO>(projet);
-
-                return CreatedAtAction(nameof(Get), new { id = projet.Id }, projetDTO);
             }
+            Projet p = _projetRepository.GetProjetByID(projet.Id);
+                //Notification
+                if (p.ChefId != null)
+                {
+                    var notification = new Notification
+                    {
+                        Nom = "Notification",
+                        Description = $"{p.Responsable.Nom} {p.Responsable.Prenom}" +
+                        "vous a ajouté en tant que chef de projet.",
+                        DateCreation = DateTime.Now,
+                        SourceId = p.Id,
+                        UserId = (Guid)p.ChefId
+                };
+
+                  //Error  _notificationRepository.InsertNotification(notification);
+                _notificationRepository.Notification(notification.UserId, notification);
+                }
+                //return
+                ProjetDTO projetDTO = _mapper.Map<ProjetDTO>(projet);
+                return new OkObjectResult(projet);
+            
                
           
         }
@@ -115,12 +134,30 @@ namespace GestionProjets.Controllers
             {
                 using (var scope = new TransactionScope())
                 {
+                    Projet Oprojet = _projetRepository.GetProjetByID(projet.Id);
                     projet.DateModification = DateTime.Now;
                     _projetRepository.UpdateProjet(projet);
                     scope.Complete();
+                }
+                    Projet p = _projetRepository.GetProjetByID(projet.Id);
+
+                    //Notification
+                    if (p.ChefId != null && p.ChefId != projet.ChefId)
+                    {
+                        Notification notification = new Notification()
+                        {
+                            Nom = "Nom",
+                            Description = $"{p.Responsable.Nom} {p.Responsable.Prenom}" +
+                           "vous a ajouté en tant que chef de projet.",
+                            DateCreation = DateTime.Now,
+                            SourceId = p.Id,
+                            UserId = (Guid)p.ChefId
+                        };
+                        _notificationRepository.InsertNotification(notification);
+                    }
                     return new OkResult();
                 }
-            }
+            
             return new NoContentResult();
         }
 

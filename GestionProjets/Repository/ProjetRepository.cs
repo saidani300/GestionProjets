@@ -24,7 +24,7 @@ namespace GestionProjets.Repository
 
         public Projet GetProjetByID(Guid ProjetId)
         {
-            return _dbContext.Projets.Find(ProjetId);
+            return _dbContext.Projets.Include(p => p.Responsable).Where(p => p.Id == ProjetId).Single();
         }
 
         public IEnumerable<Projet> GetProjets(Guid Userid)
@@ -34,7 +34,7 @@ namespace GestionProjets.Repository
 
         public void InsertProjet(Projet Projet)
         {
-            _dbContext.Add(Projet);
+            _dbContext.Projets.Add(Projet);
             Save();
         }
 

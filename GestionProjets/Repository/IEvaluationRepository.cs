@@ -9,7 +9,8 @@ namespace GestionProjets.Repository
         void DeleteEvaluation(Guid EvaluationId);
         Evaluation GetEvaluationByID(Guid EvaluationId);
         IEnumerable<Evaluation> GetEvaluations();
-        IEnumerable<Evaluation> GetEvaluationsByProjet(Guid ProjetId);
+        IEnumerable<Evaluation> GetEvaluationsByOpportunite(Guid Id);
+        IEnumerable<Evaluation> GetEvaluationsByRisque(Guid Id);
         void InsertEvaluation(Evaluation Evaluation);
         void Save();
         void UpdateEvaluation(Evaluation Evaluation);

@@ -37,7 +37,7 @@ namespace GestionProjets.Repository
         {
             if (Objectif != null)
             {
-                Projet p = _dbContext.Projets.Where(A => A.Id == Objectif.Id).FirstOrDefault();
+                Projet p = _dbContext.Projets.Where(A => A.Id == Objectif.ProjetId).FirstOrDefault();
                 p.Objectifs.Add(Objectif);
                 Save();
             }

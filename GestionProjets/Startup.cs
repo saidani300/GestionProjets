@@ -1,5 +1,7 @@
 using GestionProjets.Data;
 using GestionProjets.DBContext;
+using GestionProjets.Helpers;
+using GestionProjets.Hubs;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -56,10 +58,14 @@ namespace GestionProjets
             services.AddTransient<IRisqueRepository, RisqueRepository>();
             services.AddTransient<IDocumentRepository, DocumentRepository>();
             services.AddTransient<IUtilisateurRepository, UtilisateurRepository>();
+            services.AddTransient<INotificationRepository, NotificationRepository>();
+            services.AddTransient<IUserConnectionManager, UserConnectionManager>();
+
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
             services.AddRazorPages();
+            services.AddSignalR();
             services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
             services.AddAuthentication(Options =>
 
@@ -122,10 +128,12 @@ namespace GestionProjets
             app.UseSwaggerUI(x => { x.SwaggerEndpoint("/swagger/v1/swagger.json", "Qalitas API v1"); });
             app.UseEndpoints(endpoints =>
             {
+                
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<NotificationHub>("/NotificationUser");
             });
         }
     }

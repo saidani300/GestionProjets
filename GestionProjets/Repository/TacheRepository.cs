@@ -30,7 +30,8 @@ namespace GestionProjets.Repository
 
         public Tache GetTacheByID(Guid TacheId)
         {
-            return _dbContext.Taches.Find(TacheId);
+            return _dbContext.Taches.Include(p => p.Utilisateur)
+            .Where(t => t.Id == TacheId).Single();
         }
 
         public IEnumerable<Tache> GetTaches()

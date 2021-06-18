@@ -27,9 +27,13 @@ namespace GestionProjets.Models
         public virtual Parametre Parametre { get; set; }
 
         //Foreign keys
-        [ForeignKey("Projet")]
-        public Guid ProjetId { get; set; }
-        public virtual Projet Projet { get; set; }
+        [ForeignKey("Opportunite")]
+        public Guid? OpportuniteId { get; set; }
+        public virtual Opportunite Opportunite { get; set; }
+
+        [ForeignKey("Risque")]
+        public Guid? RisqueId { get; set; }
+        public virtual Risque Risque { get; set; }
 
     }
 
@@ -47,6 +51,9 @@ namespace GestionProjets.Models
         public Guid ParametreId { get; set; }
 
         //Foreign keys
-        public Guid ProjetId { get; set; }
+        public Guid? OpportuniteId { get; set; }
+
+        public Guid? RisqueId { get; set; }
+
     }
 }

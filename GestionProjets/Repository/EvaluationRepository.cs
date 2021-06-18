@@ -17,9 +17,14 @@ namespace GestionProjets.Repository
             _dbContext = dbContext;
         }
 
-        public IEnumerable<Evaluation> GetEvaluationsByProjet(Guid ProjetId)
+        public IEnumerable<Evaluation> GetEvaluationsByOpportunite(Guid Id)
         {
-            return _dbContext.Projets.Where(A => A.Id == ProjetId).FirstOrDefault().Evaluations;
+            return _dbContext.Opportunites.Where(A => A.Id == Id).FirstOrDefault().Evaluations;
+        }
+
+        public IEnumerable<Evaluation> GetEvaluationsByRisque(Guid Id)
+        {
+            return _dbContext.Risques.Where(A => A.Id == Id).FirstOrDefault().Evaluations;
         }
 
         public Evaluation GetEvaluationByID(Guid EvaluationId)
@@ -36,9 +41,18 @@ namespace GestionProjets.Repository
         {
             if (Evaluation != null)
             {
-                Projet p = _dbContext.Projets.Where(A => A.Id == Evaluation.Id).FirstOrDefault();
-                p.Evaluations.Add(Evaluation);
-                Save();
+                if (Evaluation.OpportuniteId != null)
+                {
+                    Opportunite opportunite = _dbContext.Opportunites.Where(A => A.Id == Evaluation.OpportuniteId).FirstOrDefault();
+                    opportunite.Evaluations.Add(Evaluation);
+                    Save();
+                }
+                else if (Evaluation.RisqueId != null)
+                {
+                    Risque risque = _dbContext.Risques.Where(A => A.Id == Evaluation.RisqueId).FirstOrDefault();
+                    risque.Evaluations.Add(Evaluation);
+                    Save();
+                }
             }
         }
 

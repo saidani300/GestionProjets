@@ -89,38 +89,25 @@ namespace GestionProjets.Controllers
             }
         }
 
-        [HttpPost("AjouterActionProjet/{id}")]
+        [HttpPost]
         [Ref("Action3")]
 
-        public IActionResult PostProjet([FromBody] Models.Action action , Guid Id)
+        public IActionResult PostProjet([FromBody] Models.Action action)
         {
                      
                 using (var scope = new TransactionScope())
                 {
-                    _actionRepository.InsertActionProjet(action, Id);
+                    _actionRepository.InsertAction(action);
                     scope.Complete();
                     return CreatedAtAction(nameof(Get), new { id = action.Id }, action);
                 }
             
         }
 
-        [HttpPost("AjouterActionPhase/{id}")]
-        [Ref("Action4")]
-
-        public IActionResult PostPhase([FromBody] Models.Action action, Guid Id)
-        {
-            
-                    using (var scope = new TransactionScope())
-                    {
-                        _actionRepository.InsertActionPhase(action, Id);
-                        scope.Complete();
-                        return CreatedAtAction(nameof(Get), new { id = action.Id }, action);
-                    }
-               
-        }
+       
 
         [HttpPut]
-        [Ref("Action5")]
+        [Ref("Action4")]
 
         public IActionResult Put([FromBody] Models.Action action)
         {
@@ -139,7 +126,7 @@ namespace GestionProjets.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Ref("Action6")]
+        [Ref("Action5")]
 
         public IActionResult Delete(Guid id)
         {

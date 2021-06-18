@@ -34,13 +34,13 @@ namespace GestionProjets.Controllers
 
         }
 
-        [HttpGet("getbyprojet/{id}")]
+        [HttpGet("getbyindicateur/{id}")]
         [Ref("Mesure0")]
 
-        public IActionResult GetByProject(Guid id)
+        public IActionResult GetByIndicateur(Guid id)
         {
-            
-                var mesures = _mesureRepository.GetMesuresByProject(id);
+
+            var mesures = _mesureRepository.GetMesuresByIndicateur(id) ;
                 var mesuresDTO = mesures.Select(_mapper.Map<MesureDTO>);
 
                 return new OkObjectResult(mesuresDTO);

@@ -30,7 +30,7 @@ namespace GestionProjets.Repository
 
         public void InsertIndicateur(Indicateur Indicateur)
         {
-            _dbContext.Add(Indicateur);
+            _dbContext.Objectifs.Where(A => A.Id == Indicateur.ObjectifId).FirstOrDefault().Indicateurs.Add(Indicateur);
             Save();
         }
 

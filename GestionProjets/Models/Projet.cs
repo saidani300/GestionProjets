@@ -50,8 +50,6 @@ namespace GestionProjets.Models
         public virtual ICollection<Opportunite> Opportunites { get; set; }
         public virtual ICollection<Risque> Risques { get; set; }
 
-        public virtual ICollection<Mesure> Mesures { get; set; }
-        public virtual ICollection<Evaluation> Evaluations { get; set; }
 
         [Required]
         public StatutP Statut { get; set; }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -42,6 +43,8 @@ namespace GestionProjets.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateCreation { get; set; } = DateTime.Now;
         public string Impact { get; set; }
+
+        public virtual ICollection<Evaluation> Evaluations { get; set; }
 
         //Foreign keys
         [ForeignKey("Projet")]

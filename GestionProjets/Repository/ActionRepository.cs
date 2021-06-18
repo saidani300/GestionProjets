@@ -31,10 +31,18 @@ namespace GestionProjets.Repository
             return _dbContext.Phases.Where(A => A.Id == PhaseId).FirstOrDefault().Actions;
         }
 
-        public void InsertActionProjet(Models.Action Action, Guid ProjetId)
+        public void InsertAction(Models.Action Action)
         {
-            _dbContext.Projets.Where(A => A.Id == ProjetId).FirstOrDefault().Actions.Add(Action);
-            Save();
+            if (Action.ProjetId != null)
+            {
+                _dbContext.Projets.Where(A => A.Id == Action.ProjetId).FirstOrDefault().Actions.Add(Action);
+                Save();
+            }
+            else if (Action.PhaseId != null)
+            {
+                _dbContext.Phases.Where(A => A.Id == Action.PhaseId).FirstOrDefault().Actions.Add(Action);
+                Save();
+            }
         }
 
         public void InsertActionPhase(Models.Action Action, Guid PhaseId)

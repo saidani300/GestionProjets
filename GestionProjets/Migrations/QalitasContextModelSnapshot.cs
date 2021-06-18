@@ -15,7 +15,7 @@ namespace GestionProjets.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.8")
+                .HasAnnotation("ProductVersion", "3.1.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -80,12 +80,9 @@ namespace GestionProjets.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UtilisateurId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UtilisateurId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Autorisations");
                 });
@@ -139,17 +136,22 @@ namespace GestionProjets.Migrations
                     b.Property<long>("Note")
                         .HasColumnType("bigint");
 
+                    b.Property<Guid?>("OpportuniteId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("ParametreId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProjetId")
+                    b.Property<Guid?>("RisqueId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OpportuniteId");
+
                     b.HasIndex("ParametreId");
 
-                    b.HasIndex("ProjetId");
+                    b.HasIndex("RisqueId");
 
                     b.ToTable("Evaluations");
                 });
@@ -171,16 +173,15 @@ namespace GestionProjets.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("ObjectifId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Unite")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("Val1")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("Val2")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ObjectifId");
 
                     b.ToTable("Indicateurs");
                 });
@@ -203,19 +204,52 @@ namespace GestionProjets.Migrations
                     b.Property<Guid>("IndicateurId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProjetId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<long>("Resultat")
+                        .HasColumnType("bigint");
 
-                    b.Property<long>("Valeur")
+                    b.Property<long>("Valeur1")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("Valeur2")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IndicateurId");
 
-                    b.HasIndex("ProjetId");
-
                     b.ToTable("Mesures");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DateCreation")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nom")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SourceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UtilisateurId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UtilisateurId");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Objectif", b =>
@@ -376,25 +410,16 @@ namespace GestionProjets.Migrations
                     b.Property<Guid>("TypeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("TypeProjetId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("Utilisateur1Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("Utilisateur2Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TypeProjetId");
+                    b.HasIndex("ChefId");
 
-                    b.HasIndex("Utilisateur1Id");
+                    b.HasIndex("TypeId");
 
-                    b.HasIndex("Utilisateur2Id");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Projets");
                 });
@@ -499,9 +524,6 @@ namespace GestionProjets.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("PreTacheId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("PredTacheId")
                         .HasColumnType("uniqueidentifier");
 
@@ -511,16 +533,13 @@ namespace GestionProjets.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("UtilisateurId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ActionId");
 
-                    b.HasIndex("PreTacheId");
+                    b.HasIndex("PredTacheId");
 
-                    b.HasIndex("UtilisateurId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Taches");
                 });
@@ -599,7 +618,9 @@ namespace GestionProjets.Migrations
                 {
                     b.HasOne("GestionProjets.Models.Utilisateur", "Utilisateur")
                         .WithMany()
-                        .HasForeignKey("UtilisateurId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Document", b =>
@@ -613,15 +634,26 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Evaluation", b =>
                 {
+                    b.HasOne("GestionProjets.Models.Opportunite", "Opportunite")
+                        .WithMany("Evaluations")
+                        .HasForeignKey("OpportuniteId");
+
                     b.HasOne("GestionProjets.Models.Parametre", "Parametre")
                         .WithMany()
                         .HasForeignKey("ParametreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GestionProjets.Models.Projet", "Projet")
+                    b.HasOne("GestionProjets.Models.Risque", "Risque")
                         .WithMany("Evaluations")
-                        .HasForeignKey("ProjetId")
+                        .HasForeignKey("RisqueId");
+                });
+
+            modelBuilder.Entity("GestionProjets.Models.Indicateur", b =>
+                {
+                    b.HasOne("GestionProjets.Models.Objectif", "Objectif")
+                        .WithMany("Indicateurs")
+                        .HasForeignKey("ObjectifId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -629,16 +661,17 @@ namespace GestionProjets.Migrations
             modelBuilder.Entity("GestionProjets.Models.Mesure", b =>
                 {
                     b.HasOne("GestionProjets.Models.Indicateur", "Indicateur")
-                        .WithMany()
+                        .WithMany("Mesures")
                         .HasForeignKey("IndicateurId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.HasOne("GestionProjets.Models.Projet", "Projet")
-                        .WithMany("Mesures")
-                        .HasForeignKey("ProjetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            modelBuilder.Entity("GestionProjets.Models.Notification", b =>
+                {
+                    b.HasOne("GestionProjets.Models.Utilisateur", "Utilisateur")
+                        .WithMany()
+                        .HasForeignKey("UtilisateurId");
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Objectif", b =>
@@ -670,17 +703,21 @@ namespace GestionProjets.Migrations
 
             modelBuilder.Entity("GestionProjets.Models.Projet", b =>
                 {
+                    b.HasOne("GestionProjets.Models.Utilisateur", "ChefdeProjet")
+                        .WithMany()
+                        .HasForeignKey("ChefId");
+
                     b.HasOne("GestionProjets.Models.TypeProjet", "TypeProjet")
                         .WithMany()
-                        .HasForeignKey("TypeProjetId");
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("GestionProjets.Models.Utilisateur", "Utilisateur1")
+                    b.HasOne("GestionProjets.Models.Utilisateur", "Responsable")
                         .WithMany()
-                        .HasForeignKey("Utilisateur1Id");
-
-                    b.HasOne("GestionProjets.Models.Utilisateur", "Utilisateur2")
-                        .WithMany()
-                        .HasForeignKey("Utilisateur2Id");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Reunion", b =>
@@ -711,11 +748,13 @@ namespace GestionProjets.Migrations
 
                     b.HasOne("GestionProjets.Models.Tache", "PreTache")
                         .WithMany()
-                        .HasForeignKey("PreTacheId");
+                        .HasForeignKey("PredTacheId");
 
                     b.HasOne("GestionProjets.Models.Utilisateur", "Utilisateur")
                         .WithMany()
-                        .HasForeignKey("UtilisateurId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GestionProjets.Models.Utilisateur", b =>

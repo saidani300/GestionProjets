@@ -71,7 +71,7 @@ namespace GestionProjets.Models
         public string Description { get; set; }
         public DateTime DateD { get; set; }
         public DateTime DateF { get; set; }
-        public Guid PreActionId { get; set; }
+        public Guid? PreActionId { get; set; }
         public StatutA Statut { get; set; }
 
 

@@ -44,5 +44,8 @@ namespace GestionProjets.DBContext
 
         public DbSet<Document> Documents { get; set; }
 
+        public DbSet<Notification> Notifications { get; set; }
+
+
     }
 }

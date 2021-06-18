@@ -9,8 +9,8 @@ namespace GestionProjets.Repository
         Models.Action GetActionByID(Guid ActionId);
         IEnumerable<Models.Action> GetActionsByPhase(Guid PhaseId);
         IEnumerable<Models.Action> GetActionsByProject(Guid ProjetId);
+        void InsertAction(Models.Action Action);
         void InsertActionPhase(Models.Action Action, Guid PhaseId);
-        void InsertActionProjet(Models.Action Action, Guid ProjetId);
         void Save();
         void UpdateAction(Models.Action Action);
     }

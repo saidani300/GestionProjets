@@ -67,7 +67,7 @@ namespace GestionProjets.Controllers
 
                 PhaseDTO phaseDTO = _mapper.Map<PhaseDTO>(phase);
 
-                return new OkObjectResult(phaseDTO);
+                return new OkObjectResult(phase);
             
         }
 

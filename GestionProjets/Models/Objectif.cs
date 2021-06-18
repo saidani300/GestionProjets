@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -22,9 +23,10 @@ namespace GestionProjets.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-
+        [Required]
         public string Nom { get; set; }
         public string Description { get; set; }
+        [Required]
         public Priorite Priorite { get; set; }
         public EtatO Etat { get; set; }
         [DataType(DataType.Date)]
@@ -34,11 +36,15 @@ namespace GestionProjets.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateModification { get; set; } = DateTime.Now;
 
-        //Foreign keys
-        [ForeignKey("Projet")]
+        public virtual ICollection<Indicateur> Indicateurs { get; set; }
 
+        //Foreign keys
+        [Required]
+        [ForeignKey("Projet")]
         public Guid ProjetId { get; set; }
         public virtual Projet Projet { get; set; }
+
+
     }
 
     public class ObjectifDTO

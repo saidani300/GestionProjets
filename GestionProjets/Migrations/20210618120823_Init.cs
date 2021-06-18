@@ -8,23 +8,6 @@ namespace GestionProjets.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Indicateurs",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Nom = table.Column<string>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    Methode = table.Column<string>(nullable: false),
-                    Val1 = table.Column<long>(nullable: false),
-                    Val2 = table.Column<long>(nullable: false),
-                    Unite = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Indicateurs", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Parametres",
                 columns: table => new
                 {
@@ -62,17 +45,15 @@ namespace GestionProjets.Migrations
                     DateF = table.Column<DateTime>(nullable: false),
                     Statut = table.Column<int>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
-                    UtilisateurId = table.Column<Guid>(nullable: true),
                     PredTacheId = table.Column<Guid>(nullable: true),
-                    PreTacheId = table.Column<Guid>(nullable: true),
                     ActionId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Taches", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Taches_Taches_PreTacheId",
-                        column: x => x.PreTacheId,
+                        name: "FK_Taches_Taches_PredTacheId",
+                        column: x => x.PredTacheId,
                         principalTable: "Taches",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -86,19 +67,30 @@ namespace GestionProjets.Migrations
                     DateCreation = table.Column<DateTime>(nullable: false),
                     DateDebut = table.Column<DateTime>(nullable: false),
                     DateFin = table.Column<DateTime>(nullable: false),
-                    Valeur = table.Column<long>(nullable: false),
-                    IndicateurId = table.Column<Guid>(nullable: false),
-                    ProjetId = table.Column<Guid>(nullable: false)
+                    Valeur1 = table.Column<long>(nullable: false),
+                    Valeur2 = table.Column<long>(nullable: false),
+                    Resultat = table.Column<long>(nullable: false),
+                    IndicateurId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Mesures", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Mesures_Indicateurs_IndicateurId",
-                        column: x => x.IndicateurId,
-                        principalTable: "Indicateurs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Indicateurs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Nom = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    Methode = table.Column<string>(nullable: false),
+                    Unite = table.Column<string>(nullable: true),
+                    ObjectifId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Indicateurs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -112,7 +104,8 @@ namespace GestionProjets.Migrations
                     DateCreation = table.Column<DateTime>(nullable: false),
                     DateModification = table.Column<DateTime>(nullable: false),
                     ParametreId = table.Column<Guid>(nullable: false),
-                    ProjetId = table.Column<Guid>(nullable: false)
+                    OpportuniteId = table.Column<Guid>(nullable: true),
+                    RisqueId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -270,14 +263,36 @@ namespace GestionProjets.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     Reference = table.Column<string>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
-                    UtilisateurId = table.Column<Guid>(nullable: true)
+                    UserId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Autorisations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Autorisations_Utilisateurs_UtilisateurId",
+                        name: "FK_Autorisations_Utilisateurs_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Utilisateurs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Nom = table.Column<string>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    DateCreation = table.Column<DateTime>(nullable: false),
+                    SourceId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false),
+                    UtilisateurId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Utilisateurs_UtilisateurId",
                         column: x => x.UtilisateurId,
                         principalTable: "Utilisateurs",
                         principalColumn: "Id",
@@ -297,33 +312,30 @@ namespace GestionProjets.Migrations
                     DateF = table.Column<DateTime>(nullable: false),
                     Statut = table.Column<int>(nullable: false),
                     TypeId = table.Column<Guid>(nullable: false),
-                    TypeProjetId = table.Column<Guid>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
-                    Utilisateur1Id = table.Column<Guid>(nullable: true),
-                    ChefId = table.Column<Guid>(nullable: true),
-                    Utilisateur2Id = table.Column<Guid>(nullable: true)
+                    ChefId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Projets_TypesProjet_TypeProjetId",
-                        column: x => x.TypeProjetId,
+                        name: "FK_Projets_Utilisateurs_ChefId",
+                        column: x => x.ChefId,
+                        principalTable: "Utilisateurs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Projets_TypesProjet_TypeId",
+                        column: x => x.TypeId,
                         principalTable: "TypesProjet",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Projets_Utilisateurs_Utilisateur1Id",
-                        column: x => x.Utilisateur1Id,
+                        name: "FK_Projets_Utilisateurs_UserId",
+                        column: x => x.UserId,
                         principalTable: "Utilisateurs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Projets_Utilisateurs_Utilisateur2Id",
-                        column: x => x.Utilisateur2Id,
-                        principalTable: "Utilisateurs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -368,9 +380,9 @@ namespace GestionProjets.Migrations
                 column: "ProjetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Autorisations_UtilisateurId",
+                name: "IX_Autorisations_UserId",
                 table: "Autorisations",
-                column: "UtilisateurId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Documents_ProjetId",
@@ -378,14 +390,24 @@ namespace GestionProjets.Migrations
                 column: "ProjetId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Evaluations_OpportuniteId",
+                table: "Evaluations",
+                column: "OpportuniteId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Evaluations_ParametreId",
                 table: "Evaluations",
                 column: "ParametreId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Evaluations_ProjetId",
+                name: "IX_Evaluations_RisqueId",
                 table: "Evaluations",
-                column: "ProjetId");
+                column: "RisqueId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Indicateurs_ObjectifId",
+                table: "Indicateurs",
+                column: "ObjectifId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Mesures_IndicateurId",
@@ -393,9 +415,9 @@ namespace GestionProjets.Migrations
                 column: "IndicateurId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Mesures_ProjetId",
-                table: "Mesures",
-                column: "ProjetId");
+                name: "IX_Notifications_UtilisateurId",
+                table: "Notifications",
+                column: "UtilisateurId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Objectifs_ProjetId",
@@ -413,19 +435,19 @@ namespace GestionProjets.Migrations
                 column: "ProjetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Projets_TypeProjetId",
+                name: "IX_Projets_ChefId",
                 table: "Projets",
-                column: "TypeProjetId");
+                column: "ChefId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Projets_Utilisateur1Id",
+                name: "IX_Projets_TypeId",
                 table: "Projets",
-                column: "Utilisateur1Id");
+                column: "TypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Projets_Utilisateur2Id",
+                name: "IX_Projets_UserId",
                 table: "Projets",
-                column: "Utilisateur2Id");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reunions_ProjetId",
@@ -443,14 +465,14 @@ namespace GestionProjets.Migrations
                 column: "ActionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Taches_PreTacheId",
+                name: "IX_Taches_PredTacheId",
                 table: "Taches",
-                column: "PreTacheId");
+                column: "PredTacheId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Taches_UtilisateurId",
+                name: "IX_Taches_UserId",
                 table: "Taches",
-                column: "UtilisateurId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Utilisateurs_ReunionId",
@@ -458,12 +480,12 @@ namespace GestionProjets.Migrations
                 column: "ReunionId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Taches_Utilisateurs_UtilisateurId",
+                name: "FK_Taches_Utilisateurs_UserId",
                 table: "Taches",
-                column: "UtilisateurId",
+                column: "UserId",
                 principalTable: "Utilisateurs",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Taches_Actions_ActionId",
@@ -474,20 +496,36 @@ namespace GestionProjets.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Mesures_Projets_ProjetId",
+                name: "FK_Mesures_Indicateurs_IndicateurId",
                 table: "Mesures",
-                column: "ProjetId",
-                principalTable: "Projets",
+                column: "IndicateurId",
+                principalTable: "Indicateurs",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Evaluations_Projets_ProjetId",
-                table: "Evaluations",
-                column: "ProjetId",
-                principalTable: "Projets",
+                name: "FK_Indicateurs_Objectifs_ObjectifId",
+                table: "Indicateurs",
+                column: "ObjectifId",
+                principalTable: "Objectifs",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Evaluations_Opportunites_OpportuniteId",
+                table: "Evaluations",
+                column: "OpportuniteId",
+                principalTable: "Opportunites",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Evaluations_Risques_RisqueId",
+                table: "Evaluations",
+                column: "RisqueId",
+                principalTable: "Risques",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Actions_Phases_PhaseId",
@@ -565,19 +603,19 @@ namespace GestionProjets.Migrations
                 name: "Mesures");
 
             migrationBuilder.DropTable(
-                name: "Objectifs");
-
-            migrationBuilder.DropTable(
-                name: "Opportunites");
-
-            migrationBuilder.DropTable(
-                name: "Risques");
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "Taches");
 
             migrationBuilder.DropTable(
+                name: "Opportunites");
+
+            migrationBuilder.DropTable(
                 name: "Parametres");
+
+            migrationBuilder.DropTable(
+                name: "Risques");
 
             migrationBuilder.DropTable(
                 name: "Indicateurs");
@@ -586,16 +624,19 @@ namespace GestionProjets.Migrations
                 name: "Actions");
 
             migrationBuilder.DropTable(
+                name: "Objectifs");
+
+            migrationBuilder.DropTable(
                 name: "Phases");
 
             migrationBuilder.DropTable(
                 name: "Projets");
 
             migrationBuilder.DropTable(
-                name: "TypesProjet");
+                name: "Utilisateurs");
 
             migrationBuilder.DropTable(
-                name: "Utilisateurs");
+                name: "TypesProjet");
 
             migrationBuilder.DropTable(
                 name: "Reunions");
