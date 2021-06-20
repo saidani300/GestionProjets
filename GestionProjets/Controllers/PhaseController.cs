@@ -71,21 +71,7 @@ namespace GestionProjets.Controllers
             
         }
 
-        internal bool Authorization(Phase phase, Guid projetId)
-        {
-
-            Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
-            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
-            if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+       
         [HttpPost]
         [Ref("Phase3")]
         public IActionResult Post([FromBody] Phase phase)
@@ -102,14 +88,15 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Phase4")]
-        public IActionResult Put([FromBody] Phase phase)
+        [AuthorizeUpdate]
+        public IActionResult Put([FromBody] Phase Model)
         {
             
-                    if (phase != null)
+                    if (Model != null)
             {
                 using (var scope = new TransactionScope())
                 {
-                    _phaseRepository.UpdatePhase(phase);
+                    _phaseRepository.UpdatePhase(Model);
                     scope.Complete();
                     return new OkResult();
                 }

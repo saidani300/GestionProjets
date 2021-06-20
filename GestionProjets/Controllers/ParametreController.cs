@@ -51,22 +51,7 @@ namespace GestionProjets.Controllers
             
         }
 
-        internal bool Authorization(Parametre parametre, Guid projetId)
-        {
-
-            Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
-            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
-            if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
+       
         [HttpPost]
         [Ref("Parametre2")]
 
@@ -85,14 +70,14 @@ namespace GestionProjets.Controllers
         [HttpPut]
         [Ref("Parametre3")]
 
-        public IActionResult Put([FromBody] Parametre parametre)
+        public IActionResult Put([FromBody] Parametre Model)
         {
            
-                    if (parametre != null)
+                    if (Model != null)
             {
                 using (var scope = new TransactionScope())
                 {
-                    _parametreRepository.UpdateParametre(parametre);
+                    _parametreRepository.UpdateParametre(Model);
                     scope.Complete();
                     return new OkResult();
                 }

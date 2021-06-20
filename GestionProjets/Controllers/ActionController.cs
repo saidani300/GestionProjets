@@ -72,34 +72,17 @@ namespace GestionProjets.Controllers
            
         }
 
-
-        internal bool Authorization(Models.Action action, Guid projetId)
-        {
-
-            Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
-            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
-            if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         [HttpPost]
         [Ref("Action3")]
 
-        public IActionResult PostProjet([FromBody] Models.Action action)
+        public IActionResult PostProjet([FromBody] Models.Action Model)
         {
                      
                 using (var scope = new TransactionScope())
                 {
-                    _actionRepository.InsertAction(action);
+                    _actionRepository.InsertAction(Model);
                     scope.Complete();
-                    return CreatedAtAction(nameof(Get), new { id = action.Id }, action);
+                    return CreatedAtAction(nameof(Get), new { id = Model.Id }, Model);
                 }
             
         }
@@ -108,15 +91,15 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Action4")]
-
-        public IActionResult Put([FromBody] Models.Action action)
+        [AuthorizeUpdate]
+        public IActionResult Put([FromBody] Models.Action Model)
         {
            
-                if (action != null)
+                if (Model != null)
             {
                 using (var scope = new TransactionScope())
                 {
-                    _actionRepository.UpdateAction(action);
+                    _actionRepository.UpdateAction(Model);
                     scope.Complete();
                     return new OkResult();
                 }

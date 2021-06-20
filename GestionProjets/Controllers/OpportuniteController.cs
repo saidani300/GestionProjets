@@ -59,22 +59,7 @@ namespace GestionProjets.Controllers
         
 }
 
-        internal bool Authorization(Opportunite opportunite, Guid projetId)
-        {
-
-            Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
-            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
-            if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
+       
         [HttpPost]
         [Ref("Opportunite3")]
         public IActionResult Post([FromBody] Opportunite opportunite)
@@ -91,14 +76,15 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Opportunite4")]
-        public IActionResult Put([FromBody] Opportunite opportunite)
+        [AuthorizeUpdate]
+        public IActionResult Put([FromBody] Opportunite Model)
         {
            
-                    if (opportunite != null)
+                    if (Model != null)
             {
                 using (var scope = new TransactionScope())
                 {
-                    _opportuniteRepository.UpdateOpportunite(opportunite);
+                    _opportuniteRepository.UpdateOpportunite(Model);
                     scope.Complete();
                     return new OkResult();
                 }

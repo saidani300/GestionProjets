@@ -59,22 +59,7 @@ namespace GestionProjets.Controllers
             
         }
 
-        internal bool Authorization(Objectif objectif , Guid projetId)
-        {
-
-            Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
-            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
-            if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
+       
         [HttpPost]
         [Ref("Objectif3")]
 
@@ -93,15 +78,15 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Objectif4")]
-
-        public IActionResult Put([FromBody] Objectif objectif)
+        [AuthorizeUpdate]
+        public IActionResult Put([FromBody] Objectif Model)
         {
            
-                    if (objectif != null)
+                    if (Model != null)
             {
                 using (var scope = new TransactionScope())
                 {
-                    _objectifRepository.UpdateObjectif(objectif);
+                    _objectifRepository.UpdateObjectif(Model);
                     scope.Complete();
                     return new OkResult();
                 }

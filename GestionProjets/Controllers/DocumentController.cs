@@ -51,48 +51,35 @@ namespace GestionProjets.Controllers
            
         }
 
-        internal bool Authorization(Document document , Guid projetId)
-        {
-
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
-            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
-            if (projetUserId.ToString() == LoggedInuserId || projetChefId.ToString() == LoggedInuserId)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+       
 
         [HttpPost]
         [Ref("Document2")]
 
-        public IActionResult Post([FromBody] Document document)
+        public IActionResult Post([FromBody] Document Model)
         {
            
                     using (var scope = new TransactionScope())
                     {
-                        _documentRepository.InsertDocument(document);
+                        _documentRepository.InsertDocument(Model);
                         scope.Complete();
-                        return CreatedAtAction(nameof(Get), new { id = document.Id }, document);
+                        return CreatedAtAction(nameof(Get), new { id = Model.Id }, Model);
                     }
               
         }
 
         [HttpPut]
         [Ref("Document3")]
-
-        public IActionResult Put([FromBody] Document document)
+       // [Authorize(Policy = "HasUserAccess")]
+        [AuthorizeUpdate]
+        public IActionResult Put([FromBody] Document Model)
         {
            
-                    if (document != null)
+                    if (Model != null)
                     {
                         using (var scope = new TransactionScope())
                         {
-                            _documentRepository.UpdateDocument(document);
+                            _documentRepository.UpdateDocument(Model);
                             scope.Complete();
                             return new OkResult();
                         }

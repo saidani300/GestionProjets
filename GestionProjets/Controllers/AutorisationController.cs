@@ -52,28 +52,28 @@ namespace GestionProjets.Controllers
         [HttpPost]
         [Ref("Autorisation2")]
 
-        public IActionResult Post([FromBody] Models.Autorisation autorisation)
+        public IActionResult Post([FromBody] Models.Autorisation Model)
         {
             
                 using (var scope = new TransactionScope())
             {
-                _autorisationRepository.InsertAutorisation(autorisation);
+                _autorisationRepository.InsertAutorisation(Model);
                 scope.Complete();
-                return CreatedAtAction(nameof(Get), new { id = autorisation.Id }, autorisation);
+                return CreatedAtAction(nameof(Get), new { id = Model.Id }, Model);
             }
             
         }
         [HttpPut]
         [Ref("Autorisation3")]
 
-        public IActionResult Put([FromBody] Models.Autorisation autorisation)
+        public IActionResult Put([FromBody] Models.Autorisation Model)
         {
             
-                if (autorisation != null)
+                if (Model != null)
             {
                 using (var scope = new TransactionScope())
                 {
-                    _autorisationRepository.UpdateAutorisation(autorisation);
+                    _autorisationRepository.UpdateAutorisation(Model);
                     scope.Complete();
                     return new OkResult();
                 }

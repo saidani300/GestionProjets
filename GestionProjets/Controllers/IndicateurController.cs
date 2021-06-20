@@ -30,21 +30,7 @@ namespace GestionProjets.Controllers
             _autorisationRepository = autorisationRepository;
         }
 
-        internal bool Authorization(Indicateur indicateur , Guid projetId)
-        {
-
-            Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
-            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
-            if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+       
 
         [HttpGet]
         [Ref("Indicateur0")]
@@ -85,15 +71,15 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Indicateur3")]
-
-        public IActionResult Put([FromBody] Indicateur indicateur)
+        [AuthorizeUpdate]
+        public IActionResult Put([FromBody] Indicateur Model)
         {
            
-                    if (indicateur != null)
+                    if (Model != null)
             {
                 using (var scope = new TransactionScope())
                 {
-                    _indicateurRepository.UpdateIndicateur(indicateur);
+                    _indicateurRepository.UpdateIndicateur(Model);
                     scope.Complete();
                     return new OkResult();
                 }

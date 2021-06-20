@@ -80,21 +80,7 @@ namespace GestionProjets.Controllers
         
            
 }
-        internal bool Authorization(Reunion reunion, Guid projetId)
-        {
-
-            Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
-            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
-            if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+       
         [HttpPost]
         [Ref("Reunion3")]
 
@@ -130,20 +116,21 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Reunion4")]
+        [AuthorizeUpdate]
 
-        public IActionResult Put([FromBody] Reunion reunion)
+        public IActionResult Put([FromBody] Reunion Model)
         {
            
-                    if (reunion != null)
+                    if (Model != null)
             {
                 using (var scope = new TransactionScope())
                 {
 
-                    _reunionRepository.UpdateReunion(reunion);
+                    _reunionRepository.UpdateReunion(Model);
                     scope.Complete();
                 }
                 //Notification
-                Reunion r = _reunionRepository.GetReunionByID(reunion.Id);
+                Reunion r = _reunionRepository.GetReunionByID(Model.Id);
 
                 if (r.Utilisateurs != null)
                     {

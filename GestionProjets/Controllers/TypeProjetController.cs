@@ -58,13 +58,13 @@ namespace GestionProjets.Controllers
         [HttpPut]
         [Ref("TypeProjet3")]
 
-        public IActionResult Put([FromBody] TypeProjet typeprojet)
+        public IActionResult Put([FromBody] TypeProjet Model)
         {
-            if (typeprojet != null)
+            if (Model != null)
             {
                 using (var scope = new TransactionScope())
                 {
-                    _typeprojetRepository.UpdateTypeProjet(typeprojet);
+                    _typeprojetRepository.UpdateTypeProjet(Model);
                     scope.Complete();
                     return new OkResult();
                 }

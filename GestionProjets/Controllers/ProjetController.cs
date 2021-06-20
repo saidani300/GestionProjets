@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GestionProjets.AuthorizationAttributes;
+using GestionProjets.ErrorHandling;
 using GestionProjets.Models;
 using GestionProjets.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -54,8 +56,11 @@ namespace GestionProjets.Controllers
             string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var projets = _projetRepository.GetProjets(new Guid(LoggedInuserId));
             var projetsDTO = projets.Select(_mapper.Map<ProjetDTO>);
-            return new OkObjectResult(projets);
-            
+
+            //throw new AppException("Message 1");
+
+           return new OkObjectResult(projets);
+
         }
 
         [HttpGet("{id}")]
@@ -125,24 +130,24 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Projet4")]
-        [Utilisateur]
+        [AuthorizeUpdate]
 
-        public IActionResult Put([FromBody] Projet projet)
+        public IActionResult Put([FromBody] Projet Model)
         {
            
-                    if (projet != null)
+                    if (Model != null)
             {
                 using (var scope = new TransactionScope())
                 {
-                    Projet Oprojet = _projetRepository.GetProjetByID(projet.Id);
-                    projet.DateModification = DateTime.Now;
-                    _projetRepository.UpdateProjet(projet);
+                    Projet Oprojet = _projetRepository.GetProjetByID(Model.Id);
+                    Model.DateModification = DateTime.Now;
+                    _projetRepository.UpdateProjet(Model);
                     scope.Complete();
                 }
-                    Projet p = _projetRepository.GetProjetByID(projet.Id);
+                    Projet p = _projetRepository.GetProjetByID(Model.Id);
 
                     //Notification
-                    if (p.ChefId != null && p.ChefId != projet.ChefId)
+                    if (p.ChefId != null && p.ChefId != Model.ChefId)
                     {
                         Notification notification = new Notification()
                         {

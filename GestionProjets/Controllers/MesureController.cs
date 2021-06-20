@@ -73,21 +73,7 @@ namespace GestionProjets.Controllers
            
         }
 
-        internal bool Authorization(Mesure mesure , Guid projetId)
-        {
-
-            Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
-            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
-            if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        
         [HttpPost]
         [Ref("Mesure3")]
 
@@ -105,15 +91,15 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Mesure4")]
-
-        public IActionResult Put([FromBody] Mesure mesure)
+        [AuthorizeUpdate]
+        public IActionResult Put([FromBody] Mesure Model)
         {
             
-                    if (mesure != null)
+                    if (Model != null)
             {
                 using (var scope = new TransactionScope())
                 {
-                    _mesureRepository.UpdateMesure(mesure);
+                    _mesureRepository.UpdateMesure(Model);
                     scope.Complete();
                     return new OkResult();
                 }

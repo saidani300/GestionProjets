@@ -61,20 +61,7 @@ namespace GestionProjets.Controllers
 
         }
 
-        internal bool Authorization(Evaluation evaluation , Guid projetId)
-        {
-
-            string LoggedInuserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
-            if (projetUserId.ToString() == LoggedInuserId)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+       
         [HttpGet]
         [Ref("Evaluation1")]
         public IActionResult Get()
@@ -103,29 +90,29 @@ namespace GestionProjets.Controllers
         [HttpPost]
         [Ref("Evaluation3")]
 
-        public IActionResult Post([FromBody] Evaluation evaluation)
+        public IActionResult Post([FromBody] Evaluation Model)
         {
            
                 using (var scope = new TransactionScope())
                 {
-                    _evaluationRepository.InsertEvaluation(evaluation);
+                    _evaluationRepository.InsertEvaluation(Model);
                     scope.Complete();
-                    return CreatedAtAction(nameof(Get), new { id = evaluation.Id }, evaluation);
+                    return CreatedAtAction(nameof(Get), new { id = Model.Id }, Model);
                 }
         }
 
         [HttpPut]
         [Ref("Evaluation4")]
-
-        public IActionResult Put([FromBody] Evaluation evaluation)
+        [AuthorizeUpdate]
+        public IActionResult Put([FromBody] Evaluation Model)
         {
             
           
-                if (evaluation != null)
+                if (Model != null)
             {
                 using (var scope = new TransactionScope())
                 {
-                    _evaluationRepository.UpdateEvaluation(evaluation);
+                    _evaluationRepository.UpdateEvaluation(Model);
                     scope.Complete();
                     return new OkResult();
                 }

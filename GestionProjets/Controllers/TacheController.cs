@@ -74,21 +74,6 @@ namespace GestionProjets.Controllers
 
 }
 
-        internal bool Authorization(Tache tache, Guid projetId)
-        {
-
-            Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
-            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
-            if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         [HttpPost]
         [Ref("Tache3")]
@@ -123,28 +108,29 @@ namespace GestionProjets.Controllers
         [Authorize(Roles = "Responsable,Chefdeprojet,Membre")]
         [HttpPut]
         [Ref("Tache4")]
-        public IActionResult Put([FromBody] Tache tache)
+        [AuthorizeUpdate]
+        public IActionResult Put([FromBody] Tache Model)
         {
             
-                    if (tache != null)
+                    if (Model != null)
             {
                 using (var scope = new TransactionScope())
                 {
-                    Tache Otache = _tacheRepository.GetTacheByID(tache.Id);
+                    Tache Otache = _tacheRepository.GetTacheByID(Model.Id);
 
-                    _tacheRepository.UpdateTache(tache);
+                    _tacheRepository.UpdateTache(Model);
                     scope.Complete();
                 }
 
                 //Notification
-                Tache t = _tacheRepository.GetTacheByID(tache.Id);
-                    if (t.UserId != null && t.UserId != tache.UserId)
+                Tache t = _tacheRepository.GetTacheByID(Model.Id);
+                    if (t.UserId != null && t.UserId != Model.UserId)
                     {
                         Notification notification = new Notification()
                         {
                             Nom = "Nom",
                             Description = $"{t.Utilisateur.Nom} {t.Utilisateur.Prenom}" +
-                           $"vous a ajouté en tant que responsable sur la tache {tache.Nom}.",
+                           $"vous a ajouté en tant que responsable sur la tache {Model.Nom}.",
                             DateCreation = DateTime.Now,
                             SourceId = t.Id,
                             UserId = t.UserId

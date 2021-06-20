@@ -1,10 +1,15 @@
+using GestionProjets.AuthorizationAttributes;
 using GestionProjets.Data;
 using GestionProjets.DBContext;
+using GestionProjets.ErrorHandling;
 using GestionProjets.Helpers;
 using GestionProjets.Hubs;
 using GestionProjets.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -17,6 +22,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -60,7 +66,7 @@ namespace GestionProjets
             services.AddTransient<IUtilisateurRepository, UtilisateurRepository>();
             services.AddTransient<INotificationRepository, NotificationRepository>();
             services.AddTransient<IUserConnectionManager, UserConnectionManager>();
-
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
@@ -100,22 +106,30 @@ namespace GestionProjets
                         Version = "v1"
                     });
             });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("HasUserAccess", policy =>
+                    policy.Requirements.Add(new UserAccessRequirement()));
+            });
+
+            services.AddTransient<IAuthorizationHandler, UserAccessHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //    app.UseDatabaseErrorPage();
+            //}
+            //else
+            //{
+            //    app.UseExceptionHandler("/Home/Error");
+            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            //    app.UseHsts();
+            //}
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -135,6 +149,8 @@ namespace GestionProjets
                 endpoints.MapRazorPages();
                 endpoints.MapHub<NotificationHub>("/NotificationUser");
             });
+            app.UseMiddleware<ErrorHandlerMiddleware>();
+
         }
     }
 }

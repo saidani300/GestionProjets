@@ -64,21 +64,6 @@ namespace GestionProjets.Controllers
            
         }
 
-        internal bool Authorization(Risque risque, Guid projetId)
-        {
-
-            Guid LoggedInuserId = new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            Guid projetChefId = (Guid)_projetRepository.GetProjetByID(projetId).ChefId;
-            Guid projetUserId = _projetRepository.GetProjetByID(projetId).UserId;
-            if (projetUserId == LoggedInuserId || projetChefId == LoggedInuserId)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         [HttpPost]
         [Ref("Risque3")]
@@ -97,15 +82,16 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Risque4")]
+        [AuthorizeUpdate]
 
-        public IActionResult Put([FromBody] Risque risque)
+        public IActionResult Put([FromBody] Risque Model)
         {
            
-                    if (risque != null)
+                    if (Model != null)
             {
                 using (var scope = new TransactionScope())
                 {
-                    _risqueRepository.UpdateRisque(risque);
+                    _risqueRepository.UpdateRisque(Model);
                     scope.Complete();
                     return new OkResult();
                 }
