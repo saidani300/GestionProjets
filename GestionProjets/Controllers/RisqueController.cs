@@ -82,7 +82,6 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Risque4")]
-        [AuthorizeUpdate]
 
         public IActionResult Put([FromBody] Risque Model)
         {

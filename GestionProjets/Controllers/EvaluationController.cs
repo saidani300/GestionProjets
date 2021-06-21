@@ -103,7 +103,6 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Evaluation4")]
-        [AuthorizeUpdate]
         public IActionResult Put([FromBody] Evaluation Model)
         {
             

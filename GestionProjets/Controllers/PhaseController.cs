@@ -88,7 +88,6 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Phase4")]
-        [AuthorizeUpdate]
         public IActionResult Put([FromBody] Phase Model)
         {
             

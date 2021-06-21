@@ -78,7 +78,6 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Objectif4")]
-        [AuthorizeUpdate]
         public IActionResult Put([FromBody] Objectif Model)
         {
            

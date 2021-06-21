@@ -91,7 +91,6 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Mesure4")]
-        [AuthorizeUpdate]
         public IActionResult Put([FromBody] Mesure Model)
         {
             

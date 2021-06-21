@@ -73,15 +73,13 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Document3")]
-       // [Authorize(Policy = "HasUserAccess")]
-        //[AuthorizeUpdate]
         public async Task<IActionResult> Put([FromBody] Document Model)
         {
            
                     if (Model != null)
                     {
-                if ((await _authorizationService
-                .AuthorizeAsync(User, Model, "EditPolicy")).Succeeded)
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, Model, "EditPolicy");
+                if (authorizationResult.Succeeded)
                 {
                     using (var scope = new TransactionScope())
                     {
@@ -90,8 +88,9 @@ namespace GestionProjets.Controllers
                         return new OkResult();
                     }
                 }
-                    }
-                    return new NoContentResult();
+                return new UnauthorizedResult();
+                }
+                return new NoContentResult();
                
         }
 

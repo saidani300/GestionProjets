@@ -116,7 +116,6 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Reunion4")]
-        [AuthorizeUpdate]
 
         public IActionResult Put([FromBody] Reunion Model)
         {

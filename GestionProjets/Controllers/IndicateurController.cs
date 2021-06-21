@@ -71,7 +71,6 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Indicateur3")]
-        [AuthorizeUpdate]
         public IActionResult Put([FromBody] Indicateur Model)
         {
            

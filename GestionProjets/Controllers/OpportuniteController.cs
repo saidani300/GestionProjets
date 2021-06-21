@@ -76,7 +76,6 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Opportunite4")]
-        [AuthorizeUpdate]
         public IActionResult Put([FromBody] Opportunite Model)
         {
            

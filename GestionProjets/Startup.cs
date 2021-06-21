@@ -110,10 +110,10 @@ namespace GestionProjets
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("EditPolicy", policy =>
-                    policy.Requirements.Add(new SameAuthorRequirement()));
+                    policy.Requirements.Add(new SameUserRequirement()));
             });
 
-            services.AddSingleton<IAuthorizationHandler, DocumentAuthorizationHandler>();
+            services.AddTransient<IAuthorizationHandler, UpdateAuthorizationHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -149,7 +149,6 @@ namespace GestionProjets
                 endpoints.MapRazorPages();
                 endpoints.MapHub<NotificationHub>("/NotificationUser");
             });
-            app.UseMiddleware<ErrorHandlerMiddleware>();
 
         }
     }

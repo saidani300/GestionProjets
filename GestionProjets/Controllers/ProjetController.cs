@@ -24,13 +24,17 @@ namespace GestionProjets.Controllers
         private readonly IProjetRepository _projetRepository;
         private readonly IAutorisationRepository _autorisationRepository;
         private readonly INotificationRepository _notificationRepository;
+        private readonly IAuthorizationService _authorizationService;
+
         private readonly IMapper _mapper;
 
-        public ProjetController(IProjetRepository projetRepository, IAutorisationRepository autorisationRepository , INotificationRepository notificationRepository, IMapper mapper)
+        public ProjetController(IProjetRepository projetRepository, IAutorisationRepository autorisationRepository , INotificationRepository notificationRepository, IMapper mapper, IAuthorizationService authorizationService)
         {
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
             _notificationRepository = notificationRepository;
+            _authorizationService = authorizationService;
+
             _mapper = mapper;
         }
 
@@ -59,7 +63,7 @@ namespace GestionProjets.Controllers
 
             //throw new AppException("Message 1");
 
-           return new OkObjectResult(projets);
+           return new OkObjectResult(projetsDTO);
 
         }
 
@@ -130,14 +134,16 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Projet4")]
-        [AuthorizeUpdate]
 
-        public IActionResult Put([FromBody] Projet Model)
+        public async Task<IActionResult> Put([FromBody] Projet Model)
         {
-           
-                    if (Model != null)
+          
+                if (Model != null)
             {
-                using (var scope = new TransactionScope())
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, Model, "EditPolicy");
+                if (authorizationResult.Succeeded)
+                {
+                    using (var scope = new TransactionScope())
                 {
                     Projet Oprojet = _projetRepository.GetProjetByID(Model.Id);
                     Model.DateModification = DateTime.Now;
@@ -162,7 +168,8 @@ namespace GestionProjets.Controllers
                     }
                     return new OkResult();
                 }
-            
+                return new UnauthorizedResult();
+            }
             return new NoContentResult();
         }
 

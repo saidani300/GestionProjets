@@ -23,14 +23,16 @@ namespace GestionProjets.Controllers
         private readonly IActionRepository _actionRepository;
         private readonly IProjetRepository _projetRepository;
         private readonly IAutorisationRepository _autorisationRepository;
+        private readonly IAuthorizationService _authorizationService;
         private readonly IMapper _mapper;
 
-        public ActionController(IActionRepository actionRepository , IProjetRepository projetRepository , IAutorisationRepository autorisationRepository, IMapper mapper)
+        public ActionController(IActionRepository actionRepository , IProjetRepository projetRepository , IAutorisationRepository autorisationRepository, IMapper mapper, IAuthorizationService authorizationService)
         {
             _actionRepository = actionRepository;
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
             _mapper = mapper;
+            _authorizationService = authorizationService;
 
         }
         [HttpGet("getbyprojet/{id}")]
@@ -91,17 +93,21 @@ namespace GestionProjets.Controllers
 
         [HttpPut]
         [Ref("Action4")]
-        [AuthorizeUpdate]
-        public IActionResult Put([FromBody] Models.Action Model)
+        public async Task<IActionResult> Put([FromBody] Models.Action Model)
         {
            
                 if (Model != null)
             {
-                using (var scope = new TransactionScope())
+                var authorizationResult = await _authorizationService.AuthorizeAsync(User, Model, "EditPolicy");
+                if (authorizationResult.Succeeded)
+                {
+                    using (var scope = new TransactionScope())
                 {
                     _actionRepository.UpdateAction(Model);
                     scope.Complete();
                     return new OkResult();
+                }
+                    return new UnauthorizedResult();
                 }
             }
             return new NoContentResult();

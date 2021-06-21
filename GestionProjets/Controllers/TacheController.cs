@@ -108,7 +108,6 @@ namespace GestionProjets.Controllers
         [Authorize(Roles = "Responsable,Chefdeprojet,Membre")]
         [HttpPut]
         [Ref("Tache4")]
-        [AuthorizeUpdate]
         public IActionResult Put([FromBody] Tache Model)
         {
             

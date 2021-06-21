@@ -23,7 +23,7 @@ namespace GestionProjets.Repository
 
         public Document GetDocumentByID(Guid DocumentId)
         {
-            return _dbContext.Documents.Find(DocumentId);
+            return _dbContext.Documents.Include(D => D.Projet).Where(p => p.Id == DocumentId).Single(); ;
         }
 
         public IEnumerable<Document> GetDocuments()
