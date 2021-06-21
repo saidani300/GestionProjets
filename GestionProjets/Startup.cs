@@ -109,11 +109,11 @@ namespace GestionProjets
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("HasUserAccess", policy =>
-                    policy.Requirements.Add(new UserAccessRequirement()));
+                options.AddPolicy("EditPolicy", policy =>
+                    policy.Requirements.Add(new SameAuthorRequirement()));
             });
 
-            services.AddTransient<IAuthorizationHandler, UserAccessHandler>();
+            services.AddSingleton<IAuthorizationHandler, DocumentAuthorizationHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

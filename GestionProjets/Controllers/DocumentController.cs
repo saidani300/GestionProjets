@@ -20,12 +20,15 @@ namespace GestionProjets.Controllers
         private readonly IDocumentRepository _documentRepository;
         private readonly IProjetRepository _projetRepository;
         private readonly IAutorisationRepository _autorisationRepository;
+        private readonly IAuthorizationService _authorizationService;
 
-        public DocumentController(IDocumentRepository documentRepository, IProjetRepository projetRepository, IAutorisationRepository autorisationRepository)
+        public DocumentController(IDocumentRepository documentRepository, IProjetRepository projetRepository, IAutorisationRepository autorisationRepository , IAuthorizationService authorizationService)
         {
             _documentRepository = documentRepository;
             _projetRepository = projetRepository;
             _autorisationRepository = autorisationRepository;
+            _authorizationService = authorizationService;
+
         }
 
         [HttpGet("getbyprojet/{id}")]
@@ -71,18 +74,22 @@ namespace GestionProjets.Controllers
         [HttpPut]
         [Ref("Document3")]
        // [Authorize(Policy = "HasUserAccess")]
-        [AuthorizeUpdate]
-        public IActionResult Put([FromBody] Document Model)
+        //[AuthorizeUpdate]
+        public async Task<IActionResult> Put([FromBody] Document Model)
         {
            
                     if (Model != null)
                     {
-                        using (var scope = new TransactionScope())
-                        {
-                            _documentRepository.UpdateDocument(Model);
-                            scope.Complete();
-                            return new OkResult();
-                        }
+                if ((await _authorizationService
+                .AuthorizeAsync(User, Model, "EditPolicy")).Succeeded)
+                {
+                    using (var scope = new TransactionScope())
+                    {
+                        _documentRepository.UpdateDocument(Model);
+                        scope.Complete();
+                        return new OkResult();
+                    }
+                }
                     }
                     return new NoContentResult();
                

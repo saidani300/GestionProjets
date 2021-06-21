@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionProjets.Migrations
 {
     [DbContext(typeof(QalitasContext))]
-    [Migration("20210618120823_Init")]
+    [Migration("20210619083815_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -273,6 +273,7 @@ namespace GestionProjets.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Nom")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Priorite")

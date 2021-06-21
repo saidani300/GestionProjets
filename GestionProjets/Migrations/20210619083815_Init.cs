@@ -165,7 +165,7 @@ namespace GestionProjets.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Nom = table.Column<string>(nullable: true),
+                    Nom = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     Priorite = table.Column<int>(nullable: false),
                     Etat = table.Column<int>(nullable: false),
